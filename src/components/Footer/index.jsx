@@ -1,8 +1,10 @@
+import './footer.scss';
+
 const Footer = () => {
     return (
-        <>
-            footer
-        </>
+        <footer>
+            <div>Quản lý nhà sách</div>
+        </footer>
     )
 }
 
