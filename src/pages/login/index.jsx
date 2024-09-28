@@ -1,11 +1,30 @@
-import { Button, Divider, Form, Input } from 'antd';
-import { Link } from 'react-router-dom';
+import { Button, Divider, Form, Input, message, notification } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
 import '../register/register.scss';
+import { useState } from 'react';
+import { callLogin } from '../../services/api';
 
 const LoginPage = () => {
+    const navigate = useNavigate();
+    const [isSubmit, setIsSubmit] = useState(false);
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
+    const onFinish = async (values) => {
+        const { username, password } = values;
+        setIsSubmit(true);
+        const res = await callLogin(username, password);
+        setIsSubmit(false);
+        if (res?.data) {
+            localStorage.setItem('access_token', res.data.access_token);
+            message.success('Đăng nhập thành công');
+            navigate('/');
+        } else {
+            notification.error({
+                message: 'Có lỗi xảy ra',
+                description: res.message && res.message.length > 0 ? res.message : "Đăng nhập thất bại",
+                duration: 5
+            })
+        }
+        console.log('check>>> res:', res);
     };
 
     return (
@@ -30,7 +49,7 @@ const LoginPage = () => {
                             <Form.Item
                                 labelCol={{ span: 24 }} //whole column
                                 label="Email"
-                                name="email"
+                                name="username"
                                 rules={[{ required: true, message: 'Email không được để trống!' }]}
                             >
                                 <Input />
@@ -49,8 +68,8 @@ const LoginPage = () => {
                             <Form.Item
                             // wrapperCol={{ offset: 6, span: 16 }}
                             >
-                                <Button type="primary" htmlType="submit" loading={false}>
-                                    Đăng ký
+                                <Button type="primary" htmlType="submit" loading={isSubmit}>
+                                    Đăng Nhập
                                 </Button>
                             </Form.Item>
                             <Divider>Or</Divider>
