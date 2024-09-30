@@ -128,11 +128,11 @@ const LayoutAdmin = () => {
                 <Content>
                     <Outlet />
                 </Content>
-                <Footer style={{ padding: 0, margin: '0 auto' }}>
+                <Footer style={{ padding: 0, margin: '0 auto', height: '35px' }}>
                     Quản lý nhà sách
                 </Footer>
             </Layout>
-        </Layout>
+        </Layout >
     );
 };
 
