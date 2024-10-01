@@ -3,9 +3,9 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import LoginPage from './pages/login';
+import BookPage from './pages/admin/book';
 import ContactPage from './pages/contact';
-import BookPage from './pages/book';
+import LoginPage from './pages/login';
 import { Outlet } from "react-router-dom";
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -19,12 +19,9 @@ import NotFound from './components/NotFound';
 import AdminPage from './pages/admin';
 import ProtectedRoute from './components/ProtectedRoute';
 import LayoutAdmin from './components/Admin/LayoutAdmin';
+import './styles/reset.scss';
 import ManageUserPage from './pages/admin/user';
-
-import "./styles/reset.scss";
-
-
-
+import ManageBookPage from './pages/admin/book';
 
 const Layout = () => {
   return (
@@ -36,39 +33,26 @@ const Layout = () => {
   )
 }
 
-// const LayoutAdmin = () => {
-//   const isAdminRoute = window.location.pathname.startsWith('/admin');
-//   const user = useSelector(state => state.account.user);
-//   const userRole = user.role;
-
-//   return (
-//     <div className='layout-app'>
-//       {isAdminRoute && userRole === "ADMIN" && <Header />}
-
-//       <Outlet />
-//       {isAdminRoute && userRole === "ADMIN" && <Footer />}
-//     </div>
-//   )
-// }
-
-
-
 export default function App() {
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(state => state.account.isAuthenticated);
-  const isLoading = useSelector(state => state.account.isLoading);
+  const isLoading = useSelector(state => state.account.isLoading)
+
   const getAccount = async () => {
-    if (window.location.pathname === "/login" || window.location.pathname === "/register") return;
+    if (
+      window.location.pathname === '/login'
+      || window.location.pathname === '/register'
+    )
+      return;
+
     const res = await callFetchAccount();
     if (res && res.data) {
-      dispatch(doGetAccountAction(res.data));
+      dispatch(doGetAccountAction(res.data))
     }
-    console.log('check>>> res:', res);
   }
+
   useEffect(() => {
     getAccount();
   }, [])
-
 
   const router = createBrowserRouter([
     {
@@ -87,6 +71,7 @@ export default function App() {
         },
       ],
     },
+
     {
       path: "/admin",
       element: <LayoutAdmin />,
@@ -100,28 +85,47 @@ export default function App() {
         },
         {
           path: "user",
-          element: <ManageUserPage />,
+          element:
+            <ProtectedRoute>
+              <ManageUserPage />
+            </ProtectedRoute>
+          ,
         },
         {
           path: "book",
-          element: <BookPage />,
+          element:
+            <ProtectedRoute>
+              <ManageBookPage />
+            </ProtectedRoute>
+          ,
         },
       ],
     },
+
+
     {
       path: "/login",
       element: <LoginPage />,
-
     },
+
     {
       path: "/register",
       element: <RegisterPage />,
-
     },
   ]);
+
   return (
     <>
-      {isLoading === false || window.location.pathname === "/login" || window.location.pathname === "/register" || window.location.pathname === "/" ? <RouterProvider router={router} /> : <Loading />}
+      {
+        isLoading === false
+          || window.location.pathname === '/login'
+          || window.location.pathname === '/register'
+          || window.location.pathname === '/'
+          ?
+          <RouterProvider router={router} />
+          :
+          <Loading />
+      }
     </>
   )
 }
