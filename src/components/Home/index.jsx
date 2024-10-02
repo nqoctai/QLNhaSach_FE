@@ -65,11 +65,33 @@ const Home = () => {
     }
 
     const handleChangeFilter = (changedValues, values) => {
-        console.log(">>> check handleChangeFilter", changedValues, values)
+        // console.log(">>> check changedValues, values: ", changedValues, values)
+
+        //only fire if category changes
+        if (changedValues.category) {
+            const cate = values.category;
+            if (cate && cate.length > 0) {
+                const f = cate.join(',');
+                setFilter(`category=${f}`)
+            } else {
+                //reset data -> fetch all
+                setFilter('');
+            }
+        }
+
     }
 
     const onFinish = (values) => {
+        // console.log('>> check values: ', values)
 
+        if (values?.range?.from >= 0 && values?.range?.to >= 0) {
+            let f = `price>=${values?.range?.from}&price<=${values?.range?.to}`;
+            if (values?.category?.length) {
+                const cate = values?.category?.join(',');
+                f += `&category=${cate}`
+            }
+            setFilter(f);
+        }
     }
 
     const items = [
@@ -96,7 +118,7 @@ const Home = () => {
     ];
 
     return (
-        <div style={{ background: '#efefef', padding: "20px 0" }}>
+        <div style={{ background: '#efefef', padding: "20px 0", maxHeight: 647, overflow: 'auto' }}>
             <div className="homepage-container" style={{ maxWidth: 1440, margin: '0 auto' }}>
                 <Row gutter={[20, 20]}>
                     <Col md={4} sm={0} xs={0}>
@@ -105,7 +127,11 @@ const Home = () => {
                                 <span> <FilterTwoTone />
                                     <span style={{ fontWeight: 500 }}> Bộ lọc tìm kiếm</span>
                                 </span>
-                                <ReloadOutlined title="Reset" onClick={() => form.resetFields()} />
+                                <ReloadOutlined title="Reset" onClick={() => {
+                                    form.resetFields();
+                                    setFilter('');
+                                }}
+                                />
                             </div>
                             <Divider />
                             <Form
