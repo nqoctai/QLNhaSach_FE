@@ -18,7 +18,7 @@ const BookTable = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [filter, setFilter] = useState("");
-    const [sortQuery, setSortQuery] = useState("");
+    const [sortQuery, setSortQuery] = useState("sort=-updatedAt");
 
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [openViewDetail, setOpenViewDetail] = useState(false);
@@ -231,9 +231,7 @@ const BookTable = () => {
                                 showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
                             }
                         }
-
                         scroll={{ y: 280 }}
-
                     />
                 </Col>
             </Row>
