@@ -35,6 +35,10 @@ const Header = () => {
             key: 'account',
         },
         {
+            label: <Link to="/history">Lịch sử mua hàng</Link>,
+            key: 'history',
+        },
+        {
             label: <label
                 style={{ cursor: 'pointer' }}
                 onClick={() => handleLogout()}
@@ -84,7 +88,7 @@ const Header = () => {
                         }}>☰</div>
                         <div className='page-header__logo'>
                             <span className='logo'>
-                                <span onClick={() => navigate('/')}> <FaReact className='rotate icon-react' />The Book Heaven</span>
+                                <span onClick={() => navigate('/')}> <FaReact className='rotate icon-react' />Hỏi Dân !T</span>
 
                                 <VscSearchFuzzy className='icon-search' />
                             </span>
