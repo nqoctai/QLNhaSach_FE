@@ -17,7 +17,8 @@ const Header = () => {
     const isAuthenticated = useSelector(state => state.account.isAuthenticated);
     const user = useSelector(state => state.account.user);
     const navigate = useNavigate();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const carts = useSelector(state => state.order.carts)
 
     const handleLogout = async () => {
         const res = await callLogout();
@@ -61,7 +62,8 @@ const Header = () => {
                         }}>☰</div>
                         <div className='page-header__logo'>
                             <span className='logo'>
-                                <FaReact className='rotate icon-react' /> The Book Heaven
+                                <span onClick={() => navigate('/')}> <FaReact className='rotate icon-react' /> Hỏi Dân IT</span>
+
                                 <VscSearchFuzzy className='icon-search' />
                             </span>
                             <input
@@ -75,7 +77,7 @@ const Header = () => {
                         <ul id="navigation" className="navigation">
                             <li className="navigation__item">
                                 <Badge
-                                    count={5}
+                                    count={carts?.length ?? 0}
                                     size={"small"}
                                 >
                                     <FiShoppingCart className='icon-cart' />
