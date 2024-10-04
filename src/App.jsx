@@ -3,6 +3,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import BookPage from './pages/book';
 import ContactPage from './pages/contact';
 import LoginPage from './pages/login';
 import { Outlet } from "react-router-dom";
@@ -19,9 +20,9 @@ import AdminPage from './pages/admin';
 import ProtectedRoute from './components/ProtectedRoute';
 import LayoutAdmin from './components/Admin/LayoutAdmin';
 import './styles/reset.scss';
+import './styles/global.scss';
 import ManageUserPage from './pages/admin/user';
 import ManageBookPage from './pages/admin/book';
-import BookPage from './pages/book';
 
 const Layout = () => {
   return (
@@ -121,6 +122,7 @@ export default function App() {
           || window.location.pathname === '/login'
           || window.location.pathname === '/register'
           || window.location.pathname === '/'
+          || window.location.pathname.startsWith('/book')
           ?
           <RouterProvider router={router} />
           :
