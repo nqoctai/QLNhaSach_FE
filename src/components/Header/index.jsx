@@ -69,7 +69,7 @@ const Header = () => {
                     })}
                 </div>
                 <div className='pop-cart-footer'>
-                    <button>Xem giỏ hàng</button>
+                    <button onClick={() => navigate('/order')}>Xem giỏ hàng</button>
                 </div>
             </div>
         )
@@ -84,7 +84,7 @@ const Header = () => {
                         }}>☰</div>
                         <div className='page-header__logo'>
                             <span className='logo'>
-                                <span onClick={() => navigate('/')}> <FaReact className='rotate icon-react' /> Hỏi Dân IT</span>
+                                <span onClick={() => navigate('/')}> <FaReact className='rotate icon-react' />The Book Heaven</span>
 
                                 <VscSearchFuzzy className='icon-search' />
                             </span>
