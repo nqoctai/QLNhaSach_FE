@@ -17,6 +17,7 @@ import './layout.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { callLogout } from '../../services/api';
 import { doLogoutAction } from '../../redux/account/accountSlice';
+import ManageAccount from '../Account/ManageAccount';
 
 const { Content, Footer, Sider } = Layout;
 
@@ -36,11 +37,11 @@ const items = [
                 key: 'crud',
                 icon: <TeamOutlined />,
             },
-            {
-                label: 'Files1',
-                key: 'file1',
-                icon: <TeamOutlined />,
-            }
+            // {
+            //     label: 'Files1',
+            //     key: 'file1',
+            //     icon: <TeamOutlined />,
+            // }
         ]
     },
     {
@@ -60,6 +61,7 @@ const LayoutAdmin = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [activeMenu, setActiveMenu] = useState('dashboard');
     const user = useSelector(state => state.account.user);
+    const [showManageAccount, setShowManageAccount] = useState(false);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -76,7 +78,7 @@ const LayoutAdmin = () => {
 
     const itemsDropdown = [
         {
-            label: <label style={{ cursor: 'pointer' }}>Quản lý tài khoản</label>,
+            label: <label style={{ cursor: 'pointer' }} onClick={() => setShowManageAccount(true)}>Quản lý tài khoản</label>,
             key: 'account',
         },
         {
@@ -96,48 +98,54 @@ const LayoutAdmin = () => {
     const urlAvatar = `${import.meta.env.VITE_BACKEND_URL}/images/avatar/${user?.avatar}`;
 
     return (
-        <Layout
-            style={{ minHeight: '100vh' }}
-            className="layout-admin"
-        >
-            <Sider
-                theme='light'
-                collapsible
-                collapsed={collapsed}
-                onCollapse={(value) => setCollapsed(value)}>
-                <div style={{ height: 32, margin: 16, textAlign: 'center' }}>
-                    Admin
-                </div>
-                <Menu
-                    defaultSelectedKeys={[activeMenu]}
-                    mode="inline"
-                    items={items}
-                    onClick={(e) => setActiveMenu(e.key)}
-                />
-            </Sider>
-            <Layout>
-                <div className='admin-header'>
-                    <span>
-                        {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-                            className: 'trigger',
-                            onClick: () => setCollapsed(!collapsed),
-                        })}
-                    </span>
-                    <Dropdown menu={{ items: itemsDropdown }} trigger={['click']}>
-                        <Space style={{ cursor: "pointer" }}>
-                            <Avatar src={urlAvatar} />
-                            {user?.fullName}
-                        </Space>
-                    </Dropdown>
-                </div>
-                <Content style={{ padding: '15px' }}>
-                    <Outlet />
-                </Content>
-                {/* <Footer style={{ padding: 0 }}>
-                    The Book Heaven
+        <>
+            <Layout
+                style={{ minHeight: '100vh' }}
+                className="layout-admin"
+            >
+                <Sider
+                    theme='light'
+                    collapsible
+                    collapsed={collapsed}
+                    onCollapse={(value) => setCollapsed(value)}>
+                    <div style={{ height: 32, margin: 16, textAlign: 'center' }}>
+                        Admin
+                    </div>
+                    <Menu
+                        defaultSelectedKeys={[activeMenu]}
+                        mode="inline"
+                        items={items}
+                        onClick={(e) => setActiveMenu(e.key)}
+                    />
+                </Sider>
+                <Layout>
+                    <div className='admin-header'>
+                        <span>
+                            {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+                                className: 'trigger',
+                                onClick: () => setCollapsed(!collapsed),
+                            })}
+                        </span>
+                        <Dropdown menu={{ items: itemsDropdown }} trigger={['click']}>
+                            <Space style={{ cursor: "pointer" }}>
+                                <Avatar src={urlAvatar} />
+                                {user?.fullName}
+                            </Space>
+                        </Dropdown>
+                    </div>
+                    <Content style={{ padding: '15px' }}>
+                        <Outlet />
+                    </Content>
+                    {/* <Footer style={{ padding: 0 }}>
                 </Footer> */}
+                </Layout>
+
             </Layout>
-        </Layout>
+            <ManageAccount
+                isModalOpen={showManageAccount}
+                setIsModalOpen={setShowManageAccount}
+            />
+        </>
     );
 };
 

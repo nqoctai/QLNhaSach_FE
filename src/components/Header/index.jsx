@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaReact } from 'react-icons/fa'
 import { FiShoppingCart } from 'react-icons/fi';
 import { VscSearchFuzzy } from 'react-icons/vsc';
-import { Divider, Badge, Drawer, message, Avatar, Popover } from 'antd';
+import { Divider, Badge, Drawer, message, Avatar, Popover, Empty } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, Space } from 'antd';
@@ -13,7 +13,7 @@ import { doLogoutAction } from '../../redux/account/accountSlice';
 import { Link } from 'react-router-dom';
 import ManageAccount from '../Account/ManageAccount';
 
-const Header = () => {
+const Header = (props) => {
     const [openDrawer, setOpenDrawer] = useState(false);
     const isAuthenticated = useSelector(state => state.account.isAuthenticated);
     const user = useSelector(state => state.account.user);
@@ -77,9 +77,15 @@ const Header = () => {
                         )
                     })}
                 </div>
-                <div className='pop-cart-footer'>
-                    <button onClick={() => navigate('/order')}>Xem giỏ hàng</button>
-                </div>
+                {carts.length > 0 ?
+                    <div className='pop-cart-footer'>
+                        <button onClick={() => navigate('/order')}>Xem giỏ hàng</button>
+                    </div>
+                    :
+                    <Empty
+                        description="Không có sản phẩm trong giỏ hàng"
+                    />
+                }
             </div>
         )
     }
@@ -93,13 +99,15 @@ const Header = () => {
                         }}>☰</div>
                         <div className='page-header__logo'>
                             <span className='logo'>
-                                <span onClick={() => navigate('/')}> <FaReact className='rotate icon-react' />Hỏi Dân !T</span>
+                                <span onClick={() => navigate('/')}> <FaReact className='rotate icon-react' />The Book Heaven</span>
 
                                 <VscSearchFuzzy className='icon-search' />
                             </span>
                             <input
                                 className="input-search" type={'text'}
                                 placeholder="Bạn tìm gì hôm nay"
+                                value={props.searchTerm}
+                                onChange={(e) => props.setSearchTerm(e.target.value)}
                             />
                         </div>
 
