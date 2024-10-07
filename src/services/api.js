@@ -1,7 +1,7 @@
 import axios from '../utils/axios-customize';
 
-export const callRegister = (fullName, email, password, phone) => {
-    return axios.post('/api/v1/user/register', { fullName, email, password, phone })
+export const callRegister = (username, email, password, phone) => {
+    return axios.post('/api/v1/user/register', { username, email, password, phone })
 }
 
 export const callLogin = (username, password) => {
@@ -16,25 +16,25 @@ export const callLogout = () => {
     return axios.post('/api/v1/auth/logout')
 }
 
-export const callFetchListUser = (query) => {
+export const callFetchListAccountWithPagination = (query) => {
     // current=1&pageSize=3
-    return axios.get(`/api/v1/user?${query}`)
+    return axios.get(`/api/v1/accounts?${query}`)
 }
 
-export const callCreateAUser = (fullName, password, email, phone) => {
-    return axios.post('/api/v1/user', { fullName, password, email, phone })
+export const callCreateAUser = (username, password, email, phone) => {
+    return axios.post('/api/v1/account', { username, password, email, phone })
 }
 
 export const callBulkCreateUser = (data) => {
-    return axios.post('/api/v1/user/bulk-create', data)
+    return axios.post('/api/v1/account/bulk-create', data)
 }
 
-export const callUpdateUser = (_id, fullName, phone) => {
-    return axios.put('/api/v1/user', { _id, fullName, phone })
+export const callUpdateUser = (id, username, phone) => {
+    return axios.put('/api/v1/account', { id, username, phone })
 }
 
 export const callDeleteUser = (id) => {
-    return axios.delete(`/api/v1/user/${id}`)
+    return axios.delete(`/api/v1/account/${id}`)
 }
 
 ///////////////////////
@@ -106,9 +106,9 @@ export const callUpdateAvatar = (fileImg) => {
     });
 }
 
-export const callUpdateUserInfo = (_id, phone, fullName, avatar) => {
+export const callUpdateUserInfo = (id, phone, username, avatar) => {
     return axios.put(`/api/v1/user`, {
-        _id, phone, fullName, avatar
+        id, phone, username, avatar
     })
 }
 
@@ -124,4 +124,8 @@ export const callFetchDashboard = () => {
 
 export const callFetchListOrder = (query) => {
     return axios.get(`/api/v1/order?${query}`)
+}
+
+export const callTestAPi = () => {
+    return axios.get('/test');
 }

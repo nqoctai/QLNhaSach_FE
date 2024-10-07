@@ -24,7 +24,7 @@ const Header = (props) => {
 
     const handleLogout = async () => {
         const res = await callLogout();
-        if (res && res.data) {
+        if (res) {
             dispatch(doLogoutAction());
             message.success('Đăng xuất thành công');
             navigate('/')
@@ -139,7 +139,7 @@ const Header = (props) => {
                                     <Dropdown menu={{ items }} trigger={['click']}>
                                         <Space >
                                             <Avatar src={urlAvatar} />
-                                            {user?.fullName}
+                                            {user?.name}
                                         </Space>
                                     </Dropdown>
                                 }

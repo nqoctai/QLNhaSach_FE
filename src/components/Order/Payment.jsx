@@ -46,7 +46,7 @@ const Payment = (props) => {
             return {
                 bookName: item.detail.mainText,
                 quantity: item.quantity,
-                _id: item._id
+                id: item.id
             }
         })
         const data = {
@@ -96,7 +96,7 @@ const Payment = (props) => {
                                 </div>
                                 <DeleteTwoTone
                                     style={{ cursor: "pointer" }}
-                                    onClick={() => dispatch(doDeleteItemCartAction({ _id: book._id }))}
+                                    onClick={() => dispatch(doDeleteItemCartAction({ id: book.id }))}
                                     twoToneColor="#eb2f96"
                                 />
 
@@ -116,7 +116,7 @@ const Payment = (props) => {
                             labelCol={{ span: 24 }}
                             label="Tên người nhận"
                             name="name"
-                            initialValue={user?.fullName}
+                            initialValue={user?.username}
                             rules={[{ required: true, message: 'Tên người nhận không được để trống!' }]}
                         >
                             <Input />

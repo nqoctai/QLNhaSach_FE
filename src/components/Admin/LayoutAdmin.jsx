@@ -129,7 +129,7 @@ const LayoutAdmin = () => {
                         <Dropdown menu={{ items: itemsDropdown }} trigger={['click']}>
                             <Space style={{ cursor: "pointer" }}>
                                 <Avatar src={urlAvatar} />
-                                {user?.fullName}
+                                {user?.name}
                             </Space>
                         </Dropdown>
                     </div>

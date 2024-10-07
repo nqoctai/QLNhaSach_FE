@@ -11,9 +11,9 @@ const UserModalUpdate = (props) => {
 
 
     const onFinish = async (values) => {
-        const { fullName, _id, phone } = values;
+        let { username, id, phone } = values;
         setIsSubmit(true)
-        const res = await callUpdateUser(_id, fullName, phone);
+        const res = await callUpdateUser(+id, username, phone);
         if (res && res.data) {
             message.success('Cập nhật user thành công');
             setOpenModalUpdate(false);
@@ -60,7 +60,7 @@ const UserModalUpdate = (props) => {
                         hidden
                         labelCol={{ span: 24 }}
                         label="Id"
-                        name="_id"
+                        name="id"
                         rules={[{ required: true, message: 'Vui lòng nhập Id!' }]}
                     >
                         <Input />
@@ -69,7 +69,7 @@ const UserModalUpdate = (props) => {
                     <Form.Item
                         labelCol={{ span: 24 }}
                         label="Tên hiển thị"
-                        name="fullName"
+                        name="username"
                         rules={[{ required: true, message: 'Vui lòng nhập tên hiển thị!' }]}
                     >
                         <Input />

@@ -2,7 +2,7 @@ import { FilterTwoTone, ReloadOutlined, HomeOutlined, UserOutlined } from '@ant-
 import { Row, Col, Form, Checkbox, Divider, InputNumber, Button, Rate, Tabs, Pagination, Spin, Empty, Breadcrumb } from 'antd';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
-import { callFetchCategory, callFetchListBook } from '../../services/api';
+import { callFetchCategory, callFetchListBook, callTestAPi } from '../../services/api';
 import './home.scss';
 import MobileFilter from './MobileFilter';
 const Home = () => {
@@ -38,8 +38,14 @@ const Home = () => {
     }, []);
 
     useEffect(() => {
+        apiTest();
         fetchBook();
     }, [current, pageSize, filter, sortQuery, searchTerm]);
+
+    const apiTest = async () => {
+        const res = await callTestAPi();
+        console.log('>>> check res: ', res)
+    }
 
     const fetchBook = async () => {
         setIsLoading(true)
@@ -169,7 +175,7 @@ const Home = () => {
 
     const handleRedirectBook = (book) => {
         const slug = convertSlug(book.mainText);
-        navigate(`/book/${slug}?id=${book._id}`)
+        navigate(`/book/${slug}?id=${book.id}`)
     }
 
     return (

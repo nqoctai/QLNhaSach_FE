@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Col, Form, Input, Row, theme } from 'antd';
+import { sfLike } from 'spring-filter-query-builder';
 
 const InputSearch = (props) => {
     const { token } = theme.useToken();
@@ -14,18 +15,25 @@ const InputSearch = (props) => {
 
     const onFinish = (values) => {
         let query = "";
-        //build query
-        if (values.fullName) {
-            query += `&fullName=/${values.fullName}/i`
+        let q = [];
+        // build query
+
+        if (values.username) {
+            q.push(`username~'${values.username}'`);
+            console.log('query username:', q);
         }
+
         if (values.email) {
-            query += `&email=/${values.email}/i`
+            q.push(`email~'${values.email}'`);
         }
 
         if (values.phone) {
-            query += `&phone=/${values.phone}/i`
+            q.push(`phone~'${values.phone}'`);
         }
 
+        // Join all query parts with ' and '
+        query = `filter=${q.join(' and ')}`;
+        console.log('query:', query);
         if (query) {
             props.handleSearch(query);
         }
@@ -51,7 +59,7 @@ const InputSearch = (props) => {
                 <Col span={8}>
                     <Form.Item
                         labelCol={{ span: 24 }}
-                        name={`fullName`}
+                        name={`username`}
                         label={`Name`}
                     >
                         <Input />

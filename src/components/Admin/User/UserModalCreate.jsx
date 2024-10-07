@@ -11,9 +11,9 @@ const UserModalCreate = (props) => {
 
 
     const onFinish = async (values) => {
-        const { fullName, password, email, phone } = values;
+        const { username, password, email, phone } = values;
         setIsSubmit(true)
-        const res = await callCreateAUser(fullName, password, email, phone);
+        const res = await callCreateAUser(username, password, email, phone);
         if (res && res.data) {
             message.success('Tạo mới user thành công');
             form.resetFields();
@@ -52,7 +52,7 @@ const UserModalCreate = (props) => {
                     <Form.Item
                         labelCol={{ span: 24 }}
                         label="Tên hiển thị"
-                        name="fullName"
+                        name="username"
                         rules={[{ required: true, message: 'Vui lòng nhập tên hiển thị!' }]}
                     >
                         <Input />

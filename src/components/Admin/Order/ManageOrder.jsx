@@ -42,13 +42,13 @@ const ManageOrder = () => {
     const columns = [
         {
             title: 'Id',
-            dataIndex: '_id',
+            dataIndex: 'id',
             render: (text, record, index) => {
                 return (
                     <a href='#' onClick={() => {
                         // setDataViewDetail(record);
                         // setOpenViewDetail(true);
-                    }}>{record._id}</a>
+                    }}>{record.id}</a>
                 )
             }
         },
@@ -142,7 +142,7 @@ const ManageOrder = () => {
                         columns={columns}
                         dataSource={listOrder}
                         onChange={onChange}
-                        rowKey="_id"
+                        rowKey="id"
                         pagination={
                             {
                                 current: current,

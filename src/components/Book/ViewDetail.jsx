@@ -51,11 +51,11 @@ const ViewDetail = (props) => {
     }
 
     const handleAddToCart = (quantity, book) => {
-        dispatch(doAddBookAction({ quantity, detail: book, _id: book._id }))
+        dispatch(doAddBookAction({ quantity, detail: book, id: book.id }))
     }
 
     const handleBuyNow = (quantity, book) => {
-        dispatch(doAddBookAction({ quantity, detail: book, _id: book._id }))
+        dispatch(doAddBookAction({ quantity, detail: book, id: book.id }))
         navigate('/order');
     }
     return (
@@ -78,7 +78,7 @@ const ViewDetail = (props) => {
                     ]}
                 />
                 <div style={{ padding: "20px", background: '#fff', borderRadius: 5 }}>
-                    {dataBook && dataBook._id ?
+                    {dataBook && dataBook.id ?
                         <Row gutter={[20, 20]}>
                             <Col md={10} sm={0} xs={0}>
                                 <ImageGallery

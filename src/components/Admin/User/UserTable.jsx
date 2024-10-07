@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Row, Col, Popconfirm, Button, message, notification } from 'antd';
 import InputSearch from './InputSearch';
-import { callDeleteUser, callFetchListUser } from '../../../services/api';
+import { callDeleteUser, callFetchListAccountWithPagination } from '../../../services/api';
 import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import UserModalCreate from './UserModalCreate';
 import UserViewDetail from './UserViewDetail';
@@ -37,7 +37,7 @@ const UserTable = () => {
 
     const fetchUser = async () => {
         setIsLoading(true)
-        let query = `current=${current}&pageSize=${pageSize}`;
+        let query = `page=${current}&size=${pageSize}`;
         if (filter) {
             query += `&${filter}`;
         }
@@ -45,7 +45,8 @@ const UserTable = () => {
             query += `&${sortQuery}`;
         }
 
-        const res = await callFetchListUser(query);
+        const res = await callFetchListAccountWithPagination(query);
+        console.log(res)
         if (res && res.data) {
             setListUser(res.data.result);
             setTotal(res.data.meta.total)
@@ -56,19 +57,19 @@ const UserTable = () => {
     const columns = [
         {
             title: 'Id',
-            dataIndex: '_id',
+            dataIndex: 'id',
             render: (text, record, index) => {
                 return (
                     <a href='#' onClick={() => {
                         setDataViewDetail(record);
                         setOpenViewDetail(true);
-                    }}>{record._id}</a>
+                    }}>{record.id}</a>
                 )
             }
         },
         {
             title: 'Tên hiển thị',
-            dataIndex: 'fullName',
+            dataIndex: 'username',
             sorter: true
         },
         {
@@ -93,6 +94,17 @@ const UserTable = () => {
 
         },
         {
+            title: 'Ngày tạo mới',
+            dataIndex: 'createdAt',
+            sorter: true,
+            render: (text, record, index) => {
+                return (
+                    <>{moment(record.createdAt).format(FORMAT_DATE_DISPLAY)}</>
+                )
+            }
+
+        },
+        {
             title: 'Action',
             render: (text, record, index) => {
                 return (
@@ -102,7 +114,7 @@ const UserTable = () => {
                             placement="leftTop"
                             title={"Xác nhận xóa user"}
                             description={"Bạn có chắc chắn muốn xóa user này ?"}
-                            onConfirm={() => handleDeleteUser(record._id)}
+                            onConfirm={() => handleDeleteUser(record.id)}
                             okText="Xác nhận"
                             cancelText="Hủy"
                         >
@@ -219,7 +231,7 @@ const UserTable = () => {
                         columns={columns}
                         dataSource={listUser}
                         onChange={onChange}
-                        rowKey="_id"
+                        rowKey="id"
                         pagination={
                             {
                                 current: current,

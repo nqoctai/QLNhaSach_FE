@@ -7,7 +7,12 @@ const instance = axios.create({
     withCredentials: true,
 });
 
-instance.defaults.headers.common = { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` };
+
+// Kiểm tra token trước khi thêm vào header Authorization
+const token = localStorage.getItem('access_token');
+if (token) {
+    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
 
 const handleRefreshToken = async () => {
     const res = await instance.get('/api/v1/auth/refresh');

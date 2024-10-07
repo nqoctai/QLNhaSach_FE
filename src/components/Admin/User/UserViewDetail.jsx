@@ -20,8 +20,8 @@ const UserViewDetail = (props) => {
                     bordered
                     column={2}
                 >
-                    <Descriptions.Item label="Id">{dataViewDetail?._id}</Descriptions.Item>
-                    <Descriptions.Item label="Tên hiển thị">{dataViewDetail?.fullName}</Descriptions.Item>
+                    <Descriptions.Item label="Id">{dataViewDetail?.id}</Descriptions.Item>
+                    <Descriptions.Item label="Tên hiển thị">{dataViewDetail?.username}</Descriptions.Item>
                     <Descriptions.Item label="Email">{dataViewDetail?.email}</Descriptions.Item>
                     <Descriptions.Item label="Số điện thoại">{dataViewDetail?.phone}</Descriptions.Item>
 

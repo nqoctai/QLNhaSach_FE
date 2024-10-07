@@ -24,7 +24,7 @@ const ViewOrder = (props) => {
     const handleOnChangeInput = (value, book) => {
         if (!value || value < 1) return;
         if (!isNaN(value)) {
-            dispatch(doUpdateCartAction({ quantity: value, detail: book, _id: book._id }))
+            dispatch(doUpdateCartAction({ quantity: value, detail: book, id: book.id }))
         }
     }
 
@@ -53,7 +53,7 @@ const ViewOrder = (props) => {
                                 </div>
                                 <DeleteTwoTone
                                     style={{ cursor: "pointer" }}
-                                    onClick={() => dispatch(doDeleteItemCartAction({ _id: book._id }))}
+                                    onClick={() => dispatch(doDeleteItemCartAction({ id: book.id }))}
                                     twoToneColor="#eb2f96"
                                 />
 

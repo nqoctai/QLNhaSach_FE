@@ -45,13 +45,13 @@ const UserInfo = (props) => {
     };
 
     const onFinish = async (values) => {
-        const { fullName, phone, _id } = values;
+        const { username, phone, id } = values;
         setIsSubmit(true)
-        const res = await callUpdateUserInfo(_id, phone, fullName, userAvatar);
+        const res = await callUpdateUserInfo(id, phone, username, userAvatar);
 
         if (res && res.data) {
             //update redux
-            dispatch(doUpdateUserInfoAction({ avatar: userAvatar, phone, fullName }));
+            dispatch(doUpdateUserInfoAction({ avatar: userAvatar, phone, username }));
             message.success("Cập nhật thông tin user thành công");
 
             //force renew token
@@ -96,7 +96,7 @@ const UserInfo = (props) => {
                             hidden
                             labelCol={{ span: 24 }}
                             label="Email"
-                            name="_id"
+                            name="id"
                             initialValue={user?.id}
 
                         >
@@ -115,8 +115,8 @@ const UserInfo = (props) => {
                         <Form.Item
                             labelCol={{ span: 24 }}
                             label="Tên hiển thị"
-                            name="fullName"
-                            initialValue={user?.fullName}
+                            name="username"
+                            initialValue={user?.username}
                             rules={[{ required: true, message: 'Tên hiển thị không được để trống!' }]}
                         >
                             <Input />

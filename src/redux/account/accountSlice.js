@@ -6,7 +6,7 @@ const initialState = {
     user: {
         email: "",
         phone: "",
-        fullName: "",
+        username: "",
         role: "",
         avatar: "",
         id: ""
@@ -36,7 +36,7 @@ export const accountSlide = createSlice({
             // immutable state based off those changes
             state.isAuthenticated = true;
             state.isLoading = false;
-            state.user = action.payload.user;
+            state.user = action.payload.account;
         },
 
         doLogoutAction: (state, action) => {
@@ -45,7 +45,7 @@ export const accountSlide = createSlice({
             state.user = {
                 email: "",
                 phone: "",
-                fullName: "",
+                name: "",
                 role: "",
                 avatar: "",
                 id: ""
@@ -54,7 +54,7 @@ export const accountSlide = createSlice({
         doUpdateUserInfoAction: (state, action) => {
             state.user.avatar = action.payload.avatar;
             state.user.phone = action.payload.phone;
-            state.user.fullName = action.payload.fullName;
+            state.user.username = action.payload.username;
         },
 
         doUploadAvatarAction: (state, action) => {

@@ -43,7 +43,7 @@ const UserImport = (props) => {
                         const sheet = workbook.Sheets[workbook.SheetNames[0]];
                         // const json = XLSX.utils.sheet_to_json(sheet);
                         const json = XLSX.utils.sheet_to_json(sheet, {
-                            header: ["fullName", "email", "phone"],
+                            header: ["username", "email", "phone"],
                             range: 1 //skip header row
                         });
                         if (json && json.length > 0) setDataExcel(json)
@@ -116,7 +116,7 @@ const UserImport = (props) => {
                         dataSource={dataExcel}
                         title={() => <span>Dữ liệu upload:</span>}
                         columns={[
-                            { dataIndex: 'fullName', title: 'Tên hiển thị' },
+                            { dataIndex: 'username', title: 'Tên hiển thị' },
                             { dataIndex: 'email', title: 'Email' },
                             { dataIndex: 'phone', title: 'Số điện thoại' },
                         ]}
