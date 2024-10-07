@@ -70,7 +70,7 @@ const BookViewDetail = (props) => {
                     bordered
                     column={2}
                 >
-                    <Descriptions.Item label="Id">{dataViewDetail?._id}</Descriptions.Item>
+                    <Descriptions.Item label="Id">{dataViewDetail?.id}</Descriptions.Item>
                     <Descriptions.Item label="Tên sách">{dataViewDetail?.mainText}</Descriptions.Item>
                     <Descriptions.Item label="Tác giả">{dataViewDetail?.author}</Descriptions.Item>
                     <Descriptions.Item label="Giá tiền">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(dataViewDetail?.price ?? 0)}</Descriptions.Item>

@@ -27,7 +27,7 @@ const BookModalCreate = (props) => {
             const res = await callFetchCategory();
             if (res && res.data) {
                 const d = res.data.map(item => {
-                    return { label: item, value: item }
+                    return { label: item?.name, value: item?.id }
                 })
                 setListCategory(d);
             }
@@ -55,6 +55,7 @@ const BookModalCreate = (props) => {
 
 
         const { mainText, author, price, sold, quantity, category } = values;
+        console.log('check category:', category);
         const thumbnail = dataThumbnail[0].name;
         const slider = dataSlider.map(item => item.name);
 
@@ -111,10 +112,10 @@ const BookModalCreate = (props) => {
 
 
     const handleUploadFileThumbnail = async ({ file, onSuccess, onError }) => {
-        const res = await callUploadBookImg(file);
+        const res = await callUploadBookImg(file, 'book');
         if (res && res.data) {
             setDataThumbnail([{
-                name: res.data.fileUploaded,
+                name: res.data.fileName,
                 uid: file.uid
             }])
             onSuccess('ok')
@@ -124,11 +125,11 @@ const BookModalCreate = (props) => {
     };
 
     const handleUploadFileSlider = async ({ file, onSuccess, onError }) => {
-        const res = await callUploadBookImg(file);
+        const res = await callUploadBookImg(file, 'book');
         if (res && res.data) {
             //copy previous state => upload multiple images
             setDataSlider((dataSlider) => [...dataSlider, {
-                name: res.data.fileUploaded,
+                name: res.data.fileName,
                 uid: file.uid
             }])
             onSuccess('ok')

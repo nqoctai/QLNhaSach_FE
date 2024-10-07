@@ -17,7 +17,7 @@ const Home = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [filter, setFilter] = useState("");
-    const [sortQuery, setSortQuery] = useState("sort=-sold");
+    const [sortQuery, setSortQuery] = useState("");
 
     const [showMobileFilter, setShowMobileFilter] = useState(false);
 
@@ -29,7 +29,7 @@ const Home = () => {
             const res = await callFetchCategory();
             if (res && res.data) {
                 const d = res.data.map(item => {
-                    return { label: item, value: item }
+                    return { label: item?.name, value: item?.name }
                 })
                 setListCategory(d);
             }
@@ -49,7 +49,7 @@ const Home = () => {
 
     const fetchBook = async () => {
         setIsLoading(true)
-        let query = `current=${current}&pageSize=${pageSize}`;
+        let query = `page=${current}&size=${pageSize}`;
         if (filter) {
             query += `&${filter}`;
         }

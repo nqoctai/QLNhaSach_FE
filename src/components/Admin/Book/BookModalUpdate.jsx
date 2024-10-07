@@ -31,7 +31,7 @@ const BookModalUpdate = (props) => {
             const res = await callFetchCategory();
             if (res && res.data) {
                 const d = res.data.map(item => {
-                    return { label: item, value: item }
+                    return { label: item?.name, value: item?.id }
                 })
                 setListCategory(d);
             }
@@ -40,13 +40,13 @@ const BookModalUpdate = (props) => {
     }, [])
 
     useEffect(() => {
-        if (dataUpdate?._id) {
+        if (dataUpdate?.id) {
             const arrThumbnail = [
                 {
                     uid: uuidv4(),
                     name: dataUpdate.thumbnail,
                     status: 'done',
-                    url: `${import.meta.env.VITE_BACKEND_URL}/images/book/${dataUpdate.thumbnail}`,
+                    url: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${dataUpdate.thumbnail}`,
                 }
             ]
 
@@ -55,16 +55,16 @@ const BookModalUpdate = (props) => {
                     uid: uuidv4(),
                     name: item,
                     status: 'done',
-                    url: `${import.meta.env.VITE_BACKEND_URL}/images/book/${item}`,
+                    url: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${item}`,
                 }
             })
 
             const init = {
-                _id: dataUpdate._id,
+                id: dataUpdate.id,
                 mainText: dataUpdate.mainText,
                 author: dataUpdate.author,
                 price: dataUpdate.price,
-                category: dataUpdate.category,
+                category: dataUpdate.category.name,
                 quantity: dataUpdate.quantity,
                 sold: dataUpdate.sold,
                 thumbnail: { fileList: arrThumbnail },
@@ -99,12 +99,12 @@ const BookModalUpdate = (props) => {
         }
 
 
-        const { _id, mainText, author, price, sold, quantity, category } = values;
+        const { id, mainText, author, price, sold, quantity, category } = values;
         const thumbnail = dataThumbnail[0].name;
         const slider = dataSlider.map(item => item.name);
 
         setIsSubmit(true)
-        const res = await callUpdateBook(_id, thumbnail, slider, mainText, author, price, sold, quantity, category);
+        const res = await callUpdateBook(id, thumbnail, slider, mainText, author, price, sold, quantity, category);
         if (res && res.data) {
             message.success('Cập nhật book thành công');
             form.resetFields();
@@ -240,7 +240,7 @@ const BookModalUpdate = (props) => {
                                 hidden
                                 labelCol={{ span: 24 }}
                                 label="Tên sách"
-                                name="_id"
+                                name="id"
                             >
                                 <Input />
                             </Form.Item>

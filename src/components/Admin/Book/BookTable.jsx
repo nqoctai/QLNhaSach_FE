@@ -18,7 +18,7 @@ const BookTable = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [filter, setFilter] = useState("");
-    const [sortQuery, setSortQuery] = useState("sort=-updatedAt");
+    const [sortQuery, setSortQuery] = useState("");
 
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [openViewDetail, setOpenViewDetail] = useState(false);
@@ -33,7 +33,7 @@ const BookTable = () => {
 
     const fetchBook = async () => {
         setIsLoading(true)
-        let query = `current=${current}&pageSize=${pageSize}`;
+        let query = `page=${current}&size=${pageSize}`;
         if (filter) {
             query += `&${filter}`;
         }
@@ -52,13 +52,13 @@ const BookTable = () => {
     const columns = [
         {
             title: 'Id',
-            dataIndex: '_id',
+            dataIndex: 'id',
             render: (text, record, index) => {
                 return (
                     <a href='#' onClick={() => {
                         setDataViewDetail(record);
                         setOpenViewDetail(true);
-                    }}>{record._id}</a>
+                    }}>{record.id}</a>
                 )
             }
         },
@@ -70,7 +70,12 @@ const BookTable = () => {
         {
             title: 'Thể loại',
             dataIndex: 'category',
-            sorter: true
+            sorter: true,
+            render: (text, record, index) => {
+                return (
+                    <>{record?.category?.name}</>
+                )
+            }
         },
         {
             title: 'Tác giả',
@@ -110,7 +115,7 @@ const BookTable = () => {
                             placement="leftTop"
                             title={"Xác nhận xóa book"}
                             description={"Bạn có chắc chắn muốn xóa book này ?"}
-                            onConfirm={() => handleDeleteBook(record._id)}
+                            onConfirm={() => handleDeleteBook(record.id)}
                             okText="Xác nhận"
                             cancelText="Hủy"
                         >
@@ -149,7 +154,7 @@ const BookTable = () => {
 
     const handleDeleteBook = async (id) => {
         const res = await callDeleteBook(id);
-        if (res && res.data) {
+        if (res && res.status == 200) {
             message.success('Xóa book thành công');
             fetchBook();
         } else {
@@ -221,7 +226,7 @@ const BookTable = () => {
                         columns={columns}
                         dataSource={listBook}
                         onChange={onChange}
-                        rowKey="_id"
+                        rowKey="id"
                         pagination={
                             {
                                 current: current,

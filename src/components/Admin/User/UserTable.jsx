@@ -58,6 +58,7 @@ const UserTable = () => {
         {
             title: 'Id',
             dataIndex: 'id',
+            sorter: true,
             render: (text, record, index) => {
                 return (
                     <a href='#' onClick={() => {
@@ -146,7 +147,13 @@ const UserTable = () => {
             setCurrent(1);
         }
         if (sorter && sorter.field) {
-            const q = sorter.order === 'ascend' ? `sort=${sorter.field}` : `sort=-${sorter.field}`;
+            // const q = sorter.order === 'ascend' ? `sort=${sorter.field},asc` : `sort=${sorter.field},desc`;
+            let q = "";
+            if (sorter.order === 'ascend') {
+                q = `sort=${sorter.field},asc`;
+            } else if (sorter.order === 'descend') {
+                q = `sort=${sorter.field},desc`;
+            }
             setSortQuery(q);
         }
     };
@@ -190,7 +197,7 @@ const UserTable = () => {
                     >Thêm mới</Button>
                     <Button type='ghost' onClick={() => {
                         setFilter("");
-                        setSortQuery("")
+                        setSortQuery("");
                     }}>
                         <ReloadOutlined />
                     </Button>
