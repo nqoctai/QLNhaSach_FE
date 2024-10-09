@@ -147,7 +147,7 @@ const BookTable = () => {
             setCurrent(1);
         }
         if (sorter && sorter.field) {
-            const q = sorter.order === 'ascend' ? `sort=${sorter.field}` : `sort=-${sorter.field}`;
+            const q = sorter.order === 'ascend' ? `sort=${sorter.field},asc` : `sort=${sorter.field},desc`;
             setSortQuery(q);
         }
     };

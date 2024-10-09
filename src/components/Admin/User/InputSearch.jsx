@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Col, Form, Input, Row, theme } from 'antd';
 import { sfLike } from 'spring-filter-query-builder';
+import { removeAccents } from '../../../utils/removeAccents';
 
 const InputSearch = (props) => {
     const { token } = theme.useToken();
@@ -26,16 +27,16 @@ const InputSearch = (props) => {
         if (values.email) {
             q.push(`email~'${values.email}'`);
         }
-
         if (values.phone) {
             q.push(`phone~'${values.phone}'`);
         }
 
         // Join all query parts with ' and '
         query = `filter=${q.join(' and ')}`;
+        const normalizedFilter = removeAccents(query);
         console.log('query:', query);
-        if (query) {
-            props.handleSearch(query);
+        if (normalizedFilter) {
+            props.handleSearch(normalizedFilter);
         }
 
         //remove undefined

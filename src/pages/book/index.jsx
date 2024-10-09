@@ -33,8 +33,8 @@ const BookPage = () => {
         if (raw.thumbnail) {
             images.push(
                 {
-                    original: `${import.meta.env.VITE_BACKEND_URL}/images/book/${raw.thumbnail}`,
-                    thumbnail: `${import.meta.env.VITE_BACKEND_URL}/images/book/${raw.thumbnail}`,
+                    original: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${raw.thumbnail}`,
+                    thumbnail: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${raw.thumbnail}`,
                     originalClass: "original-image",
                     thumbnailClass: "thumbnail-image"
                 },
@@ -44,8 +44,8 @@ const BookPage = () => {
             raw.slider?.map(item => {
                 images.push(
                     {
-                        original: `${import.meta.env.VITE_BACKEND_URL}/images/book/${item}`,
-                        thumbnail: `${import.meta.env.VITE_BACKEND_URL}/images/book/${item}`,
+                        original: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${item}`,
+                        thumbnail: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${item}`,
                         originalClass: "original-image",
                         thumbnailClass: "thumbnail-image"
                     },

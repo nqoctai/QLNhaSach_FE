@@ -5,6 +5,7 @@ import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { callFetchCategory, callFetchListBook, callTestAPi } from '../../services/api';
 import './home.scss';
 import MobileFilter from './MobileFilter';
+import { removeAccents } from '../../utils/removeAccents';
 const Home = () => {
     const [searchTerm, setSearchTerm] = useOutletContext();
 
@@ -17,7 +18,7 @@ const Home = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [filter, setFilter] = useState("");
-    const [sortQuery, setSortQuery] = useState("");
+    const [sortQuery, setSortQuery] = useState("&sort=sold,desc");
 
     const [showMobileFilter, setShowMobileFilter] = useState(false);
 
@@ -38,7 +39,6 @@ const Home = () => {
     }, []);
 
     useEffect(() => {
-        apiTest();
         fetchBook();
     }, [current, pageSize, filter, sortQuery, searchTerm]);
 
@@ -50,18 +50,20 @@ const Home = () => {
     const fetchBook = async () => {
         setIsLoading(true)
         let query = `page=${current}&size=${pageSize}`;
+        let q = [];
         if (filter) {
-            query += `&${filter}`;
-        }
-        if (sortQuery) {
-            query += `&${sortQuery}`;
+            q.push(filter);
         }
 
         if (searchTerm) {
-            query += `&mainText=/${searchTerm}/i`;
+            q.push(`mainText~'${searchTerm}'`)
         }
 
-        const res = await callFetchListBook(query);
+        query += `&filter=${q.join(' and ')}` + sortQuery;
+        const normalizedFilter = removeAccents(query);
+        console.log('>>> check query: ', normalizedFilter)
+
+        const res = await callFetchListBook(normalizedFilter);
         if (res && res.data) {
             setListBook(res.data.result);
             setTotal(res.data.meta.total)
@@ -87,8 +89,8 @@ const Home = () => {
         if (changedValues.category) {
             const cate = values.category;
             if (cate && cate.length > 0) {
-                const f = cate.join(',');
-                setFilter(`category=${f}`)
+                const f = cate.join(`' or category.name~'`);
+                setFilter(`category.name~'${f}'`)
             } else {
                 //reset data -> fetch all
                 setFilter('');
@@ -101,33 +103,34 @@ const Home = () => {
         // console.log('>> check values: ', values)
 
         if (values?.range?.from >= 0 && values?.range?.to >= 0) {
-            let f = `price>=${values?.range?.from}&price<=${values?.range?.to}`;
+            let f = `price>:${values?.range?.from} and price<:${values?.range?.to}`;
             if (values?.category?.length) {
-                const cate = values?.category?.join(',');
-                f += `&category=${cate}`
+                const cate = values?.category?.join(`' or category.name~'`);
+                f += ` and (category.name~'${cate}')`
             }
+            console.log('>>> check filter: ', f)
             setFilter(f);
         }
     }
 
     const items = [
         {
-            key: "sort=-sold",
+            key: "&sort=sold,desc",
             label: `Phổ biến`,
             children: <></>,
         },
         {
-            key: 'sort=-updatedAt',
+            key: '&sort=updatedAt,desc',
             label: `Hàng Mới`,
             children: <></>,
         },
         {
-            key: 'sort=price',
+            key: '&sort=price',
             label: `Giá Thấp Đến Cao`,
             children: <></>,
         },
         {
-            key: 'sort=-price',
+            key: '&sort=price,desc',
             label: `Giá Cao Đến Thấp`,
             children: <></>,
         },
@@ -309,7 +312,7 @@ const Home = () => {
                                 <div style={{ padding: "20px", background: '#fff', borderRadius: 5 }}>
                                     <Row >
                                         <Tabs
-                                            defaultActiveKey="sort=-sold"
+                                            defaultActiveKey="sort=sold,desc"
                                             items={items}
                                             onChange={(value) => { setSortQuery(value) }}
                                             style={{ overflowX: "auto" }}
@@ -331,7 +334,7 @@ const Home = () => {
                                                 <div className="column" key={`book-${index}`} onClick={() => handleRedirectBook(item)}>
                                                     <div className='wrapper'>
                                                         <div className='thumbnail'>
-                                                            <img src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${item.thumbnail}`} alt="thumbnail book" />
+                                                            <img src={`${import.meta.env.VITE_BACKEND_URL}/storage/book/${item.thumbnail}`} alt="thumbnail book" />
                                                         </div>
                                                         <div className='text' title={item.mainText}>{item.mainText}</div>
                                                         <div className='price'>

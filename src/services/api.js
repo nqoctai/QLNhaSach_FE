@@ -95,20 +95,21 @@ export const callOrderHistory = () => {
 
 export const callUpdateAvatar = (fileImg) => {
     const bodyFormData = new FormData();
-    bodyFormData.append('fileImg', fileImg);
+    bodyFormData.append('file', fileImg);
+    bodyFormData.append('folder', 'avatar');
+
     return axios({
         method: 'post',
-        url: '/api/v1/file/upload',
+        url: '/api/v1/files',
         data: bodyFormData,
         headers: {
             "Content-Type": "multipart/form-data",
-            "upload-type": "avatar"
         },
     });
 }
 
 export const callUpdateUserInfo = (id, phone, username, avatar) => {
-    return axios.put(`/api/v1/user`, {
+    return axios.put(`/api/v1/account`, {
         id, phone, username, avatar
     })
 }

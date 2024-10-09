@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Button, Col, Form, Input, Row, theme } from 'antd';
+import { removeAccents } from '../../../utils/removeAccents';
 
 const InputSearch = (props) => {
+
     const { token } = theme.useToken();
     const [form] = Form.useForm();
 
@@ -12,22 +14,32 @@ const InputSearch = (props) => {
         padding: 24,
     };
 
+
+
     const onFinish = (values) => {
         let query = "";
-        //build query
+        let q = [];
+
+        // build query
         if (values.mainText) {
-            query += `&mainText=/${values.mainText}/i`
+            // sử dụng encodeURIComponent để mã hóa giá trị
+            q.push(`mainText~'${values.mainText}'`);
         }
         if (values.author) {
-            query += `&author=/${values.author}/i`
+            q.push(`author~'${values.author}'`);
         }
 
         if (values.category) {
-            query += `&category=/${values.category}/i`
+            q.push(`category.name~'${values.category}'`);
         }
 
-        if (query) {
-            props.handleSearch(query);
+        query = `filter=${q.join(' and ')}`;
+        const normalizedFilter = removeAccents(query);
+
+        console.log('query:', normalizedFilter);
+
+        if (normalizedFilter) {
+            props.handleSearch(normalizedFilter);
         }
 
         //remove undefined
@@ -103,7 +115,12 @@ const InputSearch = (props) => {
             </Row>
         </Form>
     );
+
 };
+
+// export function removeAccents(str) {
+//     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+// }
 
 
 export default InputSearch;

@@ -95,7 +95,7 @@ const LayoutAdmin = () => {
 
     ];
 
-    const urlAvatar = `${import.meta.env.VITE_BACKEND_URL}/images/avatar/${user?.avatar}`;
+    const urlAvatar = `${import.meta.env.VITE_BACKEND_URL}/storage/avatar/${user?.avatar}`;
 
     return (
         <>
