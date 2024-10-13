@@ -64,7 +64,7 @@ const BookModalUpdate = (props) => {
                 mainText: dataUpdate.mainText,
                 author: dataUpdate.author,
                 price: dataUpdate.price,
-                category: dataUpdate.category.name,
+                category: dataUpdate.category.id,
                 quantity: dataUpdate.quantity,
                 sold: dataUpdate.sold,
                 thumbnail: { fileList: arrThumbnail },

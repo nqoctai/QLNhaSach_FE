@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 const initialState = {
     isAuthenticated: false,
@@ -6,10 +7,16 @@ const initialState = {
     user: {
         email: "",
         phone: "",
-        username: "",
+        name: "",
         role: "",
         avatar: "",
-        id: ""
+        id: "",
+        cart: {
+            id: -1,
+            count: 0,
+            sumPrice: 0,
+            cartItems: []
+        }
     },
     tempAvatar: ""
 };
@@ -48,7 +55,8 @@ export const accountSlide = createSlice({
                 name: "",
                 role: "",
                 avatar: "",
-                id: ""
+                id: "",
+                cart: {}
             }
         },
         doUpdateUserInfoAction: (state, action) => {

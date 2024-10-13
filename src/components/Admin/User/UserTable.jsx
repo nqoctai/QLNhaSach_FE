@@ -20,7 +20,7 @@ const UserTable = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [filter, setFilter] = useState("");
-    const [sortQuery, setSortQuery] = useState("");
+    const [sortQuery, setSortQuery] = useState("sort=createdAt,desc");
 
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [openViewDetail, setOpenViewDetail] = useState(false);

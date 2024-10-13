@@ -1,25 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     AppstoreOutlined,
     ExceptionOutlined,
-    HeartTwoTone,
-    TeamOutlined,
     UserOutlined,
+    TeamOutlined,
     DollarCircleOutlined,
     MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    DownOutlined,
+    MenuUnfoldOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Dropdown, Space, message, Avatar } from 'antd';
-import { Outlet, useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
 import './layout.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { callLogout } from '../../services/api';
 import { doLogoutAction } from '../../redux/account/accountSlice';
 import ManageAccount from '../Account/ManageAccount';
 
-const { Content, Footer, Sider } = Layout;
+const { Content, Sider } = Layout;
 
 const items = [
     {
@@ -29,7 +26,6 @@ const items = [
     },
     {
         label: <span>Manage Users</span>,
-        // key: 'user',
         icon: <UserOutlined />,
         children: [
             {
@@ -37,11 +33,6 @@ const items = [
                 key: 'crud',
                 icon: <TeamOutlined />,
             },
-            // {
-            //     label: 'Files1',
-            //     key: 'file1',
-            //     icon: <TeamOutlined />,
-            // }
         ]
     },
     {
@@ -54,27 +45,40 @@ const items = [
         key: 'order',
         icon: <DollarCircleOutlined />
     },
-
 ];
 
 const LayoutAdmin = () => {
     const [collapsed, setCollapsed] = useState(false);
-    const [activeMenu, setActiveMenu] = useState('dashboard');
+    const [activeMenu, setActiveMenu] = useState('');
     const user = useSelector(state => state.account.user);
     const [showManageAccount, setShowManageAccount] = useState(false);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
+
+    // Sử dụng useEffect để cập nhật trạng thái activeMenu khi đường dẫn thay đổi
+    useEffect(() => {
+        const currentPath = location.pathname;
+        if (currentPath.includes('/admin/book')) {
+            setActiveMenu('book');
+        } else if (currentPath.includes('/admin/user')) {
+            setActiveMenu('crud');
+        } else if (currentPath.includes('/admin/order')) {
+            setActiveMenu('order');
+        } else if (currentPath === '/admin') {
+            setActiveMenu('dashboard');
+        }
+    }, [location]);
 
     const handleLogout = async () => {
         const res = await callLogout();
         if (res) {
             dispatch(doLogoutAction());
             message.success('Đăng xuất thành công');
-            navigate('/')
+            navigate('/');
         }
-    }
-
+    };
 
     const itemsDropdown = [
         {
@@ -92,17 +96,13 @@ const LayoutAdmin = () => {
             >Đăng xuất</label>,
             key: 'logout',
         },
-
     ];
 
     const urlAvatar = `${import.meta.env.VITE_BACKEND_URL}/storage/avatar/${user?.avatar}`;
 
     return (
         <>
-            <Layout
-                style={{ minHeight: '100vh' }}
-                className="layout-admin"
-            >
+            <Layout style={{ minHeight: '100vh' }} className="layout-admin">
                 <Sider
                     theme='light'
                     collapsible
@@ -112,7 +112,7 @@ const LayoutAdmin = () => {
                         Admin
                     </div>
                     <Menu
-                        defaultSelectedKeys={[activeMenu]}
+                        selectedKeys={[activeMenu]}  // Sử dụng selectedKeys thay vì defaultSelectedKeys
                         mode="inline"
                         items={items}
                         onClick={(e) => setActiveMenu(e.key)}
@@ -136,10 +136,7 @@ const LayoutAdmin = () => {
                     <Content style={{ padding: '15px' }}>
                         <Outlet />
                     </Content>
-                    {/* <Footer style={{ padding: 0 }}>
-                </Footer> */}
                 </Layout>
-
             </Layout>
             <ManageAccount
                 isModalOpen={showManageAccount}

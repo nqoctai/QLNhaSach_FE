@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { callOrderHistory } from "../../services/api";
 import { FORMAT_DATE_DISPLAY } from "../../utils/constant";
 import ReactJson from 'react-json-view'
+import { useSelector } from "react-redux";
 
 const History = () => {
     const [orderHistory, setOrderHistory] = useState([]);
+    const account = useSelector(state => state?.account?.user);
     useEffect(() => {
         const fetchHistory = async () => {
-            const res = await callOrderHistory();
+            const res = await callOrderHistory(account?.id);
             if (res && res.data) {
                 setOrderHistory(res.data);
             }
@@ -52,7 +54,7 @@ const History = () => {
             key: 'action',
             render: (_, record) => (
                 <ReactJson
-                    src={record.detail}
+                    src={record.orderItems}
                     name={"Chi tiết đơn mua"}
                     collapsed={true}
                     enableClipboard={false}

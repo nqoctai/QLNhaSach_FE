@@ -18,7 +18,7 @@ const BookTable = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [filter, setFilter] = useState("");
-    const [sortQuery, setSortQuery] = useState("");
+    const [sortQuery, setSortQuery] = useState("sort=createdAt,desc");
 
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [openViewDetail, setOpenViewDetail] = useState(false);
@@ -105,6 +105,17 @@ const BookTable = () => {
 
         },
         {
+            title: 'Ngày tạo',
+            dataIndex: 'createdAt',
+            sorter: true,
+            render: (text, record, index) => {
+                return (
+                    <>{moment(record.createdAt).format(FORMAT_DATE_DISPLAY)}</>
+                )
+            }
+
+        },
+        {
             title: 'Action',
             width: 150,
             render: (text, record, index) => {
@@ -147,7 +158,13 @@ const BookTable = () => {
             setCurrent(1);
         }
         if (sorter && sorter.field) {
-            const q = sorter.order === 'ascend' ? `sort=${sorter.field},asc` : `sort=${sorter.field},desc`;
+            // const q = sorter.order === 'ascend' ? `sort=${sorter.field},asc` : `sort=${sorter.field},desc`;
+            let q = "";
+            if (sorter.order === 'ascend') {
+                q = `sort=${sorter.field},asc`;
+            } else if (sorter.order === 'descend') {
+                q = `sort=${sorter.field},desc`;
+            }
             setSortQuery(q);
         }
     };

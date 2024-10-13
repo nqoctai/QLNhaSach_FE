@@ -9,9 +9,9 @@ const ChangePassword = (props) => {
     const user = useSelector(state => state.account.user);
 
     const onFinish = async (values) => {
-        const { email, oldpass, newpass } = values;
+        const { email, oldPassword, newPassword } = values;
         setIsSubmit(true);
-        const res = await callUpdatePassword(email, oldpass, newpass);
+        const res = await callUpdatePassword(email, oldPassword, newPassword);
         if (res && res.data) {
             message.success("Cập nhật mật khẩu thành công");
             form.setFieldValue("oldpass", "")
@@ -50,7 +50,7 @@ const ChangePassword = (props) => {
                         <Form.Item
                             labelCol={{ span: 24 }} //whole column
                             label="Mật khẩu hiện tại"
-                            name="oldpass"
+                            name="oldPassword"
                             rules={[{ required: true, message: 'Mật khẩu không được để trống!' }]}
                         >
                             <Input.Password />
@@ -59,7 +59,7 @@ const ChangePassword = (props) => {
                         <Form.Item
                             labelCol={{ span: 24 }} //whole column
                             label="Mật khẩu mới"
-                            name="newpass"
+                            name="newPassword"
                             rules={[{ required: true, message: 'Mật khẩu không được để trống!' }]}
                         >
                             <Input.Password />

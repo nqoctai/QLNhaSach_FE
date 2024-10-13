@@ -1,7 +1,7 @@
 import axios from '../utils/axios-customize';
 
 export const callRegister = (username, email, password, phone) => {
-    return axios.post('/api/v1/user/register', { username, email, password, phone })
+    return axios.post('/api/v1/auth/register', { username, email, password, phone })
 }
 
 export const callLogin = (username, password) => {
@@ -63,7 +63,7 @@ export const callUpdateBook = (id, thumbnail, slider, mainText, author, price, s
 export const callUploadBookImg = (file, folder) => {
     const bodyFormData = new FormData();
     bodyFormData.append('file', file);
-    bodyFormData.append('folder', folder);
+    bodyFormData.append('folder', 'book');
 
     return axios({
         method: 'post',
@@ -89,8 +89,8 @@ export const callPlaceOrder = (data) => {
     })
 }
 
-export const callOrderHistory = () => {
-    return axios.get('/api/v1/history');
+export const callOrderHistory = (accountId) => {
+    return axios.get(`/api/v1/order/history/${accountId}`);
 }
 
 export const callUpdateAvatar = (fileImg) => {
@@ -114,9 +114,9 @@ export const callUpdateUserInfo = (id, phone, username, avatar) => {
     })
 }
 
-export const callUpdatePassword = (email, oldpass, newpass) => {
-    return axios.post(`/api/v1/user/change-password`, {
-        email, oldpass, newpass
+export const callUpdatePassword = (email, oldPassword, newPassword) => {
+    return axios.post(`/api/v1/account/change-password`, {
+        email, oldPassword, newPassword
     })
 }
 
@@ -130,4 +130,16 @@ export const callFetchListOrder = (query) => {
 
 export const callTestAPi = () => {
     return axios.get('/test');
+}
+
+export const callAddBookToCart = (email, bookId, quantity) => {
+    return axios.post('/api/v1/cart/add', { email, bookId, quantity })
+}
+
+export const callUpdateQuantityBookInCart = (cartId, cartItemId, quantity) => {
+    return axios.put('/api/v1/cart/update', { cartId, cartItemId, quantity })
+}
+
+export const callDeleteItemInCart = (cartItemId) => {
+    return axios.delete(`/api/v1/cart/delete/${cartItemId}`);
 }

@@ -14,10 +14,8 @@ const RegisterPage = () => {
         const res = await callRegister(username, email, password, phone);
         console.log('check res >>>>', res);
         setIsSubmit(false);
-        if (res?.data?.id) {
+        if (res?.data) {
             message.success('Đăng ký thành công');
-
-
             navigate('/login');
         } else {
             notification.error({

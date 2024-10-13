@@ -23,14 +23,14 @@ const AdminPage = () => {
                 <Card title="" bordered={false} >
                     <Statistic
                         title="Tổng Users"
-                        value={dataDashboard.countUser}
+                        value={dataDashboard.totalAccount}
                         formatter={formatter}
                     />
                 </Card>
             </Col>
             <Col span={10}>
                 <Card title="" bordered={false} >
-                    <Statistic title="Tổng Đơn hàng" value={dataDashboard.countOrder} precision={2} formatter={formatter} />
+                    <Statistic title="Tổng Đơn hàng" value={dataDashboard.totalOrder} precision={2} formatter={formatter} />
                 </Card>
             </Col>
         </Row>

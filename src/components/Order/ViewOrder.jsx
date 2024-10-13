@@ -1,44 +1,84 @@
-import { Col, Divider, Empty, InputNumber, Row } from 'antd';
+import { Col, Divider, Empty, InputNumber, message, Row } from 'antd';
 import { DeleteTwoTone } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { doDeleteItemCartAction, doUpdateCartAction } from '../../redux/order/orderSlice';
+import { callAddBookToCart, callDeleteItemInCart, callFetchAccount, callUpdateQuantityBookInCart } from '../../services/api';
+import { doGetAccountAction } from '../../redux/account/accountSlice';
+
+
 
 const ViewOrder = (props) => {
-    const carts = useSelector(state => state.order.carts);
+    const cart = useSelector(state => state.account.user.cart);
+    const account = useSelector(state => state.account.user);
     const [totalPrice, setTotalPrice] = useState(0);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (carts && carts.length > 0) {
-            let sum = 0;
-            carts.map(item => {
-                sum += item.quantity * item.detail.price;
-            })
-            setTotalPrice(sum);
+        if (cart) {
+            setTotalPrice(cart.sumPrice);
         } else {
             setTotalPrice(0);
         }
-    }, [carts]);
+    }, [cart]);
 
-    const handleOnChangeInput = (value, book) => {
+    const fetchAccount = async () => {
+        const dataAccount = await callFetchAccount();
+        dispatch(doGetAccountAction(dataAccount.data));
+    }
+
+    // const handleOnChangeInput = async (value, item) => {
+    //     if (!value || value < 1) return;
+    //     if (!isNaN(value)) {
+    //         const res = await callAddBookToCart(account.email, item.book.id, value);
+    //         if (res) {
+    //             const dataAccount = await callFetchAccount();
+    //             dispatch(doGetAccountAction(dataAccount.data));
+    //         }
+    //         // dispatch(doUpdateCartAction({ quantity: value, detail: { id: item?.book?.id, name: item?.book?.name }, id: item?.book.id }))
+    //     }
+    // }
+    const handleOnChangeInput = async (item, value) => {
         if (!value || value < 1) return;
         if (!isNaN(value)) {
-            dispatch(doUpdateCartAction({ quantity: value, detail: book, id: book.id }))
+            try {
+                // Gọi API để cập nhật số lượng sản phẩm
+                const res = await callUpdateQuantityBookInCart(account?.cart?.id, item?.id, value);
+                if (res) {
+                    // // Gọi API để lấy lại thông tin tài khoản mới sau khi cập nhật giỏ hàng
+                    // const dataAccount = await callFetchAccount();
+                    // // Dispatch cập nhật lại giỏ hàng vào Redux
+                    // dispatch(doGetAccountAction(dataAccount.data));
+                    fetchAccount();
+                    message.success("Cập nhật số lượng sản phẩm thành công");
+                }
+            } catch (error) {
+                console.error("Error updating cart item quantity:", error);
+            }
+        }
+    };
+
+    const handleDeleteItemCart = async (id) => {
+        const res = await callDeleteItemInCart(id);
+        if (res && res?.data) {
+            fetchAccount();
+            message.success("Xóa sản phẩm khỏi giỏ hàng thành công");
         }
     }
+
+
 
     return (
         <Row gutter={[20, 20]}>
             <Col md={18} xs={24}>
-                {carts?.map((book, index) => {
-                    const currentBookPrice = book?.detail?.price ?? 0;
+                {cart?.cartItems?.map((item, index) => {
+                    const currentBookPrice = item?.book?.price ?? 0;
                     return (
                         <div className='order-book' key={`index-${index}`}>
                             <div className='book-content'>
-                                <img src={`${import.meta.env.VITE_BACKEND_URL}/storage/book/${book?.detail?.thumbnail}`} />
+                                <img src={`${import.meta.env.VITE_BACKEND_URL}/storage/book/${item?.book?.thumbnail}`} />
                                 <div className='title'>
-                                    {book?.detail?.mainText}
+                                    {item?.book?.mainText}
                                 </div>
                                 <div className='price'>
                                     {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(currentBookPrice)}
@@ -46,14 +86,14 @@ const ViewOrder = (props) => {
                             </div>
                             <div className='action'>
                                 <div className='quantity'>
-                                    <InputNumber onChange={(value) => handleOnChangeInput(value, book)} value={book.quantity} />
+                                    <InputNumber min={1} onChange={(value) => handleOnChangeInput(item, value)} value={item?.quantity} />
                                 </div>
                                 <div className='sum'>
-                                    Tổng:  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(currentBookPrice * (book?.quantity ?? 0))}
+                                    Tổng:  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(currentBookPrice * (item?.quantity ?? 0))}
                                 </div>
                                 <DeleteTwoTone
                                     style={{ cursor: "pointer" }}
-                                    onClick={() => dispatch(doDeleteItemCartAction({ id: book.id }))}
+                                    onClick={() => handleDeleteItemCart(item?.id)}
                                     twoToneColor="#eb2f96"
                                 />
 
@@ -61,7 +101,7 @@ const ViewOrder = (props) => {
                         </div>
                     )
                 })}
-                {carts.length === 0 &&
+                {cart?.length === 0 &&
                     <div className='order-book-empty'>
                         <Empty
                             description={"Không có sản phẩm trong giỏ hàng"}
@@ -86,10 +126,10 @@ const ViewOrder = (props) => {
                     </div>
                     <Divider style={{ margin: "10px 0" }} />
                     <button
-                        disabled={carts.length === 0}
+                        disabled={cart?.length === 0}
                         onClick={() => props.setCurrentStep(1)}
                     >
-                        Mua Hàng ({carts?.length ?? 0})
+                        Mua Hàng ({cart?.length ?? 0})
                     </button>
                 </div>
             </Col>

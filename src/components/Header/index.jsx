@@ -19,7 +19,7 @@ const Header = (props) => {
     const user = useSelector(state => state.account.user);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const carts = useSelector(state => state.order.carts);
+    const carts = useSelector(state => state.account.user.cart);
     const [showManageAccount, setShowManageAccount] = useState(false);
 
     const handleLogout = async () => {
@@ -65,19 +65,19 @@ const Header = (props) => {
         return (
             <div className='pop-cart-body'>
                 <div className='pop-cart-content'>
-                    {carts?.map((book, index) => {
+                    {carts?.cartItems.map((item, index) => {
                         return (
-                            <div className='book' key={`book-${index}`}>
-                                <img src={`${import.meta.env.VITE_BACKEND_URL}/storage/book/${book?.detail?.thumbnail}`} />
-                                <div>{book?.detail?.mainText}</div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }} className='book' key={`book-${index}`}>
+                                <img src={`${import.meta.env.VITE_BACKEND_URL}/storage/book/${item?.book?.thumbnail}`} />
+                                <div style={{ maxWidth: 300 }}>{item?.book?.mainText}</div>
                                 <div className='price'>
-                                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(book?.detail?.price ?? 0)}
+                                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item?.book?.price ?? 0)}
                                 </div>
                             </div>
                         )
                     })}
                 </div>
-                {carts.length > 0 ?
+                {carts?.cartItems.length > 0 ?
                     <div className='pop-cart-footer'>
                         <button onClick={() => navigate('/order')}>Xem giỏ hàng</button>
                     </div>
@@ -123,7 +123,7 @@ const Header = (props) => {
                                     content={contentPopover}
                                     arrow={true}>
                                     <Badge
-                                        count={carts?.length ?? 0}
+                                        count={carts?.count ?? 0}
                                         size={"small"}
                                         showZero
                                     >

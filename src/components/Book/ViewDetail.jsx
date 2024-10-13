@@ -1,4 +1,4 @@
-import { Row, Col, Rate, Divider, Button, Breadcrumb } from 'antd';
+import { Row, Col, Rate, Divider, Button, Breadcrumb, message } from 'antd';
 import './book.scss';
 import ImageGallery from 'react-image-gallery';
 import { useRef, useState } from 'react';
@@ -6,9 +6,11 @@ import ModalGallery from './ModalGallery';
 import { MinusOutlined, PlusOutlined, HomeOutlined } from '@ant-design/icons';
 import { BsCartPlus } from 'react-icons/bs';
 import BookLoader from './BookLoader';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { doAddBookAction } from '../../redux/order/orderSlice'
 import { Link, useNavigate } from 'react-router-dom';
+import { callAddBookToCart, callFetchAccount } from '../../services/api';
+import { doGetAccountAction } from '../../redux/account/accountSlice';
 
 const ViewDetail = (props) => {
     const { dataBook } = props;
@@ -18,6 +20,8 @@ const ViewDetail = (props) => {
     const [currentQuantity, setCurrentQuantity] = useState(1);
     const refGallery = useRef(null);
     const images = dataBook?.items ?? [];
+
+    const account = useSelector(state => state.account.user);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -50,13 +54,27 @@ const ViewDetail = (props) => {
         }
     }
 
-    const handleAddToCart = (quantity, book) => {
-        dispatch(doAddBookAction({ quantity, detail: book, id: book.id }))
+    const handleAddToCart = async (quantity, book) => {
+        const res = await callAddBookToCart(account.email, book.id, quantity);
+        if (res) {
+            message.success("Sản phẩm đã được thêm vào Giỏ hàng");
+            const dataAccount = await callFetchAccount();
+            console.log('check>>> dataAccount:', dataAccount);
+            dispatch(doGetAccountAction(dataAccount.data));
+        }
+
     }
 
-    const handleBuyNow = (quantity, book) => {
-        dispatch(doAddBookAction({ quantity, detail: book, id: book.id }))
-        navigate('/order');
+    const handleBuyNow = async (quantity, book) => {
+        const res = await callAddBookToCart(account.email, book.id, quantity);
+        if (res) {
+            message.success("Sản phẩm đã được thêm vào Giỏ hàng");
+            const dataAccount = await callFetchAccount();
+            console.log('check>>> dataAccount:', dataAccount);
+            dispatch(doGetAccountAction(dataAccount.data));
+            navigate('/order');
+        }
+
     }
     return (
         <div style={{ background: '#efefef', padding: "20px 0" }}>

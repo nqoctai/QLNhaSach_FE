@@ -15,7 +15,7 @@ const ManageOrder = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [filter, setFilter] = useState("");
-    const [sortQuery, setSortQuery] = useState("sort=-createdAt");
+    const [sortQuery, setSortQuery] = useState("sort=createdAt,desc");
 
     useEffect(() => {
         fetchOrder();
@@ -23,7 +23,7 @@ const ManageOrder = () => {
 
     const fetchOrder = async () => {
         setIsLoading(true)
-        let query = `current=${current}&pageSize=${pageSize}`;
+        let query = `page=${current}&size=${pageSize}`;
         if (filter) {
             query += `&${filter}`;
         }
@@ -65,17 +65,17 @@ const ManageOrder = () => {
         },
         {
             title: 'Name',
-            dataIndex: 'name',
+            dataIndex: 'receiverName',
             sorter: true
         },
         {
             title: 'Address',
-            dataIndex: 'address',
+            dataIndex: 'receiverAddress',
             sorter: true,
         },
         {
             title: 'Số điện thoại',
-            dataIndex: 'phone',
+            dataIndex: 'receiverPhone',
             sorter: true
         },
         {
@@ -85,6 +85,17 @@ const ManageOrder = () => {
             render: (text, record, index) => {
                 return (
                     <>{moment(record.updatedAt).format(FORMAT_DATE_DISPLAY)}</>
+                )
+            }
+
+        },
+        {
+            title: 'Ngày tạo',
+            dataIndex: 'createdAt',
+            sorter: true,
+            render: (text, record, index) => {
+                return (
+                    <>{moment(record.createdAt).format(FORMAT_DATE_DISPLAY)}</>
                 )
             }
 
@@ -101,7 +112,13 @@ const ManageOrder = () => {
             setCurrent(1);
         }
         if (sorter && sorter.field) {
-            const q = sorter.order === 'ascend' ? `sort=${sorter.field}` : `sort=-${sorter.field}`;
+            // const q = sorter.order === 'ascend' ? `sort=${sorter.field}` : `sort=-${sorter.field}`;
+            let q = "";
+            if (sorter.order === 'ascend') {
+                q = `sort=${sorter.field},asc`;
+            } else if (sorter.order === 'descend') {
+                q = `sort=${sorter.field},desc`;
+            }
             setSortQuery(q);
         }
     };

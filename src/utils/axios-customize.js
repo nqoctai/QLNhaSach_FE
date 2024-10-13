@@ -8,11 +8,7 @@ const instance = axios.create({
 });
 
 
-// Kiểm tra token trước khi thêm vào header Authorization
-const token = localStorage.getItem('access_token');
-if (token) {
-    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-}
+
 
 const handleRefreshToken = async () => {
     const res = await instance.get('/api/v1/auth/refresh');
@@ -26,6 +22,13 @@ const NO_RETRY_HEADER = 'x-no-retry';
 // Add a request interceptor
 instance.interceptors.request.use(function (config) {
     // Do something before request is sent
+    // Kiểm tra token trước khi thêm vào header Authorization
+    const token = localStorage.getItem('access_token');
+
+    // Nếu có token thì thêm vào headers của request hiện tại
+    if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+    }
     return config;
 }, function (error) {
     // Do something with request error
@@ -46,10 +49,12 @@ instance.interceptors.response.use(function (response) {
     if (error.config
         && error.response
         && +error.response.status === 401
+        && error.config.url !== '/api/v1/auth/login'
         && !error.config.headers[NO_RETRY_HEADER]
     ) {
+        localStorage.removeItem('access_token');
         const access_token = await handleRefreshToken();
-        error.config.headers[NO_RETRY_HEADER] = true;
+        error.config.headers[NO_RETRY_HEADER] = 'true';
 
         if (access_token) {
             error.config.headers['Authorization'] = `Bearer ${access_token}`;
@@ -63,7 +68,7 @@ instance.interceptors.response.use(function (response) {
         && +error.response.status === 400
         && error.config.url === '/api/v1/auth/refresh'
     ) {
-        // window.location.href = '/login';
+        window.location.href = '/login';
     }
     return error?.response?.data ?? Promise.reject(error);
 });

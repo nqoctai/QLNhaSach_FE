@@ -17,7 +17,7 @@ const LoginPage = () => {
         setIsSubmit(true);
         const res = await callLogin(username, password);
         setIsSubmit(false);
-        if (res?.data) {
+        if (res && res?.data) {
             localStorage.setItem('access_token', res.data.access_token);
             dispatch(doLoginAction(res.data.account));
             message.success('Đăng nhập thành công');
@@ -29,6 +29,7 @@ const LoginPage = () => {
                 duration: 5
             })
         }
+        // window.location.reload();
         console.log('check>>> res:', res);
     };
 

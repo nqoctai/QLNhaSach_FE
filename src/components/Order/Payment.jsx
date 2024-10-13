@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { doDeleteItemCartAction, doPlaceOrderAction, doUpdateCartAction } from '../../redux/order/orderSlice';
 import { Input } from 'antd';
-import { callPlaceOrder } from '../../services/api';
+import { callFetchAccount, callPlaceOrder } from '../../services/api';
+import { doGetAccountAction } from '../../redux/account/accountSlice';
 const { TextArea } = Input;
 
 const Payment = (props) => {
-    const carts = useSelector(state => state.order.carts);
+    const carts = useSelector(state => state?.account.user?.cart?.cartItems);
     const [totalPrice, setTotalPrice] = useState(0);
     const dispatch = useDispatch();
     const [isSubmit, setIsSubmit] = useState(false);
@@ -20,7 +21,7 @@ const Payment = (props) => {
         if (carts && carts.length > 0) {
             let sum = 0;
             carts.map(item => {
-                sum += item.quantity * item.detail.price;
+                sum += item.quantity * item.book.price;
             })
             setTotalPrice(sum);
         } else {
@@ -44,23 +45,25 @@ const Payment = (props) => {
         setIsSubmit(true);
         const detailOrder = carts.map(item => {
             return {
-                bookName: item.detail.mainText,
+                bookName: item.book.mainText,
                 quantity: item.quantity,
                 id: item.id
             }
         })
         const data = {
+            accountId: user?.id,
             name: values.name,
             address: values.address,
             phone: values.phone,
             totalPrice: totalPrice,
-            detail: detailOrder
         }
 
         const res = await callPlaceOrder(data);
         if (res && res.data) {
             message.success('Đặt hàng thành công !');
-            dispatch(doPlaceOrderAction());
+            // dispatch(doPlaceOrderAction());
+            const dataAccount = await callFetchAccount();
+            dispatch(doGetAccountAction(dataAccount.data));
             props.setCurrentStep(2);
         } else {
             notification.error({
@@ -74,14 +77,14 @@ const Payment = (props) => {
     return (
         <Row gutter={[20, 20]}>
             <Col md={16} xs={24}>
-                {carts?.map((book, index) => {
-                    const currentBookPrice = book?.detail?.price ?? 0;
+                {carts?.map((item, index) => {
+                    const currentBookPrice = item?.book?.price ?? 0;
                     return (
                         <div className='order-book' key={`index-${index}`}>
                             <div className='book-content'>
-                                <img src={`${import.meta.env.VITE_BACKEND_URL}/storage/book/${book?.detail?.thumbnail}`} />
+                                <img src={`${import.meta.env.VITE_BACKEND_URL}/storage/book/${item?.book?.thumbnail}`} />
                                 <div className='title'>
-                                    {book?.detail?.mainText}
+                                    {item?.book?.mainText}
                                 </div>
                                 <div className='price'>
                                     {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(currentBookPrice)}
@@ -89,14 +92,14 @@ const Payment = (props) => {
                             </div>
                             <div className='action'>
                                 <div className='quantity'>
-                                    Số lượng: {book?.quantity}
+                                    Số lượng: {item?.quantity}
                                 </div>
                                 <div className='sum'>
-                                    Tổng:  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(currentBookPrice * (book?.quantity ?? 0))}
+                                    Tổng:  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(currentBookPrice * (item?.quantity ?? 0))}
                                 </div>
                                 <DeleteTwoTone
                                     style={{ cursor: "pointer" }}
-                                    onClick={() => dispatch(doDeleteItemCartAction({ id: book.id }))}
+                                    onClick={() => dispatch(doDeleteItemCartAction({ id: item.id }))}
                                     twoToneColor="#eb2f96"
                                 />
 

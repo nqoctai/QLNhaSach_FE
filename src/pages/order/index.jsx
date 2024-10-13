@@ -11,7 +11,7 @@ const OrderPage = (props) => {
     const navigate = useNavigate();
 
     return (
-        <div style={{ background: '#efefef', padding: "20px 0" }}>
+        <div style={{ background: '#efefef', padding: "20px 0", maxHeight: 600, overflowY: "auto" }}>
             <div className="order-container" style={{ maxWidth: 1440, margin: '0 auto' }}>
                 <Breadcrumb
                     style={{ margin: '5px 0' }}
