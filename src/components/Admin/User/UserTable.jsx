@@ -35,6 +35,7 @@ const UserTable = () => {
         fetchUser();
     }, [current, pageSize, filter, sortQuery]);
 
+
     const fetchUser = async () => {
         setIsLoading(true)
         let query = `page=${current}&size=${pageSize}`;
@@ -63,6 +64,7 @@ const UserTable = () => {
                 return (
                     <a href='#' onClick={() => {
                         setDataViewDetail(record);
+                        console.log("DataViewDetail: ", dataViewDetail);
                         setOpenViewDetail(true);
                     }}>{record.id}</a>
                 )
@@ -82,6 +84,16 @@ const UserTable = () => {
             title: 'Số điện thoại',
             dataIndex: 'phone',
             sorter: true
+        },
+        {
+            title: 'Vai trò',
+            dataIndex: 'role',
+            sorter: true,
+            render: (text, record, index) => {
+                return (
+                    <>{record.role ? record.role.name : 'Không có vai trò'}</>
+                )
+            }
         },
         {
             title: 'Ngày cập nhật',

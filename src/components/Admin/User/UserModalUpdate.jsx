@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Divider, Form, Input, message, Modal, notification } from 'antd';
-import { callUpdateUser } from '../../../services/api';
+import { Button, Divider, Form, Input, message, Modal, notification, Select } from 'antd';
+import { callUpdateUser, callListRole } from '../../../services/api';
 
 const UserModalUpdate = (props) => {
     const { openModalUpdate, setOpenModalUpdate, dataUpdate, setDataUpdate } = props;
     const [isSubmit, setIsSubmit] = useState(false);
+    const [roles, setRoles] = useState([]);
 
     // https://ant.design/components/form#components-form-demo-control-hooks
     const [form] = Form.useForm();
 
 
     const onFinish = async (values) => {
-        let { username, id, phone } = values;
+        let { username, id, phone, role } = values;
         setIsSubmit(true)
-        const res = await callUpdateUser(+id, username, phone);
+        const res = await callUpdateUser(+id, username, phone, role);
         if (res && res.data) {
             message.success('Cập nhật user thành công');
             setOpenModalUpdate(false);
@@ -27,8 +28,22 @@ const UserModalUpdate = (props) => {
         setIsSubmit(false)
     };
 
+    const fetchRoles = async () => {
+        const res = await callListRole();
+        if (res && res.data) {
+            const d = res.data.map(item => {
+                return { label: item.name, value: item.id }
+            })
+            setRoles(d)
+        }
+    }
+
     useEffect(() => {
-        form.setFieldsValue(dataUpdate)
+        if (dataUpdate) {
+            form.setFieldsValue({ ...dataUpdate, role: { value: dataUpdate?.role?.id, label: dataUpdate?.role?.name } })
+        }
+
+        fetchRoles();
     }, [dataUpdate])
 
     return (
@@ -90,6 +105,18 @@ const UserModalUpdate = (props) => {
                         rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
                     >
                         <Input />
+                    </Form.Item>
+                    <Form.Item
+                        labelCol={{ span: 24 }}
+                        label="Vai trò"
+                        name="role"
+                        rules={[{ required: true, message: 'Vui lòng chọn role!' }]}
+                    >
+                        <Select
+                            showSearch
+                            allowClear
+                            options={roles}
+                        />
                     </Form.Item>
                 </Form>
             </Modal>

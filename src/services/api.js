@@ -21,16 +21,16 @@ export const callFetchListAccountWithPagination = (query) => {
     return axios.get(`/api/v1/accounts?${query}`)
 }
 
-export const callCreateAUser = (username, password, email, phone) => {
-    return axios.post('/api/v1/account', { username, password, email, phone })
+export const callCreateAUser = (username, password, email, phone, role) => {
+    return axios.post('/api/v1/account', { username, password, email, phone, role: { id: role } })
 }
 
 export const callBulkCreateUser = (data) => {
     return axios.post('/api/v1/account/bulk-create', data)
 }
 
-export const callUpdateUser = (id, username, phone) => {
-    return axios.put('/api/v1/account', { id, username, phone })
+export const callUpdateUser = (id, username, phone, role) => {
+    return axios.put('/api/v1/account', { id, username, phone, role: { id: role } })
 }
 
 export const callDeleteUser = (id) => {
@@ -142,4 +142,8 @@ export const callUpdateQuantityBookInCart = (cartId, cartItemId, quantity) => {
 
 export const callDeleteItemInCart = (cartItemId) => {
     return axios.delete(`/api/v1/cart/delete/${cartItemId}`);
+}
+
+export const callListRole = () => {
+    return axios.get('/api/v1/role');
 }

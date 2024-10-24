@@ -78,7 +78,7 @@ const BookViewDetail = (props) => {
                     <Descriptions.Item label="Đã bán">{dataViewDetail?.sold ?? 0}</Descriptions.Item>
 
                     <Descriptions.Item label="Thể loại" span={2}>
-                        <Badge status="processing" text={dataViewDetail?.category} />
+                        <Badge status="processing" text={dataViewDetail?.category?.name} />
                     </Descriptions.Item>
 
                     <Descriptions.Item label="Created At">

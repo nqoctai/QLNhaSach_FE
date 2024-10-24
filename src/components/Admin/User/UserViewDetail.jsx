@@ -26,7 +26,7 @@ const UserViewDetail = (props) => {
                     <Descriptions.Item label="Số điện thoại">{dataViewDetail?.phone}</Descriptions.Item>
 
                     <Descriptions.Item label="Role" span={2}>
-                        <Badge status="processing" text={dataViewDetail?.role} />
+                        <Badge status="processing" text={dataViewDetail?.role?.name} />
                     </Descriptions.Item>
                     <Descriptions.Item label="Created At">
                         {moment(dataViewDetail?.createdAt).format('DD-MM-YYYY hh:mm:ss')}

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Divider, Form, Input, message, Modal, notification } from 'antd';
-import { callCreateAUser } from '../../../services/api';
+import React, { useEffect, useState } from 'react';
+import { Button, Divider, Form, Input, message, Modal, notification, Select } from 'antd';
+import { callCreateAUser, callListRole } from '../../../services/api';
 
 const UserModalCreate = (props) => {
     const { openModalCreate, setOpenModalCreate } = props;
@@ -9,11 +9,26 @@ const UserModalCreate = (props) => {
     // https://ant.design/components/form#components-form-demo-control-hooks
     const [form] = Form.useForm();
 
+    const [roles, setRoles] = useState([]);
+    const fetchRoles = async () => {
+        const res = await callListRole();
+        if (res && res.data) {
+            const d = res.data.map(item => {
+                return { label: item.name, value: item.id }
+            })
+            setRoles(d)
+        }
+    }
+
+    useEffect(() => {
+        fetchRoles()
+    }, [])
+
 
     const onFinish = async (values) => {
-        const { username, password, email, phone } = values;
+        const { username, password, email, phone, role } = values;
         setIsSubmit(true)
-        const res = await callCreateAUser(username, password, email, phone);
+        const res = await callCreateAUser(username, password, email, phone, role);
         if (res && res.data) {
             message.success('Tạo mới user thành công');
             form.resetFields();
@@ -80,6 +95,19 @@ const UserModalCreate = (props) => {
                         rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
                     >
                         <Input />
+                    </Form.Item>
+                    <Form.Item
+                        labelCol={{ span: 24 }}
+                        label="Vai trò"
+                        name="role"
+                        rules={[{ required: true, message: 'Vui lòng chọn role!' }]}
+                    >
+                        <Select
+                            defaultValue={null}
+                            showSearch
+                            allowClear
+                            options={roles}
+                        />
                     </Form.Item>
                 </Form>
             </Modal>
