@@ -9,7 +9,7 @@ import { doGetAccountAction } from '../../redux/account/accountSlice';
 
 
 const ViewOrder = (props) => {
-    const cart = useSelector(state => state.account.user.cart);
+    const cart = useSelector(state => state.account.user.customer.cart);
     const account = useSelector(state => state.account.user);
     const [totalPrice, setTotalPrice] = useState(0);
     const dispatch = useDispatch();

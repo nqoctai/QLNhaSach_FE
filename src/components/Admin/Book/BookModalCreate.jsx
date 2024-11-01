@@ -58,9 +58,10 @@ const BookModalCreate = (props) => {
         console.log('check category:', category);
         const thumbnail = dataThumbnail[0].name;
         const slider = dataSlider.map(item => item.name);
+        const bookImages = dataSlider.map(item => { return { url: item.name } });
 
         setIsSubmit(true)
-        const res = await callCreateBook(thumbnail, slider, mainText, author, price, sold, quantity, category);
+        const res = await callCreateBook(thumbnail, mainText, author, price, sold, quantity, category, bookImages);
         if (res && res.data) {
             message.success('Tạo mới book thành công');
             form.resetFields();

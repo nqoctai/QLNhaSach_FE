@@ -26,6 +26,7 @@ import ManageBookPage from './pages/admin/book';
 import OrderPage from './pages/order';
 import HistoryPage from './pages/history';
 import AdminOrderPage from './pages/admin/order';
+import ManageCustomerPage from './pages/admin/customer';
 
 const Layout = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -110,6 +111,14 @@ export default function App() {
           element:
             <ProtectedRoute>
               <ManageUserPage />
+            </ProtectedRoute>
+          ,
+        },
+        {
+          path: "customer",
+          element:
+            <ProtectedRoute>
+              <ManageCustomerPage />
             </ProtectedRoute>
           ,
         },

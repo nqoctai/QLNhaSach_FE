@@ -9,7 +9,7 @@ import { doGetAccountAction } from '../../redux/account/accountSlice';
 const { TextArea } = Input;
 
 const Payment = (props) => {
-    const carts = useSelector(state => state?.account.user?.cart?.cartItems);
+    const carts = useSelector(state => state?.account.user?.customer?.cart?.cartItems);
     const [totalPrice, setTotalPrice] = useState(0);
     const dispatch = useDispatch();
     const [isSubmit, setIsSubmit] = useState(false);

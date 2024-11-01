@@ -48,15 +48,15 @@ export const callFetchCategory = () => {
     return axios.get('/api/v1/categories');
 }
 
-export const callCreateBook = (thumbnail, slider, mainText, author, price, sold, quantity, categories) => {
+export const callCreateBook = (thumbnail, mainText, author, price, sold, quantity, categories, bookImages) => {
     return axios.post('/api/v1/book', {
-        thumbnail, slider, mainText, author, price, sold, quantity, category: { id: categories }
+        thumbnail, mainText, author, price, sold, quantity, category: { id: categories }, bookImages
     })
 }
 
-export const callUpdateBook = (id, thumbnail, slider, mainText, author, price, sold, quantity, category) => {
+export const callUpdateBook = (id, thumbnail, mainText, author, price, sold, quantity, category, bookImages) => {
     return axios.put(`/api/v1/book/${id}`, {
-        thumbnail, slider, mainText, author, price, sold, quantity, category: { id: category }
+        thumbnail, mainText, author, price, sold, quantity, category: { id: category }, bookImages
     })
 }
 
@@ -146,4 +146,20 @@ export const callDeleteItemInCart = (cartItemId) => {
 
 export const callListRole = () => {
     return axios.get('/api/v1/role');
+}
+
+export const callFetchCustomerWithPagination = (query) => {
+    return axios.get(`/api/v1/customers?${query}`);
+}
+
+export const callCreateCustomer = (name, address, phone, email) => {
+    return axios.post('/api/v1/customer', { name, address, phone, email })
+}
+
+export const callDeleteCustomer = (id) => {
+    return axios.delete(`/api/v1/customer/${id}`)
+}
+
+export const callUpdateCustomer = (id, name, address, phone, email) => {
+    return axios.put('/api/v1/account', { id, name, address, phone, email })
 }

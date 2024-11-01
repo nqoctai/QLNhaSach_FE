@@ -19,7 +19,7 @@ const Header = (props) => {
     const user = useSelector(state => state.account.user);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const carts = useSelector(state => state.account.user.cart);
+    const carts = useSelector(state => state?.account?.user?.customer?.cart);
     const [showManageAccount, setShowManageAccount] = useState(false);
 
     const handleLogout = async () => {

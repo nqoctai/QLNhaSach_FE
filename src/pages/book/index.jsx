@@ -40,12 +40,12 @@ const BookPage = () => {
                 },
             )
         }
-        if (raw.slider) {
-            raw.slider?.map(item => {
+        if (raw.bookImages) {
+            raw.bookImages?.map(item => {
                 images.push(
                     {
-                        original: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${item}`,
-                        thumbnail: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${item}`,
+                        original: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${item.url}`,
+                        thumbnail: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${item.url}`,
                         originalClass: "original-image",
                         thumbnailClass: "thumbnail-image"
                     },

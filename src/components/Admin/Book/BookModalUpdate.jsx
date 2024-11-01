@@ -50,12 +50,12 @@ const BookModalUpdate = (props) => {
                 }
             ]
 
-            const arrSlider = dataUpdate?.slider?.map(item => {
+            const arrSlider = dataUpdate?.bookImages?.map(item => {
                 return {
                     uid: uuidv4(),
-                    name: item,
+                    name: item.url,
                     status: 'done',
-                    url: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${item}`,
+                    url: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${item.url}`,
                 }
             })
 
@@ -102,9 +102,12 @@ const BookModalUpdate = (props) => {
         const { id, mainText, author, price, sold, quantity, category } = values;
         const thumbnail = dataThumbnail[0].name;
         const slider = dataSlider.map(item => item.name);
+        const bookImages = dataSlider.map(item => { return { url: item.name } });
+        console.log('bookImages', bookImages)
+
 
         setIsSubmit(true)
-        const res = await callUpdateBook(id, thumbnail, slider, mainText, author, price, sold, quantity, category);
+        const res = await callUpdateBook(id, thumbnail, mainText, author, price, sold, quantity, category, bookImages);
         if (res && res.data) {
             message.success('Cập nhật book thành công');
             form.resetFields();
@@ -171,10 +174,11 @@ const BookModalUpdate = (props) => {
 
     const handleUploadFileSlider = async ({ file, onSuccess, onError }) => {
         const res = await callUploadBookImg(file);
+        console.log('res', res)
         if (res && res.data) {
             //copy previous state => upload multiple images
             setDataSlider((dataSlider) => [...dataSlider, {
-                name: res.data.fileUploaded,
+                name: res.data.fileName,
                 uid: file.uid
             }])
             onSuccess('ok')

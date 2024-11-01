@@ -36,6 +36,11 @@ const items = [
         ]
     },
     {
+        label: <Link to='/admin/customer'>Manage Customers</Link>,
+        key: 'customer',
+        icon: <ExceptionOutlined />
+    },
+    {
         label: <Link to='/admin/book'>Manage Books</Link>,
         key: 'book',
         icon: <ExceptionOutlined />

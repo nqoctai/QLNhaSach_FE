@@ -11,11 +11,15 @@ const initialState = {
         role: "",
         avatar: "",
         id: "",
-        cart: {
-            id: -1,
-            count: 0,
-            sumPrice: 0,
-            cartItems: []
+        customer: {
+            id: "",
+            name: "",
+            cart: {
+                id: -1,
+                count: 0,
+                sumPrice: 0,
+                cartItems: []
+            }
         }
     },
     tempAvatar: ""

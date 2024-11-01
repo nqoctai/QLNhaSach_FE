@@ -29,13 +29,13 @@ const BookViewDetail = (props) => {
                     url: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${dataViewDetail.thumbnail}`,
                 }
             }
-            if (dataViewDetail.slider && dataViewDetail.slider.length > 0) {
-                dataViewDetail.slider.map(item => {
+            if (dataViewDetail.bookImages && dataViewDetail.bookImages.length > 0) {
+                dataViewDetail.bookImages.map(item => {
                     imgSlider.push({
                         uid: uuidv4(),
-                        name: item,
+                        name: item.url,
                         status: 'done',
-                        url: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${item}`,
+                        url: `${import.meta.env.VITE_BACKEND_URL}/storage/book/${item.url}`,
                     })
                 })
             }
