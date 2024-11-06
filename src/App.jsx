@@ -27,6 +27,7 @@ import OrderPage from './pages/order';
 import HistoryPage from './pages/history';
 import AdminOrderPage from './pages/admin/order';
 import ManageCustomerPage from './pages/admin/customer';
+import ManageEmployeePage from './pages/admin/employee';
 
 const Layout = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -119,6 +120,14 @@ export default function App() {
           element:
             <ProtectedRoute>
               <ManageCustomerPage />
+            </ProtectedRoute>
+          ,
+        },
+        {
+          path: "employee",
+          element:
+            <ProtectedRoute>
+              <ManageEmployeePage />
             </ProtectedRoute>
           ,
         },

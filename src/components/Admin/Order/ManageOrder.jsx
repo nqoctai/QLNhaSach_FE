@@ -4,6 +4,9 @@ import { callFetchListOrder } from '../../../services/api';
 import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import moment from 'moment/moment';
 import { FORMAT_DATE_DISPLAY } from '../../../utils/constant';
+import OrderModalCreate from './OrderModalCreate';
+import OrderModalUpdate from './OrderModalUpdate';
+import OrderViewDetail from './OrderViewDetail';
 
 
 // https://stackblitz.com/run?file=demo.tsx
@@ -12,10 +15,14 @@ const ManageOrder = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(5);
     const [total, setTotal] = useState(0);
-
+    const [openModalCreate, setOpenModalCreate] = useState(false);
+    const [dataViewDetail, setDataViewDetail] = useState(null);
+    const [openViewDetail, setOpenViewDetail] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [filter, setFilter] = useState("");
     const [sortQuery, setSortQuery] = useState("sort=createdAt,desc");
+    const [dataUpdate, setDataUpdate] = useState(null);
+    const [openModalUpdate, setOpenModalUpdate] = useState(false);
 
     useEffect(() => {
         fetchOrder();
@@ -46,8 +53,8 @@ const ManageOrder = () => {
             render: (text, record, index) => {
                 return (
                     <a href='#' onClick={() => {
-                        // setDataViewDetail(record);
-                        // setOpenViewDetail(true);
+                        setDataViewDetail(record);
+                        setOpenViewDetail(true);
                     }}>{record.id}</a>
                 )
             }
@@ -61,6 +68,11 @@ const ManageOrder = () => {
 
                 )
             },
+            sorter: true
+        },
+        {
+            title: 'Email',
+            dataIndex: 'receiverEmail',
             sorter: true
         },
         {
@@ -100,6 +112,37 @@ const ManageOrder = () => {
             }
 
         },
+        {
+            title: 'Action',
+            render: (text, record, index) => {
+                return (
+                    <>
+
+                        <Popconfirm
+                            placement="leftTop"
+                            title={"Xác nhận xóa user"}
+                            description={"Bạn có chắc chắn muốn xóa đơn hàng này ?"}
+                            onConfirm={() => handleDeleteUser(record.id)}
+                            okText="Xác nhận"
+                            cancelText="Hủy"
+                        >
+                            <span style={{ cursor: "pointer", margin: "0 20px" }}>
+                                <DeleteTwoTone twoToneColor="#ff4d4f" />
+                            </span>
+                        </Popconfirm>
+
+                        <EditTwoTone
+                            twoToneColor="#f57800" style={{ cursor: "pointer" }}
+                            onClick={() => {
+                                setOpenModalUpdate(true);
+                                setDataUpdate(record);
+                            }}
+                        />
+                    </>
+
+                )
+            }
+        }
 
     ];
 
@@ -138,6 +181,14 @@ const ManageOrder = () => {
                     }}>
                         <ReloadOutlined />
                     </Button>
+
+                    <Button
+                        icon={<PlusOutlined />}
+                        type="primary"
+                        onClick={() => setOpenModalCreate(true)}
+                    >Thêm mới</Button>
+
+
                 </span>
             </div>
         )
@@ -173,6 +224,24 @@ const ManageOrder = () => {
                     />
                 </Col>
             </Row>
+            <OrderModalCreate
+                openModalCreate={openModalCreate}
+                setOpenModalCreate={setOpenModalCreate}
+                fetchOrder={fetchOrder}
+            />
+            <OrderModalUpdate
+                openModalUpdate={openModalUpdate}
+                setOpenModalUpdate={setOpenModalUpdate}
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
+                fetchOrder={fetchOrder}
+            />
+            <OrderViewDetail
+                openViewDetail={openViewDetail}
+                setOpenViewDetail={setOpenViewDetail}
+                dataViewDetail={dataViewDetail}
+                setDataViewDetail={setDataViewDetail}
+            />
         </>
     )
 }

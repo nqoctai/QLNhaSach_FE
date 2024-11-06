@@ -1,6 +1,6 @@
 import { Badge, Descriptions, Drawer } from "antd";
 import moment from 'moment';
-const UserViewDetail = (props) => {
+const EmployeeViewDetail = (props) => {
     const { openViewDetail, setOpenViewDetail, dataViewDetail, setDataViewDetail } = props;
 
     const onClose = () => {
@@ -21,15 +21,14 @@ const UserViewDetail = (props) => {
                     column={2}
                 >
                     <Descriptions.Item label="Id">{dataViewDetail?.id}</Descriptions.Item>
-                    <Descriptions.Item label="Họ tên">{dataViewDetail?.username}</Descriptions.Item>
+                    <Descriptions.Item label="Họ và tên">{dataViewDetail?.fullName}</Descriptions.Item>
                     <Descriptions.Item label="Email">{dataViewDetail?.email}</Descriptions.Item>
+                    <Descriptions.Item label="Địa chỉ">{dataViewDetail?.address}</Descriptions.Item>
+                    <Descriptions.Item label="Lương">{dataViewDetail?.salary}</Descriptions.Item>
+                    <Descriptions.Item label="Role">{dataViewDetail?.role?.name}</Descriptions.Item>
                     <Descriptions.Item label="Số điện thoại">{dataViewDetail?.phone}</Descriptions.Item>
-                    <Descriptions.Item label="Mã khách hàng">{dataViewDetail?.customer?.id}</Descriptions.Item>
-                    <Descriptions.Item label="Mã nhân viên">{dataViewDetail?.employee?.id}</Descriptions.Item>
-
-
-                    <Descriptions.Item label="Role" span={2}>
-                        <Badge status="processing" text={dataViewDetail?.role?.name} />
+                    <Descriptions.Item label="Hire Date">
+                        {moment(dataViewDetail?.hireDate).format('DD-MM-YYYY')}
                     </Descriptions.Item>
                     <Descriptions.Item label="Created At">
                         {moment(dataViewDetail?.createdAt).format('DD-MM-YYYY hh:mm:ss')}
@@ -42,4 +41,4 @@ const UserViewDetail = (props) => {
         </>
     )
 }
-export default UserViewDetail;
+export default EmployeeViewDetail;

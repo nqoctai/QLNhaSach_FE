@@ -52,6 +52,7 @@ const Payment = (props) => {
         })
         const data = {
             accountId: user?.id,
+            email: user?.email,
             name: values.name,
             address: values.address,
             phone: values.phone,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Row, Col, Popconfirm, Button, message, notification } from 'antd';
-import InputSearch from './InpuSearch';
+import InputSearch from './InputSearch';
 import { callDeleteCustomer, callDeleteUser, callFetchCustomerWithPagination, callFetchListAccountWithPagination } from '../../../services/api';
 import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 

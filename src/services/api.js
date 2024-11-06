@@ -43,6 +43,12 @@ export const callFetchListBook = (query) => {
     return axios.get(`/api/v1/books?${query}`)
 }
 
+export const callFetchListBookNoPagination = () => {
+    return axios.get(`/api/v1/booksNoPagination`)
+}
+
+
+
 
 export const callFetchCategory = () => {
     return axios.get('/api/v1/categories');
@@ -162,4 +168,32 @@ export const callDeleteCustomer = (id) => {
 
 export const callUpdateCustomer = (id, name, address, phone, email) => {
     return axios.put('/api/v1/account', { id, name, address, phone, email })
+}
+
+export const callFetchEmployeeWithPagination = (query) => {
+    return axios.get(`/api/v1/employees?${query}`);
+}
+
+export const callCreateEmployee = (fullName, address, phone, email, hireDate, salary, role) => {
+    return axios.post('/api/v1/employee', { fullName, address, phone, email, hireDate, salary, role: { id: role } })
+}
+
+export const callUpdateEmployee = (id, fullName, address, phone, email, hireDate, salary, role) => {
+    return axios.put('/api/v1/employee', { id, fullName, address, phone, email, hireDate, salary, role: { id: role } })
+}
+
+export const callDeleteEmployee = (id) => {
+    return axios.delete(`/api/v1/employee/${id}`)
+}
+
+export const callFetcListShippingStatus = () => {
+    return axios.get('/api/v1/shippingStatus');
+}
+
+export const callCreateOrder = (receiverName, email, receiverAddress, receiverPhone, totalPrice, status, rqProducts) => {
+    return axios.post('/api/v1/order/create', { receiverName, email, receiverAddress, receiverPhone, totalPrice, statusId: status, orderItems: rqProducts })
+}
+
+export const callUpdateOrder = (id, status, note) => {
+    return axios.put('/api/v1/order', { id, statusId: status, note })
 }

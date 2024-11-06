@@ -38,7 +38,12 @@ const items = [
     {
         label: <Link to='/admin/customer'>Manage Customers</Link>,
         key: 'customer',
-        icon: <ExceptionOutlined />
+        icon: <TeamOutlined />
+    },
+    {
+        label: <Link to='/admin/employee'>Manage Employees</Link>,
+        key: 'employee',
+        icon: <TeamOutlined />
     },
     {
         label: <Link to='/admin/book'>Manage Books</Link>,
@@ -73,6 +78,10 @@ const LayoutAdmin = () => {
             setActiveMenu('order');
         } else if (currentPath === '/admin') {
             setActiveMenu('dashboard');
+        } else if (currentPath.includes('/admin/customer')) {
+            setActiveMenu('customer');
+        } else if (currentPath.includes('/admin/employee')) {
+            setActiveMenu('employee');
         }
     }, [location]);
 

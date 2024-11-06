@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Row, Col, Popconfirm, Button, message, notification } from 'antd';
 import InputSearch from './InputSearch';
-import { callDeleteUser, callFetchListAccountWithPagination } from '../../../services/api';
+import { callDeleteEmployee, callFetchEmployeeWithPagination, } from '../../../services/api';
 import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
-import UserModalCreate from './UserModalCreate';
-import UserViewDetail from './UserViewDetail';
+
 import moment from 'moment/moment';
 import { FORMAT_DATE_DISPLAY } from '../../../utils/constant';
-import UserImport from './data/UserImport';
+
 import * as XLSX from 'xlsx';
-import UserModalUpdate from './UserModalUpdate';
+
+
+import EmployeeViewDetail from './EmployeeViewDetail';
+import EmployeeModalCreate from './EmployeeModalCreate';
+import EmployeeModalUpdate from './EmployeeModalUpdate';
 
 // https://stackblitz.com/run?file=demo.tsx
-const UserTable = () => {
-    const [listUser, setListUser] = useState([]);
+const EmployeeTable = () => {
+    const [listCustomer, setListCustomer] = useState([]);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(5);
     const [total, setTotal] = useState(0);
@@ -32,11 +35,11 @@ const UserTable = () => {
     const [dataUpdate, setDataUpdate] = useState(null);
 
     useEffect(() => {
-        fetchUser();
+        fetchEmployee();
     }, [current, pageSize, filter, sortQuery]);
 
 
-    const fetchUser = async () => {
+    const fetchEmployee = async () => {
         setIsLoading(true)
         let query = `page=${current}&size=${pageSize}`;
         if (filter) {
@@ -46,10 +49,10 @@ const UserTable = () => {
             query += `&${sortQuery}`;
         }
 
-        const res = await callFetchListAccountWithPagination(query);
+        const res = await callFetchEmployeeWithPagination(query);
         console.log(res)
         if (res && res.data) {
-            setListUser(res.data.result);
+            setListCustomer(res.data.result);
             setTotal(res.data.meta.total)
         }
         setIsLoading(false)
@@ -64,15 +67,14 @@ const UserTable = () => {
                 return (
                     <a href='#' onClick={() => {
                         setDataViewDetail(record);
-                        console.log("DataViewDetail: ", dataViewDetail);
                         setOpenViewDetail(true);
                     }}>{record.id}</a>
                 )
             }
         },
         {
-            title: 'Họ tên',
-            dataIndex: 'username',
+            title: 'Họ và Tên',
+            dataIndex: 'fullName',
             sorter: true
         },
         {
@@ -81,19 +83,24 @@ const UserTable = () => {
             sorter: true,
         },
         {
+            title: 'Địa chỉ',
+            dataIndex: 'address',
+            sorter: true,
+        },
+        {
             title: 'Số điện thoại',
             dataIndex: 'phone',
             sorter: true
         },
         {
-            title: 'Vai trò',
-            dataIndex: 'role',
-            sorter: true,
-            render: (text, record, index) => {
-                return (
-                    <>{record.role ? record.role.name : 'Không có vai trò'}</>
-                )
-            }
+            title: 'Lương',
+            dataIndex: 'salary',
+            sorter: true
+        },
+        {
+            title: 'Ngày thuê',
+            dataIndex: 'hireDate',
+            sorter: true
         },
         {
             title: 'Ngày cập nhật',
@@ -126,7 +133,7 @@ const UserTable = () => {
                         <Popconfirm
                             placement="leftTop"
                             title={"Xác nhận xóa user"}
-                            description={"Bạn có chắc chắn muốn xóa user này ?"}
+                            description={"Bạn có chắc chắn muốn xóa nhân viên này ?"}
                             onConfirm={() => handleDeleteUser(record.id)}
                             okText="Xác nhận"
                             cancelText="Hủy"
@@ -170,11 +177,11 @@ const UserTable = () => {
         }
     };
 
-    const handleDeleteUser = async (userId) => {
-        const res = await callDeleteUser(userId);
+    const handleDeleteUser = async (employeeId) => {
+        const res = await callDeleteEmployee(employeeId);
         if (res && res.data) {
-            message.success('Xóa user thành công');
-            fetchUser();
+            message.success('Xóa nhân viên thành công');
+            fetchEmployee();
         } else {
             notification.error({
                 message: 'Có lỗi xảy ra',
@@ -248,7 +255,7 @@ const UserTable = () => {
                         loading={isLoading}
 
                         columns={columns}
-                        dataSource={listUser}
+                        dataSource={listCustomer}
                         onChange={onChange}
                         rowKey="id"
                         pagination={
@@ -265,36 +272,38 @@ const UserTable = () => {
                     />
                 </Col>
             </Row>
-            <UserModalCreate
-                openModalCreate={openModalCreate}
-                setOpenModalCreate={setOpenModalCreate}
-                fetchUser={fetchUser}
-            />
-
-            <UserViewDetail
+            <EmployeeViewDetail
                 openViewDetail={openViewDetail}
                 setOpenViewDetail={setOpenViewDetail}
                 dataViewDetail={dataViewDetail}
                 setDataViewDetail={setDataViewDetail}
             />
 
+            <EmployeeModalCreate
+                openModalCreate={openModalCreate}
+                setOpenModalCreate={setOpenModalCreate}
+                fetchEmployee={fetchEmployee}
+            />
+
+            <EmployeeModalUpdate
+                openModalUpdate={openModalUpdate}
+                setOpenModalUpdate={setOpenModalUpdate}
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
+                fetchEmployee={fetchEmployee}
+            />
+            {/*
             <UserImport
                 openModalImport={openModalImport}
                 setOpenModalImport={setOpenModalImport}
                 fetchUser={fetchUser}
             />
 
-            <UserModalUpdate
-                openModalUpdate={openModalUpdate}
-                setOpenModalUpdate={setOpenModalUpdate}
-                dataUpdate={dataUpdate}
-                setDataUpdate={setDataUpdate}
-                fetchUser={fetchUser}
-            />
+            */}
 
         </>
     )
 }
 
 
-export default UserTable;
+export default EmployeeTable;
