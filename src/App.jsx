@@ -29,6 +29,8 @@ import AdminOrderPage from './pages/admin/order';
 import ManageCustomerPage from './pages/admin/customer';
 import ManageEmployeePage from './pages/admin/employee';
 import ManageReceiptPage from './pages/admin/receipt';
+import ManageSupply from './pages/admin/supply';
+import ManageSupplyPage from './pages/admin/supply';
 
 const Layout = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -153,6 +155,14 @@ export default function App() {
           element:
             <ProtectedRoute>
               <ManageReceiptPage />
+            </ProtectedRoute>
+          ,
+        },
+        {
+          path: "supply",
+          element:
+            <ProtectedRoute>
+              <ManageSupplyPage />
             </ProtectedRoute>
           ,
         }

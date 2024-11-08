@@ -207,7 +207,7 @@ export const callFetchSupplierById = (id) => {
 }
 
 export const callSupplyBySupplierIDAndBookID = (supplierID, bookID) => {
-    return axios.post(`/api/v1/supply`, { supplierID, bookID });
+    return axios.post(`/api/v1/fetch-supply`, { supplierID, bookID });
 }
 
 export const callFetchAllImportReceipt = (query) => {
@@ -224,4 +224,20 @@ export const callFetchBookBySupplierId = (id) => {
 
 export const callUpdateImportReceipt = (id, employeeEmail, totalPrice, rqProducts) => {
     return axios.put('/api/v1/receipt', { id, employeeEmail, totalPrice, importReceiptItems: rqProducts });
+}
+
+export const callFetchAllSupplyWithPagination = (query) => {
+    return axios.get(`/api/v1/supplies?${query}`);
+}
+
+export const callCreateSupply = (supplierID, bookID, supplyPrice) => {
+    return axios.post('/api/v1/supply', { supplier: { id: supplierID }, book: { id: bookID }, supplyPrice });
+}
+
+export const callDeleteSupply = (id) => {
+    return axios.delete(`/api/v1/supply/${id}`);
+}
+
+export const callUpdateSupply = (id, supplierID, bookID, supplyPrice) => {
+    return axios.put('/api/v1/supply', { id, supplier: { id: supplierID }, book: { id: bookID }, supplyPrice });
 }

@@ -167,7 +167,7 @@ const ReceiptModalUpdate = (props) => {
 
                 <Form
                     form={form}
-                    name="create_receipt_form"
+                    name="update_receipt_form"
                     onFinish={onFinish}
                     layout="vertical"
                 >
