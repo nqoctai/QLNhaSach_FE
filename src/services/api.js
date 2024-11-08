@@ -197,3 +197,31 @@ export const callCreateOrder = (receiverName, email, receiverAddress, receiverPh
 export const callUpdateOrder = (id, status, note) => {
     return axios.put('/api/v1/order', { id, statusId: status, note })
 }
+
+export const callFetchListSupplier = () => {
+    return axios.get('/api/v1/suppliers');
+}
+
+export const callFetchSupplierById = (id) => {
+    return axios.get(`/api/v1/supplier/${id}`);
+}
+
+export const callSupplyBySupplierIDAndBookID = (supplierID, bookID) => {
+    return axios.post(`/api/v1/supply`, { supplierID, bookID });
+}
+
+export const callFetchAllImportReceipt = (query) => {
+    return axios.get(`/api/v1/receipts?${query}`);
+}
+
+export const callCreateImportReceipt = (employeeEmail, totalPrice, rqProducts) => {
+    return axios.post('/api/v1/receipt', { employeeEmail: employeeEmail, totalPrice, importReceiptItems: rqProducts });
+}
+
+export const callFetchBookBySupplierId = (id) => {
+    return axios.get(`/api/v1/supplier/${id}/books`);
+}
+
+export const callUpdateImportReceipt = (id, employeeEmail, totalPrice, rqProducts) => {
+    return axios.put('/api/v1/receipt', { id, employeeEmail, totalPrice, importReceiptItems: rqProducts });
+}

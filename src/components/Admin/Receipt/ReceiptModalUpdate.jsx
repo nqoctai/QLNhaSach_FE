@@ -1,26 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Button, DatePicker, Divider, Form, Input, InputNumber, message, Modal, notification, Select, Table } from 'antd';
-import { callCreateAUser, callCreateCustomer, callCreateEmployee, callCreateOrder, callFetchListBook, callFetchListBookNoPagination, callFetcListShippingStatus, callListRole, callUpdateOrder } from '../../../services/api';
+import { callCreateAUser, callCreateCustomer, callCreateEmployee, callCreateImportReceipt, callCreateOrder, callFetchBookBySupplierId, callFetchListBook, callFetchListBookNoPagination, callFetchListSupplier, callFetchSupplierById, callFetcListShippingStatus, callListRole, callSupplyBySupplierIDAndBookID, callUpdateImportReceipt } from '../../../services/api';
 import moment from 'moment';
-import ModalAddOrderItem from './ModalAddOrderItem';
 
-const OrderModalUpdate = (props) => {
+import ModalAddReceiptItem from './ModalAddReceiptItem';
+import { useSelector } from 'react-redux';
+import { DeleteTwoTone } from '@ant-design/icons';
+
+const ReceiptModalUpdate = (props) => {
     const { openModalUpdate, setOpenModalUpdate, dataUpdate, setDataUpdate } = props;
-    const [openModalAddOrderItem, setModalAddOrderItem] = useState(false);
+    const [openModalAddReceiptItem, setModalAddReceiptItem] = useState(false);
     const [isSubmit, setIsSubmit] = useState(false);
     const [products, setProducts] = useState([]);
+    const [idSupplier, setIdSupplier] = useState(null);
+    const user = useSelector(state => state.account.user);
 
 
     // https://ant.design/components/form#components-form-demo-control-hooks
     const [form] = Form.useForm();
 
-    const [shippingstatus, setShippingstatus] = useState([]);
+    const [listSupplier, setListSupplier] = useState([]);
     const [listBooks, setListBooks] = useState([]);
 
     const fetchListbook = async () => {
-        const res = await callFetchListBookNoPagination();
-        if (res && res.data && res.data.length > 0) {
-            const d = res.data.map(item => {
+        const res = await callFetchBookBySupplierId(idSupplier);
+        if (res && res.data) {
+            const d = res.data?.map(item => {
                 return { label: item.mainText, value: item.id }
             })
             setListBooks(d)
@@ -28,34 +33,36 @@ const OrderModalUpdate = (props) => {
     }
 
 
-    const fetchShippingstatus = async () => {
-        const res = await callFetcListShippingStatus();
+    const fetchSuppliers = async () => {
+        const res = await callFetchListSupplier();
         if (res && res.data) {
             const d = res.data.map(item => {
-                return { label: item.status, value: item.id }
+                return { label: item.name, value: item.id }
             })
-            setShippingstatus(d)
+            setListSupplier(d)
         }
     }
 
-    useEffect(() => {
-        fetchShippingstatus();
-        fetchListbook();
-    }, []);
 
+    useEffect(() => {
+        fetchListbook();
+    }, [idSupplier]);
+    useEffect(() => {
+        fetchSuppliers();
+    }, []);
 
     useEffect(() => {
         if (dataUpdate) {
+            console.log('dataUpdate', dataUpdate);
             form.setFieldsValue({ ...dataUpdate })
-            const listOderitems = dataUpdate.orderItems.map(product => {
-                return { id: product.id, name: product.book.mainText, quantity: product.quantity, price: product.book.price, totalPrice: product.price, key: product.id }
+            const listOderitems = dataUpdate.importReceiptDetails.map(product => {
+                return { bookId: product?.supply?.book.id, supplierId: product?.supply?.supplier.id, quantity: product.quantity, price: product?.supply?.supplyPrice, totalPrice: product.totalPrice, key: product.id }
             })
 
             setProducts(listOderitems)
         }
 
     }, [dataUpdate]);
-
 
     useEffect(() => {
         const calculateTotalPrice = () => {
@@ -68,19 +75,20 @@ const OrderModalUpdate = (props) => {
 
 
     const onFinish = async (values) => {
-        const { id, status, note } = values;
+        const { id, totalPrice } = values;
         console.log('values', values);
         console.log('products', products);
         const rqProducts = products.map(product => {
-            return { bookId: product.id, quantity: product.quantity }
+            return { supplierId: product.supplierId, bookId: product.bookId, quantity: product.quantity, totalPrice: product.totalPrice }
         })
         setIsSubmit(true)
-        const res = await callUpdateOrder(id, status, note);
+        console.log('rqProducts', rqProducts);
+        const res = await callUpdateImportReceipt(id, user?.email, totalPrice, rqProducts);
         if (res && res.data) {
-            message.success('Cập nhập đơn hàng thành công');
+            message.success('Cập nhập phiếu nhập thành công');
             form.resetFields();
             setOpenModalUpdate(false);
-            await props.fetchOrder()
+            await props.fetchReceipt()
         } else {
             notification.error({
                 message: 'Đã có lỗi xảy ra',
@@ -93,16 +101,29 @@ const OrderModalUpdate = (props) => {
         setProducts(products.filter((product) => product.key !== key));
     };
 
+    const handleCancelModal = () => {
+        setOpenModalUpdate(false);
+        if (dataUpdate) {
+            console.log('dataUpdate', dataUpdate);
+            form.setFieldsValue({ ...dataUpdate })
+            const listOderitems = dataUpdate.importReceiptDetails.map(product => {
+                return { bookId: product?.supply?.book.id, supplierId: product?.supply?.supplier.id, quantity: product.quantity, price: product?.supply?.supplyPrice, totalPrice: product.totalPrice, key: product.id }
+            })
+
+            setProducts(listOderitems)
+        }
+    }
+
     const productColumns = [
         {
-            title: 'Id',
-            dataIndex: 'id',
-            key: 'id',
+            title: 'Mã Sách',
+            dataIndex: 'bookId',
+            key: 'bookId',
         },
         {
-            title: 'Tên sản phẩm',
-            dataIndex: 'name',
-            key: 'name',
+            title: 'Mã nhà cung ứng',
+            dataIndex: 'supplierId',
+            key: 'supplierId',
         },
         {
             title: 'Số lượng',
@@ -120,18 +141,25 @@ const OrderModalUpdate = (props) => {
             dataIndex: 'totalPrice',
             key: 'totalPrice',
             render: (price) => `${price} đ`, // Định dạng giá tiền
-        }
+        },
+        {
+            title: 'Thao tác',
+            key: 'action',
+            render: (_, record) => (
+                <DeleteTwoTone onClick={() => deleteProduct(record.key)} twoToneColor="#ff4d4f" />
+            ),
+        },
     ];
 
     return (
         <>
 
             <Modal
-                title="Cập nhập đơn hàng"
+                title="Thêm mới phiếu nhập"
                 open={openModalUpdate}
                 onOk={() => { form.submit() }}
-                onCancel={() => { setOpenModalUpdate(false) }}
-                okText={"Cập nhập"}
+                onCancel={() => handleCancelModal()}
+                okText={"Cập nhập phiếu nhập"}
                 cancelText={"Hủy"}
                 confirmLoading={isSubmit}
             >
@@ -139,7 +167,7 @@ const OrderModalUpdate = (props) => {
 
                 <Form
                     form={form}
-                    name="create_order_form"
+                    name="create_receipt_form"
                     onFinish={onFinish}
                     layout="vertical"
                 >
@@ -152,41 +180,6 @@ const OrderModalUpdate = (props) => {
                     >
                         <Input />
                     </Form.Item>
-                    <Form.Item
-                        label="Tên người nhận"
-                        name="receiverName"
-                        rules={[{ required: true, message: 'Vui lòng nhập tên người nhận!' }]}
-                    >
-                        <Input placeholder="Nhập tên người nhận" disabled />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Email"
-                        name="receiverEmail"
-                        rules={[{ required: true, message: 'Vui lòng nhập email người nhận!' }]}
-                    >
-                        <Input placeholder="Nhập email người nhận" disabled />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Địa chỉ người nhận"
-                        name="receiverAddress"
-                        rules={[{ required: true, message: 'Vui lòng nhập địa chỉ người nhận!' }]}
-                    >
-                        <Input placeholder="Nhập địa chỉ người nhận" disabled />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Số điện thoại người nhận"
-                        name="receiverPhone"
-                        rules={[
-                            { required: true, message: 'Vui lòng nhập số điện thoại người nhận!' },
-                            { pattern: /^[0-9]{10}$/, message: 'Số điện thoại không hợp lệ!' },
-                        ]}
-                    >
-                        <Input placeholder="Nhập số điện thoại người nhận" disabled />
-                    </Form.Item>
-
                     <Form.Item
                         label="Tổng giá"
                         name="totalPrice"
@@ -203,29 +196,24 @@ const OrderModalUpdate = (props) => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Tình trạng"
-                        name="status"
-                        rules={[{ required: true, message: 'Vui lòng chọn tình trạng!' }]}
+                        label="Nhà cung cấp"
+                        name="supplier"
+                        rules={[{ required: true, message: 'Vui lòng chọn nhà cung cấp!' }]}
                     >
                         <Select
                             defaultValue={null}
                             showSearch
                             allowClear
-                            options={shippingstatus}
+                            onChange={(value) => setIdSupplier(value)}
+                            options={listSupplier}
                         />
                     </Form.Item>
 
-                    <Form.Item
-                        label="Ghi chú"
-                        name="note"
-                    >
-                        <Input placeholder="Nhập ghi chú" />
-                    </Form.Item>
-
-
-
                     {/* Bảng sản phẩm */}
                     <Form.Item label="Danh sách sản phẩm">
+                        <Button type="dashed" onClick={() => setModalAddReceiptItem(true)}>
+                            Thêm sản phẩm
+                        </Button>
                         <Table
                             dataSource={products}
                             columns={productColumns}
@@ -236,8 +224,16 @@ const OrderModalUpdate = (props) => {
                     </Form.Item>
                 </Form>
             </Modal>
+            <ModalAddReceiptItem
+                openModalAddReceiptItem={openModalAddReceiptItem}
+                setModalAddReceiptItem={setModalAddReceiptItem}
+                products={products}
+                setProducts={setProducts}
+                listBooks={listBooks}
+                idSupplier={idSupplier}
+            />
         </>
     );
 };
 
-export default OrderModalUpdate;
+export default ReceiptModalUpdate;

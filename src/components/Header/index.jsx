@@ -52,7 +52,7 @@ const Header = (props) => {
         },
 
     ];
-    if (user?.role === 'ADMIN') {
+    if (user?.role === 'ADMIN' || user?.role === 'EMPLOYEE') {
         items.unshift({
             label: <Link to='/admin'>Trang quản trị</Link>,
             key: 'admin',

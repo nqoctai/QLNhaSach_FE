@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Row, Col, Popconfirm, Button, message, notification } from 'antd';
-import { callFetchListOrder } from '../../../services/api';
+import { callFetchAllImportReceipt, callFetchListOrder } from '../../../services/api';
 import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import moment from 'moment/moment';
 import { FORMAT_DATE_DISPLAY } from '../../../utils/constant';
-import OrderModalCreate from './OrderModalCreate';
-import OrderModalUpdate from './OrderModalUpdate';
-import OrderViewDetail from './OrderViewDetail';
+import ReceiptModalCreate from './ReceiptModalCreate';
+import ReceiptModalDetail from './ReceiptModalDetail';
 import InputSearch from './InputSearch';
+import ReceiptModalUpdate from './ReceiptModalUpdate';
 
 
 // https://stackblitz.com/run?file=demo.tsx
-const ManageOrder = () => {
-    const [listOrder, setListOrder] = useState([]);
+const ManageReceipt = () => {
+    const [listReceipt, setListReceipt] = useState([]);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(5);
     const [total, setTotal] = useState(0);
@@ -26,10 +26,10 @@ const ManageOrder = () => {
     const [openModalUpdate, setOpenModalUpdate] = useState(false);
 
     useEffect(() => {
-        fetchOrder();
+        fetchReceipt();
     }, [current, pageSize, filter, sortQuery]);
 
-    const fetchOrder = async () => {
+    const fetchReceipt = async () => {
         setIsLoading(true)
         let query = `page=${current}&size=${pageSize}`;
         if (filter) {
@@ -39,10 +39,12 @@ const ManageOrder = () => {
             query += `&${sortQuery}`;
         }
 
-        const res = await callFetchListOrder(query);
+        const res = await callFetchAllImportReceipt(query);
         if (res && res.data) {
-            setListOrder(res.data.result);
+
+            setListReceipt(res.data.result);
             setTotal(res.data.meta.total)
+            console.log('listReceipt', res.data.result);
         }
         setIsLoading(false)
     }
@@ -61,34 +63,24 @@ const ManageOrder = () => {
             }
         },
         {
+            title: 'Người tạo',
+            dataIndex: 'createdBy',
+            sorter: true
+        },
+        {
+            title: 'Người cập nhật',
+            dataIndex: 'updatedBy',
+            sorter: true
+        },
+        {
             title: 'Price',
-            dataIndex: 'totalPrice',
+            dataIndex: 'totalAmount',
             render: (text, record, index) => {
                 return (
-                    <>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(record.totalPrice)}</>
+                    <>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(record.totalAmount)}</>
 
                 )
             },
-            sorter: true
-        },
-        {
-            title: 'Email',
-            dataIndex: 'receiverEmail',
-            sorter: true
-        },
-        {
-            title: 'Name',
-            dataIndex: 'receiverName',
-            sorter: true
-        },
-        {
-            title: 'Address',
-            dataIndex: 'receiverAddress',
-            sorter: true,
-        },
-        {
-            title: 'Số điện thoại',
-            dataIndex: 'receiverPhone',
             sorter: true
         },
         {
@@ -160,7 +152,7 @@ const ManageOrder = () => {
     const renderHeader = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Table List Order</span>
+                <span>Table List Receipt</span>
                 <span style={{ display: 'flex', gap: 15 }}>
                     <Button type='ghost' onClick={() => {
                         setFilter("");
@@ -201,7 +193,7 @@ const ManageOrder = () => {
                         loading={isLoading}
 
                         columns={columns}
-                        dataSource={listOrder}
+                        dataSource={listReceipt}
                         onChange={onChange}
                         rowKey="id"
                         pagination={
@@ -217,27 +209,29 @@ const ManageOrder = () => {
                     />
                 </Col>
             </Row>
-            <OrderModalCreate
+            <ReceiptModalCreate
                 openModalCreate={openModalCreate}
                 setOpenModalCreate={setOpenModalCreate}
-                fetchOrder={fetchOrder}
+                fetchReceipt={fetchReceipt}
             />
-            <OrderModalUpdate
-                openModalUpdate={openModalUpdate}
-                setOpenModalUpdate={setOpenModalUpdate}
-                dataUpdate={dataUpdate}
-                setDataUpdate={setDataUpdate}
-                fetchOrder={fetchOrder}
-            />
-            <OrderViewDetail
+            <ReceiptModalDetail
                 openViewDetail={openViewDetail}
                 setOpenViewDetail={setOpenViewDetail}
                 dataViewDetail={dataViewDetail}
                 setDataViewDetail={setDataViewDetail}
             />
+
+            <ReceiptModalUpdate
+                openModalUpdate={openModalUpdate}
+                setOpenModalUpdate={setOpenModalUpdate}
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
+                fetchReceipt={fetchReceipt}
+            />
+
         </>
     )
 }
 
 
-export default ManageOrder;
+export default ManageReceipt;

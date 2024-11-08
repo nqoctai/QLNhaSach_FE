@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Col, Form, Input, Row, theme } from 'antd';
+import { Button, Col, DatePicker, Form, Input, Row, theme } from 'antd';
 import { sfLike } from 'spring-filter-query-builder';
 import { removeAccents } from '../../../utils/removeAccents';
+import moment from 'moment';
 
 const InputSearch = (props) => {
     const { token } = theme.useToken();
@@ -18,18 +19,22 @@ const InputSearch = (props) => {
         let query = "";
         let q = [];
         // build query
-
-        if (values.username) {
-            q.push(`fullName~'${values.username}'`);
-            console.log('query username:', q);
-        }
-
         if (values.email) {
-            q.push(`email~'${values.email}'`);
+            q.push(`createdBy~'${values.email}'`);
         }
-        if (values.phone) {
-            q.push(`phone~'${values.phone}'`);
+
+        if (values.createdAt) {
+            const formattedDate = moment(values.createdAt).format('YYYY-MM-DD');
+            q.push(`createdAt~'${formattedDate}'`);
         }
+
+        if (values.updatedAt) {
+            const formattedDate = moment(values.updatedAt).format('YYYY-MM-DD');
+            q.push(`updatedAt~'${formattedDate}'`);
+        }
+
+
+
 
         // Join all query parts with ' and '
         query = `filter=${q.join(' and ')}`;
@@ -57,15 +62,7 @@ const InputSearch = (props) => {
     return (
         <Form form={form} name="advanced_search" style={formStyle} onFinish={onFinish}>
             <Row gutter={24}>
-                <Col span={8}>
-                    <Form.Item
-                        labelCol={{ span: 24 }}
-                        name={`username`}
-                        label={`Name`}
-                    >
-                        <Input />
-                    </Form.Item>
-                </Col>
+
                 <Col span={8}>
                     <Form.Item
                         labelCol={{ span: 24 }}
@@ -79,12 +76,24 @@ const InputSearch = (props) => {
                 <Col span={8}>
                     <Form.Item
                         labelCol={{ span: 24 }}
-                        name={`phone`}
-                        label={`Số điện thoại`}
+                        name="createdAt"
+                        label="Ngày tạo"
                     >
-                        <Input />
+                        <DatePicker format="YYYY-MM-DD" />
                     </Form.Item>
                 </Col>
+
+                <Col span={8}>
+                    <Form.Item
+                        labelCol={{ span: 24 }}
+                        name="updatedAt"
+                        label="Ngày cập nhật"
+                    >
+                        <DatePicker format="YYYY-MM-DD" />
+                    </Form.Item>
+                </Col>
+
+
             </Row>
             <Row>
                 <Col span={24} style={{ textAlign: 'right' }}>
@@ -99,14 +108,7 @@ const InputSearch = (props) => {
                     >
                         Clear
                     </Button>
-                    {/* <a
-                        style={{ fontSize: 12 }}
-                        onClick={() => {
-                            setExpand(!expand);
-                        }}
-                    >
-                        {expand ? <UpOutlined /> : <DownOutlined />} Collapse
-                    </a> */}
+
                 </Col>
             </Row>
         </Form>

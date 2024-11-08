@@ -55,6 +55,11 @@ const items = [
         key: 'order',
         icon: <DollarCircleOutlined />
     },
+    {
+        label: <Link to='/admin/receipt'>Manage Receipts</Link>,
+        key: 'receipt',
+        icon: <DollarCircleOutlined />
+    }
 ];
 
 const LayoutAdmin = () => {

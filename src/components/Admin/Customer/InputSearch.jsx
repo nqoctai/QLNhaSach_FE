@@ -20,7 +20,7 @@ const InputSearch = (props) => {
         // build query
 
         if (values.username) {
-            q.push(`username~'${values.username}'`);
+            q.push(`name~'${values.username}'`);
             console.log('query username:', q);
         }
 

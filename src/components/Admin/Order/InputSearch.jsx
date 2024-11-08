@@ -20,15 +20,15 @@ const InputSearch = (props) => {
         // build query
 
         if (values.username) {
-            q.push(`fullName~'${values.username}'`);
+            q.push(`receiverName~'${values.username}'`);
             console.log('query username:', q);
         }
 
         if (values.email) {
-            q.push(`email~'${values.email}'`);
+            q.push(`receiverEmail~'${values.email}'`);
         }
         if (values.phone) {
-            q.push(`phone~'${values.phone}'`);
+            q.push(`receiverPhone~'${values.phone}'`);
         }
 
         // Join all query parts with ' and '
@@ -99,14 +99,7 @@ const InputSearch = (props) => {
                     >
                         Clear
                     </Button>
-                    {/* <a
-                        style={{ fontSize: 12 }}
-                        onClick={() => {
-                            setExpand(!expand);
-                        }}
-                    >
-                        {expand ? <UpOutlined /> : <DownOutlined />} Collapse
-                    </a> */}
+
                 </Col>
             </Row>
         </Form>

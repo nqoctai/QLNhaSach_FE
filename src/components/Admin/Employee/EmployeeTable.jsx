@@ -195,7 +195,7 @@ const EmployeeTable = () => {
     const renderHeader = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Table List Users</span>
+                <span>Table List Employees</span>
                 <span style={{ display: 'flex', gap: 15 }}>
                     <Button
                         icon={<ExportOutlined />}
