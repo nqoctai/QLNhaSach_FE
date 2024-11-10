@@ -31,6 +31,7 @@ import ManageEmployeePage from './pages/admin/employee';
 import ManageReceiptPage from './pages/admin/receipt';
 import ManageSupply from './pages/admin/supply';
 import ManageSupplyPage from './pages/admin/supply';
+import ManageSupplierPage from './pages/admin/supplier';
 
 const Layout = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -163,6 +164,14 @@ export default function App() {
           element:
             <ProtectedRoute>
               <ManageSupplyPage />
+            </ProtectedRoute>
+          ,
+        },
+        {
+          path: "supplier",
+          element:
+            <ProtectedRoute>
+              <ManageSupplierPage />
             </ProtectedRoute>
           ,
         }

@@ -59,11 +59,15 @@ const items = [
         label: <Link to='/admin/receipt'>Manage Receipts</Link>,
         key: 'receipt',
         icon: <DollarCircleOutlined />
-    }
-    ,
+    },
     {
-        label: <Link to='/admin/supply'>Manage Supplys</Link>,
+        label: <Link to='/admin/supply'>Manage Supplies</Link>,
         key: 'supply',
+        icon: <DollarCircleOutlined />
+    },
+    {
+        label: <Link to='/admin/supplier'>Manage Suppliers</Link>,
+        key: 'supplier',
         icon: <DollarCircleOutlined />
     }
 ];

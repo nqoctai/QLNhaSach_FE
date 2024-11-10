@@ -241,3 +241,23 @@ export const callDeleteSupply = (id) => {
 export const callUpdateSupply = (id, supplierID, bookID, supplyPrice) => {
     return axios.put('/api/v1/supply', { id, supplier: { id: supplierID }, book: { id: bookID }, supplyPrice });
 }
+
+export const callFetchAllSupplierWithPagination = (query) => {
+    return axios.get(`/api/v1/suppliers-pagination?${query}`);
+}
+
+export const callFetchSupplyBySupplierId = (id) => {
+    return axios.get(`/api/v1/supplier/${id}/supplies`);
+}
+
+export const callCreateASupplier = (name, address, phone, email) => {
+    return axios.post('/api/v1/supplier', { name, address, phone, email });
+}
+
+export const callUpdateSupplier = (id, name, address, phone, email) => {
+    return axios.put('/api/v1/supplier', { id, name, address, phone, email });
+}
+
+export const callDeleteSupplier = (id) => {
+    return axios.delete(`/api/v1/supplier/${id}`);
+}
