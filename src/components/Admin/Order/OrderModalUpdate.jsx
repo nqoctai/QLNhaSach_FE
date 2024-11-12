@@ -31,7 +31,10 @@ const OrderModalUpdate = (props) => {
     const fetchShippingstatus = async () => {
         const res = await callFetcListShippingStatus();
         if (res && res.data) {
-            const d = res.data.map(item => {
+            const orderShippingEvents = dataUpdate?.orderShippingEvents || [];
+            const filter = res.data.filter(item => !orderShippingEvents.some(event => event?.shippingStatus?.id === item.id));
+            console.log('filter', filter);
+            const d = filter.map(item => {
                 return { label: item.status, value: item.id }
             })
             setShippingstatus(d)
@@ -39,7 +42,8 @@ const OrderModalUpdate = (props) => {
     }
 
     useEffect(() => {
-        fetchShippingstatus();
+
+
         fetchListbook();
     }, []);
 
@@ -50,10 +54,10 @@ const OrderModalUpdate = (props) => {
             const listOderitems = dataUpdate.orderItems.map(product => {
                 return { id: product.id, name: product.book.mainText, quantity: product.quantity, price: product.book.price, totalPrice: product.price, key: product.id }
             })
-
+            fetchShippingstatus();
             setProducts(listOderitems)
         }
-
+        console.log('dataUpdate1', dataUpdate);
     }, [dataUpdate]);
 
 

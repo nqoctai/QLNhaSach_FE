@@ -16,7 +16,7 @@ const ChangePassword = (props) => {
             message.success("Cập nhật mật khẩu thành công");
             form.setFieldValue("oldpass", "")
             form.setFieldValue("newpass", "")
-            
+
         } else {
             notification.error({
                 message: "Đã có lỗi xảy ra",
@@ -26,6 +26,8 @@ const ChangePassword = (props) => {
 
         setIsSubmit(false);
     }
+
+
 
     return (
         <div style={{ minHeight: 400 }}>

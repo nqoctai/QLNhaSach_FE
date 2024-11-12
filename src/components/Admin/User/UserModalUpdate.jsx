@@ -12,11 +12,11 @@ const UserModalUpdate = (props) => {
 
 
     const onFinish = async (values) => {
-        let { username, id, phone, role } = values;
+        let { email, username, id, phone, role } = values;
         setIsSubmit(true)
-        const res = await callUpdateUser(+id, username, phone, role);
+        const res = await callUpdateUser(+id, email, username, phone, role);
         if (res && res.data) {
-            message.success('Cập nhật user thành công');
+            message.success('Cập nhật tài khoản thành công');
             setOpenModalUpdate(false);
             await props.fetchUser()
         } else {
@@ -40,7 +40,7 @@ const UserModalUpdate = (props) => {
 
     useEffect(() => {
         if (dataUpdate) {
-            form.setFieldsValue({ ...dataUpdate, role: { value: dataUpdate?.role?.id, label: dataUpdate?.role?.name } })
+            form.setFieldsValue({ ...dataUpdate, role: dataUpdate?.role?.id })
         }
 
         fetchRoles();
@@ -50,7 +50,7 @@ const UserModalUpdate = (props) => {
         <>
 
             <Modal
-                title="Cập nhật người dùng"
+                title="Cập nhật tài khoản"
                 open={openModalUpdate}
                 onOk={() => { form.submit() }}
                 onCancel={() => {
@@ -96,7 +96,7 @@ const UserModalUpdate = (props) => {
                         name="email"
                         rules={[{ required: true, message: 'Vui lòng nhập email!' }]}
                     >
-                        <Input disabled />
+                        <Input />
                     </Form.Item>
                     <Form.Item
                         labelCol={{ span: 24 }}

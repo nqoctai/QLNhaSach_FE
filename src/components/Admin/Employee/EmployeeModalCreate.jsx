@@ -44,7 +44,7 @@ const EmployeeModalCreate = (props) => {
         <>
 
             <Modal
-                title="Thêm mới người dùng"
+                title="Thêm mới nhân viên"
                 open={openModalCreate}
                 onOk={() => { form.submit() }}
                 onCancel={() => setOpenModalCreate(false)}

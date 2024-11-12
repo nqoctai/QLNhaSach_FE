@@ -15,7 +15,7 @@ const EmployeeModalUpdate = (props) => {
         const res = await callListRole();
         if (res && res.data) {
             const d = res.data.map(item => {
-                return { label: item.name, value: item.id }
+                return { label: item?.name, value: item?.id }
             })
             setRoles(d)
         }
@@ -31,7 +31,7 @@ const EmployeeModalUpdate = (props) => {
         if (res && res.data) {
             message.success('Cập nhật customer thành công');
             setOpenModalUpdate(false);
-            await props.fetchCustomer()
+            await props.fetchEmployee()
         } else {
             notification.error({
                 message: 'Đã có lỗi xảy ra',
@@ -49,11 +49,10 @@ const EmployeeModalUpdate = (props) => {
                 fullName: dataUpdate.fullName,
                 hireDate: dataUpdate.hireDate ? moment(dataUpdate.hireDate) : null,
                 address: dataUpdate.address,
-                address: dataUpdate.address,
                 email: dataUpdate.email,
                 phone: dataUpdate.phone,
                 salary: dataUpdate.salary,
-                role: dataUpdate.role.id,
+                role: dataUpdate?.role?.id,
                 // Các trường khác
             };
             form.setFieldsValue(init);
@@ -64,7 +63,7 @@ const EmployeeModalUpdate = (props) => {
         <>
 
             <Modal
-                title="Cập nhật người dùng"
+                title="Cập nhật nhân viên"
                 open={openModalUpdate}
                 onOk={() => { form.submit() }}
                 onCancel={() => {

@@ -25,15 +25,10 @@ const items = [
         icon: <AppstoreOutlined />
     },
     {
-        label: <span>Manage Users</span>,
+        label: <Link to='/admin/user'>Manage Accounts</Link>,
+        key: 'account',
         icon: <UserOutlined />,
-        children: [
-            {
-                label: <Link to='/admin/user'>CRUD</Link>,
-                key: 'crud',
-                icon: <TeamOutlined />,
-            },
-        ]
+
     },
     {
         label: <Link to='/admin/customer'>Manage Customers</Link>,
@@ -88,7 +83,7 @@ const LayoutAdmin = () => {
         if (currentPath.includes('/admin/book')) {
             setActiveMenu('book');
         } else if (currentPath.includes('/admin/user')) {
-            setActiveMenu('crud');
+            setActiveMenu('account');
         } else if (currentPath.includes('/admin/order')) {
             setActiveMenu('order');
         } else if (currentPath === '/admin') {
@@ -97,6 +92,12 @@ const LayoutAdmin = () => {
             setActiveMenu('customer');
         } else if (currentPath.includes('/admin/employee')) {
             setActiveMenu('employee');
+        } else if (currentPath.includes('/admin/receipt')) {
+            setActiveMenu('receipt');
+        } else if (currentPath.includes('/admin/supply')) {
+            setActiveMenu('supply');
+        } else if (currentPath.includes('/admin/supplier')) {
+            setActiveMenu('supplier');
         }
     }, [location]);
 

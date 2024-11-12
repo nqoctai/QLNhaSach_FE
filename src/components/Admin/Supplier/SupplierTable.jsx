@@ -117,7 +117,7 @@ const SupplierTable = () => {
 
                         <Popconfirm
                             placement="leftTop"
-                            title={"Xác nhận xóa book"}
+                            title={"Xác nhận xóa supplier"}
                             description={"Bạn có chắc chắn muốn xóa nhà cung cấp này ?"}
                             onConfirm={() => handleDeleteSupplier(record.id)}
                             okText="Xác nhận"
@@ -180,13 +180,9 @@ const SupplierTable = () => {
     const renderHeader = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Table List Books</span>
+                <span>Table List Supplies</span>
                 <span style={{ display: 'flex', gap: 15 }}>
-                    <Button
-                        icon={<ExportOutlined />}
-                        type="primary"
-                        onClick={() => handleExportData()}
-                    >Export</Button>
+
 
                     <Button
                         icon={<PlusOutlined />}
@@ -210,15 +206,7 @@ const SupplierTable = () => {
         setFilter(query);
     }
 
-    const handleExportData = () => {
-        // https://stackoverflow.com/questions/70871254/how-can-i-export-a-json-object-to-excel-using-nextjs-react
-        if (listSupplier.length > 0) {
-            const worksheet = XLSX.utils.json_to_sheet(listSupplier);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-            XLSX.writeFile(workbook, "ExportBook.csv");
-        }
-    }
+
     return (
         <>
             <Row gutter={[20, 20]}>

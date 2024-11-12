@@ -56,6 +56,8 @@ const CustomerTable = () => {
         setIsLoading(false)
     }
 
+
+
     const columns = [
         {
             title: 'Id',
@@ -191,11 +193,7 @@ const CustomerTable = () => {
                         onClick={() => handleExportData()}
                     >Export</Button>
 
-                    <Button
-                        icon={<CloudUploadOutlined />}
-                        type="primary"
-                        onClick={() => setOpenModalImport(true)}
-                    >Import</Button>
+
 
                     <Button
                         icon={<PlusOutlined />}
@@ -221,11 +219,11 @@ const CustomerTable = () => {
 
     const handleExportData = () => {
         // https://stackoverflow.com/questions/70871254/how-can-i-export-a-json-object-to-excel-using-nextjs-react
-        if (listUser.length > 0) {
-            const worksheet = XLSX.utils.json_to_sheet(listUser);
+        if (listCustomer.length > 0) {
+            const worksheet = XLSX.utils.json_to_sheet(listCustomer);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-            XLSX.writeFile(workbook, "ExportUser.csv");
+            XLSX.writeFile(workbook, "ExportCustomer.csv");
         }
     }
     return (

@@ -39,7 +39,7 @@ const CustomerModalUpdate = (props) => {
         <>
 
             <Modal
-                title="Cập nhật người dùng"
+                title="Cập nhật khách hàng"
                 open={openModalUpdate}
                 onOk={() => { form.submit() }}
                 onCancel={() => {

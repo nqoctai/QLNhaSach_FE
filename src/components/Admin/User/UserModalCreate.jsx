@@ -30,7 +30,7 @@ const UserModalCreate = (props) => {
         setIsSubmit(true)
         const res = await callCreateAUser(username, password, email, phone, role);
         if (res && res.data) {
-            message.success('Tạo mới user thành công');
+            message.success('Tạo mới tài khoản thành công');
             form.resetFields();
             setOpenModalCreate(false);
             await props.fetchUser()
@@ -47,7 +47,7 @@ const UserModalCreate = (props) => {
         <>
 
             <Modal
-                title="Thêm mới người dùng"
+                title="Thêm mới tài khoản"
                 open={openModalCreate}
                 onOk={() => { form.submit() }}
                 onCancel={() => setOpenModalCreate(false)}

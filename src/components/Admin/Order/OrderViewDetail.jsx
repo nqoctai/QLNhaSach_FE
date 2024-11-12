@@ -73,6 +73,8 @@ const OrderViewDetail = (props) => {
                     <Descriptions.Item label="Email">{dataViewDetail?.receiverEmail}</Descriptions.Item>
                     <Descriptions.Item label="Địa chỉ">{dataViewDetail?.receiverAddress}</Descriptions.Item>
                     <Descriptions.Item label="Số điện thoại">{dataViewDetail?.receiverPhone}</Descriptions.Item>
+                    <Descriptions.Item label="Mã khách hàng">{dataViewDetail?.customer?.id}</Descriptions.Item>
+
                     <Descriptions.Item label="Created At">
                         {moment(dataViewDetail?.createdAt).format('DD-MM-YYYY hh:mm:ss')}
                     </Descriptions.Item>

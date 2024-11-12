@@ -30,7 +30,7 @@ const CustomerModalCreate = (props) => {
         <>
 
             <Modal
-                title="Thêm mới người dùng"
+                title="Thêm mới khách hàng"
                 open={openModalCreate}
                 onOk={() => { form.submit() }}
                 onCancel={() => setOpenModalCreate(false)}

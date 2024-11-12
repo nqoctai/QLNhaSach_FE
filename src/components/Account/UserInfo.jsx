@@ -45,9 +45,9 @@ const UserInfo = (props) => {
     };
 
     const onFinish = async (values) => {
-        const { username, phone, id } = values;
+        const { email, username, phone, id } = values;
         setIsSubmit(true)
-        const res = await callUpdateUserInfo(id, phone, username, userAvatar);
+        const res = await callUpdateUserInfo(id, email, phone, username, userAvatar);
 
         if (res && res.data) {
             //update redux
@@ -95,7 +95,7 @@ const UserInfo = (props) => {
                         <Form.Item
                             hidden
                             labelCol={{ span: 24 }}
-                            label="Email"
+                            label="id"
                             name="id"
                             initialValue={user?.id}
 
@@ -110,13 +110,13 @@ const UserInfo = (props) => {
                             initialValue={user?.email}
 
                         >
-                            <Input disabled />
+                            <Input />
                         </Form.Item>
                         <Form.Item
                             labelCol={{ span: 24 }}
                             label="Tên hiển thị"
                             name="username"
-                            initialValue={user?.username}
+                            initialValue={user?.name}
                             rules={[{ required: true, message: 'Tên hiển thị không được để trống!' }]}
                         >
                             <Input />

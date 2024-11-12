@@ -43,7 +43,7 @@ const ViewOrder = (props) => {
         if (!isNaN(value)) {
             try {
                 // Gọi API để cập nhật số lượng sản phẩm
-                const res = await callUpdateQuantityBookInCart(account?.cart?.id, item?.id, value);
+                const res = await callUpdateQuantityBookInCart(cart?.id, item?.id, value);
                 if (res) {
                     // // Gọi API để lấy lại thông tin tài khoản mới sau khi cập nhật giỏ hàng
                     // const dataAccount = await callFetchAccount();

@@ -188,7 +188,7 @@ const UserTable = () => {
     const renderHeader = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Table List Users</span>
+                <span>Table List Accounts</span>
                 <span style={{ display: 'flex', gap: 15 }}>
                     <Button
                         icon={<ExportOutlined />}
@@ -196,11 +196,7 @@ const UserTable = () => {
                         onClick={() => handleExportData()}
                     >Export</Button>
 
-                    <Button
-                        icon={<CloudUploadOutlined />}
-                        type="primary"
-                        onClick={() => setOpenModalImport(true)}
-                    >Import</Button>
+
 
                     <Button
                         icon={<PlusOutlined />}

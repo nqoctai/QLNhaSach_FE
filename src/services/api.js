@@ -29,8 +29,8 @@ export const callBulkCreateUser = (data) => {
     return axios.post('/api/v1/account/bulk-create', data)
 }
 
-export const callUpdateUser = (id, username, phone, role) => {
-    return axios.put('/api/v1/account', { id, username, phone, role: { id: role } })
+export const callUpdateUser = (id, email, username, phone, role) => {
+    return axios.put('/api/v1/account', { id, email, username, phone, role: { id: role } })
 }
 
 export const callDeleteUser = (id) => {
@@ -114,9 +114,9 @@ export const callUpdateAvatar = (fileImg) => {
     });
 }
 
-export const callUpdateUserInfo = (id, phone, username, avatar) => {
+export const callUpdateUserInfo = (id, email, phone, username, avatar) => {
     return axios.put(`/api/v1/account`, {
-        id, phone, username, avatar
+        id, email, phone, username, avatar, role: { id: 2 }
     })
 }
 
@@ -167,7 +167,7 @@ export const callDeleteCustomer = (id) => {
 }
 
 export const callUpdateCustomer = (id, name, address, phone, email) => {
-    return axios.put('/api/v1/account', { id, name, address, phone, email })
+    return axios.put('/api/v1/customer', { id, name, address, phone, email })
 }
 
 export const callFetchEmployeeWithPagination = (query) => {
