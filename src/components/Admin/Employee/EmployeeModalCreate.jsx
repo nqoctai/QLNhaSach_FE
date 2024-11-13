@@ -30,7 +30,7 @@ const EmployeeModalCreate = (props) => {
             message.success('Tạo mới nhân viên thành công');
             form.resetFields();
             setOpenModalCreate(false);
-            await props.fetchCustomer()
+            await props.fetchEmployee()
         } else {
             notification.error({
                 message: 'Đã có lỗi xảy ra',

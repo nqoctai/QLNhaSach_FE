@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Row, Col, Popconfirm, Button, message, notification } from 'antd';
-import InputSearch from './InputSearch';
-import { callDeleteCustomer, callDeleteUser, callFetchCustomerWithPagination, callFetchListAccountWithPagination } from '../../../services/api';
+
+import { callDeleteCustomer, callDeletePermission, callDeleteUser, callFetchAllPermission, callFetchCustomerWithPagination, callFetchListAccountWithPagination } from '../../../services/api';
 import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 
 import moment from 'moment/moment';
 import { FORMAT_DATE_DISPLAY } from '../../../utils/constant';
 
 import * as XLSX from 'xlsx';
-import CustomerViewDetail from './CustomerViewDetail';
-import CustomerModalCreate from './CustomerModalCreate';
-import CustomerModalUpdate from './CustomerModalUpdate';
+import PermissionModalCreate from './PermissionModalCreate';
+import PermissionModalUpdate from './PermissionModalUpdate';
+import InputSearch from './InputSearch';
+
 
 // https://stackblitz.com/run?file=demo.tsx
-const CustomerTable = () => {
-    const [listCustomer, setListCustomer] = useState([]);
+const PermissionPage = () => {
+    const [listPermission, setListPermission] = useState([]);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(5);
     const [total, setTotal] = useState(0);
@@ -33,11 +34,11 @@ const CustomerTable = () => {
     const [dataUpdate, setDataUpdate] = useState(null);
 
     useEffect(() => {
-        fetchCustomer();
+        fetchPermission();
     }, [current, pageSize, filter, sortQuery]);
 
 
-    const fetchCustomer = async () => {
+    const fetchPermission = async () => {
         setIsLoading(true)
         let query = `page=${current}&size=${pageSize}`;
         if (filter) {
@@ -47,10 +48,10 @@ const CustomerTable = () => {
             query += `&${sortQuery}`;
         }
 
-        const res = await callFetchCustomerWithPagination(query);
+        const res = await callFetchAllPermission(query);
         console.log(res)
         if (res && res.data) {
-            setListCustomer(res.data.result);
+            setListPermission(res.data.result);
             setTotal(res.data.meta.total)
         }
         setIsLoading(false)
@@ -73,23 +74,23 @@ const CustomerTable = () => {
             }
         },
         {
-            title: 'Họ và Tên',
+            title: 'Tên quyền',
             dataIndex: 'name',
             sorter: true
         },
         {
-            title: 'Email',
-            dataIndex: 'email',
+            title: 'API',
+            dataIndex: 'apiPath',
             sorter: true,
         },
         {
-            title: 'Địa chỉ',
-            dataIndex: 'address',
+            title: 'Method',
+            dataIndex: 'method',
             sorter: true,
         },
         {
-            title: 'Số điện thoại',
-            dataIndex: 'phone',
+            title: 'MODULE',
+            dataIndex: 'module',
             sorter: true
         },
         {
@@ -123,7 +124,7 @@ const CustomerTable = () => {
                         <Popconfirm
                             placement="leftTop"
                             title={"Xác nhận xóa user"}
-                            description={"Bạn có chắc chắn muốn xóa user này ?"}
+                            description={"Bạn có chắc chắn muốn xóa permission này ?"}
                             onConfirm={() => handleDeleteUser(record.id)}
                             okText="Xác nhận"
                             cancelText="Hủy"
@@ -168,10 +169,10 @@ const CustomerTable = () => {
     };
 
     const handleDeleteUser = async (customerId) => {
-        const res = await callDeleteCustomer(customerId);
-        if (res && res.data) {
-            message.success('Xóa khách hàng thành công');
-            fetchCustomer();
+        const res = await callDeletePermission(customerId);
+        if (res) {
+            message.success('Xóa quyền hạn thành công thành công');
+            fetchPermission();
         } else {
             notification.error({
                 message: 'Có lỗi xảy ra',
@@ -185,16 +186,8 @@ const CustomerTable = () => {
     const renderHeader = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Table List Customers</span>
+                <span>Table List Permissions</span>
                 <span style={{ display: 'flex', gap: 15 }}>
-                    <Button
-                        icon={<ExportOutlined />}
-                        type="primary"
-                        onClick={() => handleExportData()}
-                    >Export</Button>
-
-
-
                     <Button
                         icon={<PlusOutlined />}
                         type="primary"
@@ -217,15 +210,6 @@ const CustomerTable = () => {
         setFilter(query);
     }
 
-    const handleExportData = () => {
-        // https://stackoverflow.com/questions/70871254/how-can-i-export-a-json-object-to-excel-using-nextjs-react
-        if (listCustomer.length > 0) {
-            const worksheet = XLSX.utils.json_to_sheet(listCustomer);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-            XLSX.writeFile(workbook, "ExportCustomer.csv");
-        }
-    }
     return (
         <>
             <Row gutter={[20, 20]}>
@@ -241,7 +225,7 @@ const CustomerTable = () => {
                         loading={isLoading}
 
                         columns={columns}
-                        dataSource={listCustomer}
+                        dataSource={listPermission}
                         onChange={onChange}
                         rowKey="id"
                         pagination={
@@ -258,38 +242,23 @@ const CustomerTable = () => {
                     />
                 </Col>
             </Row>
-            <CustomerViewDetail
-                openViewDetail={openViewDetail}
-                setOpenViewDetail={setOpenViewDetail}
-                dataViewDetail={dataViewDetail}
-                setDataViewDetail={setDataViewDetail}
-            />
-
-            <CustomerModalCreate
+            <PermissionModalCreate
                 openModalCreate={openModalCreate}
                 setOpenModalCreate={setOpenModalCreate}
-                fetchCustomer={fetchCustomer}
+                fetchPermission={fetchPermission}
             />
-
-            <CustomerModalUpdate
+            <PermissionModalUpdate
                 openModalUpdate={openModalUpdate}
                 setOpenModalUpdate={setOpenModalUpdate}
                 dataUpdate={dataUpdate}
                 setDataUpdate={setDataUpdate}
-                fetchCustomer={fetchCustomer}
-            />
-            {/*
-            <UserImport
-                openModalImport={openModalImport}
-                setOpenModalImport={setOpenModalImport}
-                fetchUser={fetchUser}
+                fetchPermission={fetchPermission}
             />
 
-            */}
 
         </>
     )
 }
 
 
-export default CustomerTable;
+export default PermissionPage;

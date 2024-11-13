@@ -32,6 +32,8 @@ import ManageReceiptPage from './pages/admin/receipt';
 import ManageSupply from './pages/admin/supply';
 import ManageSupplyPage from './pages/admin/supply';
 import ManageSupplierPage from './pages/admin/supplier';
+import ManagePermissionPage from './pages/admin/permission';
+import ManageRolePage from './pages/admin/role';
 
 const Layout = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -172,6 +174,22 @@ export default function App() {
           element:
             <ProtectedRoute>
               <ManageSupplierPage />
+            </ProtectedRoute>
+          ,
+        },
+        {
+          path: "permission",
+          element:
+            <ProtectedRoute>
+              <ManagePermissionPage />
+            </ProtectedRoute>
+          ,
+        },
+        {
+          path: "role",
+          element:
+            <ProtectedRoute>
+              <ManageRolePage />
             </ProtectedRoute>
           ,
         }

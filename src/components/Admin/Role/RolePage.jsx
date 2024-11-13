@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Row, Col, Popconfirm, Button, message, notification } from 'antd';
-import InputSearch from './InputSearch';
-import { callDeleteCustomer, callDeleteUser, callFetchCustomerWithPagination, callFetchListAccountWithPagination } from '../../../services/api';
+
+import { callDeleteCustomer, callDeletePermission, callDeleteRole, callDeleteUser, callFetchAllPermission, callFetchAllRoleWithPagination, callFetchCustomerWithPagination, callFetchListAccountWithPagination } from '../../../services/api';
 import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 
 import moment from 'moment/moment';
 import { FORMAT_DATE_DISPLAY } from '../../../utils/constant';
 
 import * as XLSX from 'xlsx';
-import CustomerViewDetail from './CustomerViewDetail';
-import CustomerModalCreate from './CustomerModalCreate';
-import CustomerModalUpdate from './CustomerModalUpdate';
+import RoleViewDetail from './RoleViewDetail';
+import RoleModalCreate from './RoleModalCreate';
+import RoleModalUpdate from './RoleModalUpdate';
+
+
 
 // https://stackblitz.com/run?file=demo.tsx
-const CustomerTable = () => {
-    const [listCustomer, setListCustomer] = useState([]);
+const RolePage = () => {
+    const [listRole, setListRole] = useState([]);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(5);
     const [total, setTotal] = useState(0);
@@ -33,11 +35,11 @@ const CustomerTable = () => {
     const [dataUpdate, setDataUpdate] = useState(null);
 
     useEffect(() => {
-        fetchCustomer();
+        fetchRole();
     }, [current, pageSize, filter, sortQuery]);
 
 
-    const fetchCustomer = async () => {
+    const fetchRole = async () => {
         setIsLoading(true)
         let query = `page=${current}&size=${pageSize}`;
         if (filter) {
@@ -47,10 +49,10 @@ const CustomerTable = () => {
             query += `&${sortQuery}`;
         }
 
-        const res = await callFetchCustomerWithPagination(query);
+        const res = await callFetchAllRoleWithPagination(query);
         console.log(res)
         if (res && res.data) {
-            setListCustomer(res.data.result);
+            setListRole(res.data.result);
             setTotal(res.data.meta.total)
         }
         setIsLoading(false)
@@ -73,24 +75,14 @@ const CustomerTable = () => {
             }
         },
         {
-            title: 'Họ và Tên',
+            title: 'Tên role',
             dataIndex: 'name',
             sorter: true
         },
         {
-            title: 'Email',
-            dataIndex: 'email',
+            title: 'Mô tả',
+            dataIndex: 'description',
             sorter: true,
-        },
-        {
-            title: 'Địa chỉ',
-            dataIndex: 'address',
-            sorter: true,
-        },
-        {
-            title: 'Số điện thoại',
-            dataIndex: 'phone',
-            sorter: true
         },
         {
             title: 'Ngày cập nhật',
@@ -122,8 +114,8 @@ const CustomerTable = () => {
 
                         <Popconfirm
                             placement="leftTop"
-                            title={"Xác nhận xóa user"}
-                            description={"Bạn có chắc chắn muốn xóa user này ?"}
+                            title={"Xác nhận xóa role này ?"}
+                            description={"Bạn có chắc chắn muốn xóa role này ?"}
                             onConfirm={() => handleDeleteUser(record.id)}
                             okText="Xác nhận"
                             cancelText="Hủy"
@@ -168,10 +160,10 @@ const CustomerTable = () => {
     };
 
     const handleDeleteUser = async (customerId) => {
-        const res = await callDeleteCustomer(customerId);
-        if (res && res.data) {
-            message.success('Xóa khách hàng thành công');
-            fetchCustomer();
+        const res = await callDeleteRole(customerId);
+        if (res) {
+            message.success('Xóa role thành công thành công');
+            fetchRole();
         } else {
             notification.error({
                 message: 'Có lỗi xảy ra',
@@ -185,16 +177,8 @@ const CustomerTable = () => {
     const renderHeader = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Table List Customers</span>
+                <span>Table List Permissions</span>
                 <span style={{ display: 'flex', gap: 15 }}>
-                    <Button
-                        icon={<ExportOutlined />}
-                        type="primary"
-                        onClick={() => handleExportData()}
-                    >Export</Button>
-
-
-
                     <Button
                         icon={<PlusOutlined />}
                         type="primary"
@@ -217,31 +201,22 @@ const CustomerTable = () => {
         setFilter(query);
     }
 
-    const handleExportData = () => {
-        // https://stackoverflow.com/questions/70871254/how-can-i-export-a-json-object-to-excel-using-nextjs-react
-        if (listCustomer.length > 0) {
-            const worksheet = XLSX.utils.json_to_sheet(listCustomer);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-            XLSX.writeFile(workbook, "ExportCustomer.csv");
-        }
-    }
     return (
         <>
             <Row gutter={[20, 20]}>
-                <Col span={24}>
+                {/* <Col span={24}>
                     <InputSearch
                         handleSearch={handleSearch}
                         setFilter={setFilter}
                     />
-                </Col>
+                </Col> */}
                 <Col span={24}>
                     <Table
                         title={renderHeader}
                         loading={isLoading}
 
                         columns={columns}
-                        dataSource={listCustomer}
+                        dataSource={listRole}
                         onChange={onChange}
                         rowKey="id"
                         pagination={
@@ -258,38 +233,29 @@ const CustomerTable = () => {
                     />
                 </Col>
             </Row>
-            <CustomerViewDetail
+            <RoleModalCreate
+                openModalCreate={openModalCreate}
+                setOpenModalCreate={setOpenModalCreate}
+                fetchRole={fetchRole}
+            />
+            <RoleModalUpdate
+                openModalUpdate={openModalUpdate}
+                setOpenModalUpdate={setOpenModalUpdate}
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
+                fetchRole={fetchRole}
+            />
+            <RoleViewDetail
                 openViewDetail={openViewDetail}
                 setOpenViewDetail={setOpenViewDetail}
                 dataViewDetail={dataViewDetail}
                 setDataViewDetail={setDataViewDetail}
             />
 
-            <CustomerModalCreate
-                openModalCreate={openModalCreate}
-                setOpenModalCreate={setOpenModalCreate}
-                fetchCustomer={fetchCustomer}
-            />
-
-            <CustomerModalUpdate
-                openModalUpdate={openModalUpdate}
-                setOpenModalUpdate={setOpenModalUpdate}
-                dataUpdate={dataUpdate}
-                setDataUpdate={setDataUpdate}
-                fetchCustomer={fetchCustomer}
-            />
-            {/*
-            <UserImport
-                openModalImport={openModalImport}
-                setOpenModalImport={setOpenModalImport}
-                fetchUser={fetchUser}
-            />
-
-            */}
 
         </>
     )
 }
 
 
-export default CustomerTable;
+export default RolePage;

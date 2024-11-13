@@ -261,3 +261,47 @@ export const callUpdateSupplier = (id, name, address, phone, email) => {
 export const callDeleteSupplier = (id) => {
     return axios.delete(`/api/v1/supplier/${id}`);
 }
+
+export const callFetchAllPermission = (query) => {
+    return axios.get(`/api/v1/permissions?${query}`);
+}
+
+export const callCreatePermission = (name, apiPath, method, module) => {
+    return axios.post('/api/v1/permissions', { name, apiPath, method, module });
+}
+
+export const callUpdatePermission = (id, name, apiPath, method, module) => {
+    return axios.put('/api/v1/permissions', { id, name, apiPath, method, module });
+}
+
+export const callDeletePermission = (id) => {
+    return axios.delete(`/api/v1/permissions/${id}`);
+}
+
+export const callFetchAllRoleWithPagination = (query) => {
+    return axios.get(`/api/v1/roles?${query}`);
+}
+
+export const callCreateRole = (name, description, permissions) => {
+    return axios.post('/api/v1/role', { name, description, permissions });
+}
+
+export const callUpdateRole = (id, name, description, permissions) => {
+    return axios.put('/api/v1/role', { id, name, description, permissions });
+}
+
+export const callDeleteRole = (id) => {
+    return axios.delete(`/api/v1/role/${id}`);
+}
+
+export const callFetchListPermissionNoPagination = () => {
+    return axios.get('/api/v1/permissions-no-pagination');
+}
+
+export const callFetchPermissionById = (id) => {
+    return axios.get(`/api/v1/permissions/${id}`);
+}
+
+export const callFetchPermissionByName = (name) => {
+    return axios.get(`/api/v1/permissions-name?name=${name}`);
+}

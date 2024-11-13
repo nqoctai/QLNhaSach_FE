@@ -64,6 +64,16 @@ const items = [
         label: <Link to='/admin/supplier'>Manage Suppliers</Link>,
         key: 'supplier',
         icon: <DollarCircleOutlined />
+    },
+    {
+        label: <Link to='/admin/permission'>Manage Permissions</Link>,
+        key: 'permission',
+        icon: <DollarCircleOutlined />
+    },
+    {
+        label: <Link to='/admin/role'>Manage Roles</Link>,
+        key: 'role',
+        icon: <DollarCircleOutlined />
     }
 ];
 
