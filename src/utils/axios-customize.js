@@ -1,3 +1,4 @@
+import { notification } from "antd";
 import axios from "axios";
 
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
@@ -67,9 +68,19 @@ instance.interceptors.response.use(function (response) {
         && error.response
         && +error.response.status === 400
         && error.config.url === '/api/v1/auth/refresh'
+        && location.pathname.startsWith("/admin")
     ) {
         window.location.href = '/login';
     }
+
+    if (+error.response.status === 403) {
+        console.log('error.response', error.response);
+        notification.error({
+            message: error?.response?.data?.message ?? "",
+            description: error?.response?.data?.error ?? ""
+        })
+    }
+
     return error?.response?.data ?? Promise.reject(error);
 });
 

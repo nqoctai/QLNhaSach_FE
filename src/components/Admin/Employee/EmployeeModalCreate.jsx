@@ -10,22 +10,10 @@ const EmployeeModalCreate = (props) => {
     const [form] = Form.useForm();
     const [roles, setRoles] = useState([]);
 
-    const fetchRoles = async () => {
-        const res = await callListRole();
-        if (res && res.data) {
-            const d = res.data.map(item => {
-                return { label: item.name, value: item.id }
-            })
-            setRoles(d)
-        }
-    }
-    useEffect(() => {
-        fetchRoles()
-    }, [])
     const onFinish = async (values) => {
-        const { fullName, address, phone, email, hireDate, salary, role } = values;
+        const { fullName, address, phone, email, hireDate, salary } = values;
         setIsSubmit(true)
-        const res = await callCreateEmployee(fullName, address, phone, email, hireDate, salary, role);
+        const res = await callCreateEmployee(fullName, address, phone, email, hireDate, salary);
         if (res && res.data) {
             message.success('Tạo mới nhân viên thành công');
             form.resetFields();
@@ -114,19 +102,7 @@ const EmployeeModalCreate = (props) => {
                             addonAfter="VND"
                         />
                     </Form.Item>
-                    <Form.Item
-                        labelCol={{ span: 24 }}
-                        label="Vai trò"
-                        name="role"
-                        rules={[{ required: true, message: 'Vui lòng chọn role!' }]}
-                    >
-                        <Select
-                            defaultValue={null}
-                            showSearch
-                            allowClear
-                            options={roles}
-                        />
-                    </Form.Item>
+
                 </Form>
             </Modal>
         </>

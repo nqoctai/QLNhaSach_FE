@@ -56,23 +56,39 @@ const ViewDetail = (props) => {
 
     const handleAddToCart = async (quantity, book) => {
         const res = await callAddBookToCart(account.email, book.id, quantity);
-        if (res) {
+        if (res && res.data) {
             message.success("Sản phẩm đã được thêm vào Giỏ hàng");
             const dataAccount = await callFetchAccount();
             console.log('check>>> dataAccount:', dataAccount);
             dispatch(doGetAccountAction(dataAccount.data));
+        } else {
+            if (res.status === 401) {
+                message.error('Vui lòng đăng nhập để mua hàng');
+                navigate('/login');
+            } else {
+                message.error(res.message);
+            }
+
         }
 
     }
 
     const handleBuyNow = async (quantity, book) => {
         const res = await callAddBookToCart(account.email, book.id, quantity);
-        if (res) {
+        if (res && res.data) {
             message.success("Sản phẩm đã được thêm vào Giỏ hàng");
             const dataAccount = await callFetchAccount();
             console.log('check>>> dataAccount:', dataAccount);
             dispatch(doGetAccountAction(dataAccount.data));
             navigate('/order');
+        } else {
+            if (res.status === 401) {
+                message.error('Vui lòng đăng nhập để mua hàng');
+                navigate('/login');
+            } else {
+                message.error(res.message);
+            }
+
         }
 
     }

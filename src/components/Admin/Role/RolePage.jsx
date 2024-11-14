@@ -177,7 +177,7 @@ const RolePage = () => {
     const renderHeader = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Table List Permissions</span>
+                <span>Table List Roles</span>
                 <span style={{ display: 'flex', gap: 15 }}>
                     <Button
                         icon={<PlusOutlined />}

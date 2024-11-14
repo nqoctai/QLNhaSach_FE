@@ -103,7 +103,7 @@ const EmployeeTable = () => {
             sorter: true,
             render: (text, record, index) => {
                 return (
-                    <>{record.role ? record.role.name : 'Không có vai trò'}</>
+                    <>{record?.account?.role ? record?.account?.role?.name : 'Không có vai trò'}</>
                 )
             }
         },

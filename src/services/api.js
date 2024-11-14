@@ -174,12 +174,12 @@ export const callFetchEmployeeWithPagination = (query) => {
     return axios.get(`/api/v1/employees?${query}`);
 }
 
-export const callCreateEmployee = (fullName, address, phone, email, hireDate, salary, role) => {
-    return axios.post('/api/v1/employee', { fullName, address, phone, email, hireDate, salary, role: { id: role } })
+export const callCreateEmployee = (fullName, address, phone, email, hireDate, salary) => {
+    return axios.post('/api/v1/employee', { fullName, address, phone, email, hireDate, salary })
 }
 
-export const callUpdateEmployee = (id, fullName, address, phone, email, hireDate, salary, role) => {
-    return axios.put('/api/v1/employee', { id, fullName, address, phone, email, hireDate, salary, role: { id: role } })
+export const callUpdateEmployee = (id, fullName, address, phone, email, hireDate, salary) => {
+    return axios.put('/api/v1/employee', { id, fullName, address, phone, email, hireDate, salary })
 }
 
 export const callDeleteEmployee = (id) => {

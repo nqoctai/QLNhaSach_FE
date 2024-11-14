@@ -59,7 +59,7 @@ const RoleModalUpdate = (props) => {
         console.log('rqProducts', rqProducts);
         const res = await callUpdateRole(id, name, description, rqProducts);
         if (res && res.data) {
-            message.success('Tạo mới role thành công');
+            message.success('Cập nhật role thành công');
             form.resetFields();
             setOpenModalUpdate(false);
             await props.fetchRole()
@@ -118,7 +118,7 @@ const RoleModalUpdate = (props) => {
         <>
 
             <Modal
-                title="Thêm mới role"
+                title="Cập nhật role"
                 open={openModalUpdate}
                 onOk={() => { form.submit() }}
                 onCancel={() => { setOpenModalUpdate(false); setProducts([]); form.resetFields(); setDataUpdate(null) }}

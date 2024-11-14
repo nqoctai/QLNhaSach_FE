@@ -11,23 +11,11 @@ const EmployeeModalUpdate = (props) => {
     // https://ant.design/components/form#components-form-demo-control-hooks
     const [form] = Form.useForm();
 
-    const fetchRoles = async () => {
-        const res = await callListRole();
-        if (res && res.data) {
-            const d = res.data.map(item => {
-                return { label: item?.name, value: item?.id }
-            })
-            setRoles(d)
-        }
-    }
-    useEffect(() => {
-        fetchRoles()
-    }, [])
 
     const onFinish = async (values) => {
-        let { id, fullName, address, phone, email, hireDate, salary, role } = values;
+        let { id, fullName, address, phone, email, hireDate, salary } = values;
         setIsSubmit(true)
-        const res = await callUpdateEmployee(+id, fullName, address, phone, email, hireDate, salary, role);
+        const res = await callUpdateEmployee(+id, fullName, address, phone, email, hireDate, salary);
         if (res && res.data) {
             message.success('Cập nhật customer thành công');
             setOpenModalUpdate(false);
@@ -51,8 +39,7 @@ const EmployeeModalUpdate = (props) => {
                 address: dataUpdate.address,
                 email: dataUpdate.email,
                 phone: dataUpdate.phone,
-                salary: dataUpdate.salary,
-                role: dataUpdate?.role?.id,
+                salary: dataUpdate.salary
                 // Các trường khác
             };
             form.setFieldsValue(init);
@@ -148,19 +135,7 @@ const EmployeeModalUpdate = (props) => {
                             addonAfter="VND"
                         />
                     </Form.Item>
-                    <Form.Item
-                        labelCol={{ span: 24 }}
-                        label="Vai trò"
-                        name="role"
-                        rules={[{ required: true, message: 'Vui lòng chọn role!' }]}
-                    >
-                        <Select
-                            defaultValue={null}
-                            showSearch
-                            allowClear
-                            options={roles}
-                        />
-                    </Form.Item>
+
 
                 </Form>
             </Modal>
