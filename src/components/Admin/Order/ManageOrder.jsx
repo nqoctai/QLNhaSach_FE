@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Row, Col, Popconfirm, Button, message, notification } from 'antd';
+import { Table, Row, Col, Popconfirm, Button, message, notification, Tag } from 'antd';
 import { callFetchListOrder } from '../../../services/api';
 import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import moment from 'moment/moment';
@@ -92,6 +92,30 @@ const ManageOrder = () => {
             sorter: true
         },
         {
+            title: 'Trạng thái',
+            dataIndex: 'status',
+            sorter: true,
+            render: (text, record, index) => {
+                const orderShippingEventsNew = record.orderShippingEvents.reduce((latest, event) => {
+                    return new Date(event.createdAt) > new Date(latest.createdAt) ? event : latest;
+                }, record.orderShippingEvents[0]);
+                <Tag color={"green"}>
+                    Thành công
+                </Tag>
+                console.log('orderShippingEventsNew', orderShippingEventsNew);
+                return (
+                    <>
+                        {orderShippingEventsNew?.shippingStatus?.status === "Hủy bỏ" ?
+                            <Tag color={"red"}>{orderShippingEventsNew?.shippingStatus?.status}</Tag> :
+                            orderShippingEventsNew?.shippingStatus?.status === "Hoàn thành" ?
+                                <Tag color={"green"}>{orderShippingEventsNew?.shippingStatus?.status}</Tag> :
+                                <Tag color={"blue"}>{orderShippingEventsNew?.shippingStatus?.status}</Tag>}
+                    </>
+
+                )
+            }
+        },
+        {
             title: 'Ngày cập nhật',
             dataIndex: 'updatedAt',
             sorter: true,
@@ -116,15 +140,21 @@ const ManageOrder = () => {
         {
             title: 'Action',
             render: (text, record, index) => {
+                const orderShippingEventsNew = record.orderShippingEvents.reduce((latest, event) => {
+                    return new Date(event.createdAt) > new Date(latest.createdAt) ? event : latest;
+                }, record.orderShippingEvents[0]);
                 return (
                     <>
-                        <EditTwoTone
-                            twoToneColor="#f57800" style={{ cursor: "pointer" }}
-                            onClick={() => {
-                                setOpenModalUpdate(true);
-                                setDataUpdate(record);
-                            }}
-                        />
+                        {
+                            orderShippingEventsNew?.shippingStatus?.status === "Hủy bỏ" || orderShippingEventsNew?.shippingStatus?.status === "Hoàn thành" ? null :
+                                <EditTwoTone
+                                    twoToneColor="#f57800" style={{ cursor: "pointer" }}
+                                    onClick={() => {
+                                        setOpenModalUpdate(true);
+                                        setDataUpdate(record);
+                                    }}
+                                />
+                        }
                     </>
 
                 )
@@ -213,6 +243,7 @@ const ManageOrder = () => {
                                 showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
                             }
                         }
+                        scroll={{ y: 280 }}
 
                     />
                 </Col>

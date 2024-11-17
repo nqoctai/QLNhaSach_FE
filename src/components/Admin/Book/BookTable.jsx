@@ -182,7 +182,7 @@ const BookTable = () => {
         } else {
             notification.error({
                 message: 'Có lỗi xảy ra',
-                description: res.message
+                description: 'Không thể xóa sách này, vì có các bản ghi liên quan đến sách này'
             });
         }
     };

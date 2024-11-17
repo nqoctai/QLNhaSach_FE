@@ -143,9 +143,9 @@ const RoleModalCreate = (props) => {
 
 
                     {/* Bảng sản phẩm */}
-                    <Form.Item label="Danh sách sản phẩm">
+                    <Form.Item label="Danh sách quyền hạn">
                         <Button type="dashed" onClick={() => setModalAddPermission(true)}>
-                            Thêm sản phẩm
+                            Thêm quyền
                         </Button>
                         <Table
                             dataSource={products}

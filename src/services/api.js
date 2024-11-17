@@ -95,8 +95,8 @@ export const callPlaceOrder = (data) => {
     })
 }
 
-export const callOrderHistory = (accountId) => {
-    return axios.get(`/api/v1/order/history/${accountId}`);
+export const callOrderHistory = (id) => {
+    return axios.get(`/api/v1/order/history/${id}`);
 }
 
 export const callUpdateAvatar = (fileImg) => {
