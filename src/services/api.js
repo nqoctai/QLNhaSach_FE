@@ -305,3 +305,7 @@ export const callFetchPermissionById = (id) => {
 export const callFetchPermissionByName = (name) => {
     return axios.get(`/api/v1/permissions-name?name=${name}`);
 }
+
+export const callFetchRevenue = (year) => {
+    return axios.get(`/api/v1/monthly-revenue?year=${year}`);
+}

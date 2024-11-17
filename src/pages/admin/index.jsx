@@ -1,7 +1,7 @@
 import { Card, Col, Row, Select, Statistic } from "antd";
 import { useEffect, useState } from "react";
 import CountUp from 'react-countup';
-import { callFetchDashboard } from "../../services/api";
+import { callFetchDashboard, callFetchRevenue } from "../../services/api";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -34,32 +34,14 @@ const AdminPage = () => {
         datasets: []
     });
 
-    const [selectedYear, setSelectedYear] = useState("2023");
+    const [selectedYear, setSelectedYear] = useState("2024");
 
-    const fetchRevenueData = (year) => {
-        const res = {
-            "2023": [
-                { month: "Jan", revenue: 5000 },
-                { month: "Feb", revenue: 10000 },
-                { month: "Mar", revenue: 7500 },
-                { month: "Apr", revenue: 12000 },
-                { month: "May", revenue: 15000 },
-                { month: "Jun", revenue: 11000 }
-            ],
-            "2024": [
-                { month: "Jan", revenue: 7000 },
-                { month: "Feb", revenue: 9000 },
-                { month: "Mar", revenue: 8500 },
-                { month: "Apr", revenue: 13000 },
-                { month: "May", revenue: 14000 },
-                { month: "Jun", revenue: 12500 }
-            ]
-        };
-        // API trả về dữ liệu doanh thu
-        if (res[year]) {
-            const labels = res[year].map(item => item.month);
-            const revenue = res[year].map(item => item.revenue);
+    const fetchRevenueData = async (year) => {
 
+        const res = await callFetchRevenue(year); // API trả về dữ liệu doanh thu
+        if (res && res.data) {
+            const labels = res.data.map(item => item.thang);
+            const revenue = res.data.map(item => item.doanhThu);
             setRevenueData({
                 labels,
                 datasets: [
@@ -73,16 +55,21 @@ const AdminPage = () => {
                 ]
             });
         }
+
+
     }
     useEffect(() => {
         fetchRevenueData(selectedYear);
     }, [selectedYear]);
+
+
     useEffect(() => {
         const initDashboard = async () => {
             const res = await callFetchDashboard();
             if (res && res.data) setDataDashboard(res.data)
         }
         initDashboard();
+        fetchRevenueData(selectedYear);
     }, []);
 
     const handleYearChange = (value) => {
@@ -113,6 +100,8 @@ const AdminPage = () => {
                         style={{ width: 200, marginBottom: "20px" }}
                         onChange={handleYearChange}
                     >
+                        <Option value="2021">2021</Option>
+                        <Option value="2022">2022</Option>
                         <Option value="2023">2023</Option>
                         <Option value="2024">2024</Option>
                     </Select>
