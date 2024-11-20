@@ -16,7 +16,7 @@ const UserViewDetail = (props) => {
                 open={openViewDetail}
             >
                 <Descriptions
-                    title="Thông tin user"
+                    title="Thông tin tài khoản"
                     bordered
                     column={2}
                 >

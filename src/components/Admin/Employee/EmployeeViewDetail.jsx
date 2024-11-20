@@ -16,7 +16,7 @@ const EmployeeViewDetail = (props) => {
                 open={openViewDetail}
             >
                 <Descriptions
-                    title="Thông tin user"
+                    title="Thông tin nhân viên"
                     bordered
                     column={2}
                 >

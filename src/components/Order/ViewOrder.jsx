@@ -129,7 +129,7 @@ const ViewOrder = (props) => {
                         disabled={cart?.length === 0}
                         onClick={() => props.setCurrentStep(1)}
                     >
-                        Mua Hàng ({cart?.length ?? 0})
+                        Mua Hàng ({cart?.cartItems?.length ?? 0})
                     </button>
                 </div>
             </Col>

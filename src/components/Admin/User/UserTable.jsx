@@ -71,7 +71,7 @@ const UserTable = () => {
             }
         },
         {
-            title: 'Họ tên',
+            title: 'Tên hiển thị',
             dataIndex: 'username',
             sorter: true
         },

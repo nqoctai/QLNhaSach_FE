@@ -190,7 +190,7 @@ const SupplyTable = () => {
     const renderHeader = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Table List Supplys</span>
+                <span>Table List Supplies</span>
                 <span style={{ display: 'flex', gap: 15 }}>
 
                     <Button

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Divider, Form, Input, message, Modal, notification, Select } from 'antd';
+import { Button, DatePicker, Divider, Form, Input, message, Modal, notification, Select } from 'antd';
 import { callCreateAUser, callCreateCustomer, callListRole } from '../../../services/api';
 
 const CustomerModalCreate = (props) => {
@@ -9,9 +9,9 @@ const CustomerModalCreate = (props) => {
     // https://ant.design/components/form#components-form-demo-control-hooks
     const [form] = Form.useForm();
     const onFinish = async (values) => {
-        const { name, address, phone, email } = values;
+        const { name, address, phone, email, gender, birthday } = values;
         setIsSubmit(true)
-        const res = await callCreateCustomer(name, address, phone, email);
+        const res = await callCreateCustomer(name, address, phone, email, gender, birthday);
         if (res && res.data) {
             message.success('Tạo mới customer thành công');
             form.resetFields();
@@ -78,6 +78,29 @@ const CustomerModalCreate = (props) => {
                         rules={[{ required: true, message: 'Vui lòng nhập email!' }]}
                     >
                         <Input />
+                    </Form.Item>
+                    <Form.Item
+                        labelCol={{ span: 24 }}
+                        label="Giới tính"
+                        name="gender"
+                        rules={[{ required: true, message: 'Vui lòng nhập email!' }]}
+                    >
+                        <Select
+                            placeholder="Chọn giới tính"
+                            allowClear
+                        >
+                            <Option value="Nam">Nam</Option>
+                            <Option value="Nữ">Nữ</Option>
+                            <Option value="Khác">Khác</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        labelCol={{ span: 24 }}
+                        label="Ngày sinh"
+                        name="birthday"
+                        rules={[{ required: true, message: 'Vui lòng nhập ngày sinh!' }]}
+                    >
+                        <DatePicker />
                     </Form.Item>
                 </Form>
             </Modal>

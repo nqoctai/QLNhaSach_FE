@@ -65,6 +65,7 @@ const OrderModalCreate = (props) => {
         if (res && res.data) {
             message.success('Tạo mới đơn hàng thành công');
             form.resetFields();
+            setProducts([]);
             setOpenModalCreate(false);
             await props.fetchOrder()
         } else {

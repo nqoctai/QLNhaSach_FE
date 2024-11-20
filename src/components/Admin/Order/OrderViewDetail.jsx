@@ -23,7 +23,7 @@ const OrderViewDetail = (props) => {
             setsteps(init)
 
             const listOderitems = dataViewDetail.orderItems.map(product => {
-                return { mainText: product.book.mainText, quantity: product.quantity, price: product.book.price, totalPrice: product.price, key: product.id }
+                return { mainText: product.book.mainText, quantity: product.quantity, price: product.price / product.quantity, totalPrice: product.price, key: product.id }
             })
 
             setProducts(listOderitems)

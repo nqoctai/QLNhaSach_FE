@@ -180,7 +180,7 @@ const SupplierTable = () => {
     const renderHeader = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Table List Supplies</span>
+                <span>Table List Suppliers</span>
                 <span style={{ display: 'flex', gap: 15 }}>
 
 

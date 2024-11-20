@@ -37,7 +37,7 @@ const ModalAddReceiptItem = (props) => {
         <>
             {/* Modal thêm sản phẩm */}
             <Modal
-                title="Thêm sản phẩm vào đơn hàng"
+                title="Thêm sản phẩm phiếu nhập hàng"
                 open={openModalAddReceiptItem}
                 onCancel={() => { setModalAddReceiptItem(false); form.resetFields() }}
                 onOk={() => { form.submit() }}

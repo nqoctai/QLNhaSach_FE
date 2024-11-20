@@ -154,6 +154,11 @@ const ManageReceipt = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Table List Receipt</span>
                 <span style={{ display: 'flex', gap: 15 }}>
+                    <Button
+                        icon={<PlusOutlined />}
+                        type="primary"
+                        onClick={() => setOpenModalCreate(true)}
+                    >Thêm mới</Button>
                     <Button type='ghost' onClick={() => {
                         setFilter("");
                         setSortQuery("")
@@ -161,11 +166,7 @@ const ManageReceipt = () => {
                         <ReloadOutlined />
                     </Button>
 
-                    <Button
-                        icon={<PlusOutlined />}
-                        type="primary"
-                        onClick={() => setOpenModalCreate(true)}
-                    >Thêm mới</Button>
+
 
 
                 </span>
@@ -180,7 +181,7 @@ const ManageReceipt = () => {
 
     return (
         <>
-            <Row gutter={[20, 20]}>
+            <Row gutter={[20, 20]} style={{ maxHeight: '626px', overflowY: 'auto' }}>
                 <Col span={24}>
                     <InputSearch
                         handleSearch={handleSearch}

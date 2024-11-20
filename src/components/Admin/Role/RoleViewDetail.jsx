@@ -63,7 +63,7 @@ const RoleViewDetail = (props) => {
                 open={openViewDetail}
             >
                 <Descriptions
-                    title="Thông tin đơn hàng"
+                    title="Thông tin vai trò"
                     bordered
                     column={2}
                 >

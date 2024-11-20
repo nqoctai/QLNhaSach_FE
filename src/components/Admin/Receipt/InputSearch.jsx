@@ -7,6 +7,7 @@ import moment from 'moment';
 const InputSearch = (props) => {
     const { token } = theme.useToken();
     const [form] = Form.useForm();
+    const { RangePicker } = DatePicker;
 
     const formStyle = {
         maxWidth: 'none',
@@ -19,6 +20,11 @@ const InputSearch = (props) => {
         let query = "";
         let q = [];
         // build query
+        if (values.RangeDate) {
+            const dateStart = values.RangeDate[0].format('YYYY-MM-DD');
+            const dateFinish = values.RangeDate[1].format('YYYY-MM-DD');
+            q.push(`createdAt>='${dateStart}' and createdAt<='${dateFinish} 23:59:59'`);
+        }
         if (values.email) {
             q.push(`createdBy~'${values.email}'`);
         }
@@ -90,6 +96,16 @@ const InputSearch = (props) => {
                         label="Ngày cập nhật"
                     >
                         <DatePicker format="YYYY-MM-DD" />
+                    </Form.Item>
+                </Col>
+
+                <Col span={8}>
+                    <Form.Item
+                        labelCol={{ span: 24 }}
+                        name={`RangeDate`}
+                        label={`Khoảng thời gian`}
+                    >
+                        <RangePicker />
                     </Form.Item>
                 </Col>
 

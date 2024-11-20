@@ -2,12 +2,13 @@ import { Modal, Tabs } from "antd";
 import UserInfo from "./UserInfo";
 import ChangePassword from "./ChangePassword";
 import CustomerInfo from "./CustomerInfo";
+import { useSelector } from "react-redux";
 
 const ManageAccount = (props) => {
     const { isModalOpen, setIsModalOpen } = props;
+    const user = useSelector(state => state.account.user);
 
-
-    const items = [
+    let items = [
         {
             key: 'info',
             label: `Cập nhật thông tin tài khoản`,
@@ -18,7 +19,6 @@ const ManageAccount = (props) => {
             label: `Đổi mật khẩu`,
             children: <ChangePassword />,
         },
-        ,
         {
             key: 'infocustomer',
             label: `Cập nhật thông tin khách hàng`,
@@ -26,6 +26,22 @@ const ManageAccount = (props) => {
         },
 
     ];
+
+    if (user?.role !== 'CUSTOMER') {
+        items = [
+            {
+                key: 'info',
+                label: `Cập nhật thông tin tài khoản`,
+                children: <UserInfo />,
+            },
+            {
+                key: 'password',
+                label: `Đổi mật khẩu`,
+                children: <ChangePassword />,
+            }
+        ];
+    }
+
 
 
     return (

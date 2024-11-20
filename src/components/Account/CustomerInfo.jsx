@@ -1,5 +1,5 @@
 import { AntDesignOutlined, UploadOutlined } from "@ant-design/icons";
-import { Avatar, Button, Col, Form, Input, Row, Upload, message, notification } from "antd";
+import { Avatar, Button, Col, DatePicker, Form, Input, Row, Select, Upload, message, notification } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { callUpdateAvatar, callUpdateCustomer, callUpdateUserInfo } from "../../services/api";
 import { doUpdateUserInfoAction, doUploadAvatarAction } from "../../redux/account/accountSlice";
@@ -15,9 +15,9 @@ const CustomerInfo = (props) => {
     const [isSubmit, setIsSubmit] = useState(false);
 
     const onFinish = async (values) => {
-        const { name, address, phone, id, email } = values;
+        const { name, address, phone, id, email, gender, birthday } = values;
         setIsSubmit(true)
-        const res = await callUpdateCustomer(id, name, address, phone, email);
+        const res = await callUpdateCustomer(id, name, address, phone, email, gender, birthday);
 
         if (res && res.data) {
             //update redux
@@ -77,7 +77,7 @@ const CustomerInfo = (props) => {
                             label="Địa chỉ"
                             name="address"
                             initialValue={customer?.address}
-                            rules={[{ required: true, message: 'Tên hiển thị không được để trống!' }]}
+                            rules={[{ required: true, message: 'Địa chỉ không được để trống!' }]}
                         >
                             <Input />
                         </Form.Item>
@@ -90,6 +90,30 @@ const CustomerInfo = (props) => {
                         >
                             <Input />
                         </Form.Item>
+                        <Form.Item
+                            labelCol={{ span: 24 }}
+                            label="Giới tính"
+                            name="gender"
+                            rules={[{ required: true, message: 'Vui lòng chọn giới tính!' }]}
+                        >
+                            <Select
+                                placeholder="Chọn giới tính"
+                                allowClear
+                            >
+                                <Option value="Nam">Nam</Option>
+                                <Option value="Nữ">Nữ</Option>
+                                <Option value="Khác">Khác</Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            labelCol={{ span: 24 }}
+                            label="Ngày sinh"
+                            name="birthday"
+                            rules={[{ required: true, message: 'Vui lòng nhập ngày sinh!' }]}
+                        >
+                            <DatePicker />
+                        </Form.Item>
+
                         <Button loading={isSubmit} onClick={() => form.submit()}>Cập nhật</Button>
                     </Form>
                 </Col>

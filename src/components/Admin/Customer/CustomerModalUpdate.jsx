@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Divider, Form, Input, message, Modal, notification, Select } from 'antd';
+import { Button, DatePicker, Divider, Form, Input, message, Modal, notification, Select } from 'antd';
 import { callUpdateUser, callListRole, callUpdateCustomer } from '../../../services/api';
+import { Option } from 'antd/es/mentions';
+import moment from 'moment';
 
 const CustomerModalUpdate = (props) => {
     const { openModalUpdate, setOpenModalUpdate, dataUpdate, setDataUpdate } = props;
@@ -12,9 +14,9 @@ const CustomerModalUpdate = (props) => {
 
 
     const onFinish = async (values) => {
-        let { id, name, address, phone, email } = values;
+        let { id, name, address, phone, email, gender, birthday } = values;
         setIsSubmit(true)
-        const res = await callUpdateCustomer(+id, name, address, phone, email);
+        const res = await callUpdateCustomer(+id, name, address, phone, email, gender, birthday);
         if (res && res.data) {
             message.success('Cập nhật customer thành công');
             setOpenModalUpdate(false);
@@ -31,7 +33,8 @@ const CustomerModalUpdate = (props) => {
 
     useEffect(() => {
         if (dataUpdate) {
-            form.setFieldsValue({ ...dataUpdate })
+            console.log(dataUpdate)
+            form.setFieldsValue({ ...dataUpdate, birthday: dataUpdate.birthday ? moment(dataUpdate.birthday) : null })
         }
     }, [dataUpdate])
 
@@ -102,6 +105,29 @@ const CustomerModalUpdate = (props) => {
                         rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
                     >
                         <Input />
+                    </Form.Item>
+                    <Form.Item
+                        labelCol={{ span: 24 }}
+                        label="Giới tính"
+                        name="gender"
+                        rules={[{ required: true, message: 'Vui lòng giới tính!' }]}
+                    >
+                        <Select
+                            placeholder="Chọn giới tính"
+                            allowClear
+                        >
+                            <Option value="Nam">Nam</Option>
+                            <Option value="Nữ">Nữ</Option>
+                            <Option value="Khác">Khác</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        labelCol={{ span: 24 }}
+                        label="Ngày sinh"
+                        name="birthday"
+                        rules={[{ required: true, message: 'Vui lòng nhập ngày sinh!' }]}
+                    >
+                        <DatePicker />
                     </Form.Item>
 
                 </Form>

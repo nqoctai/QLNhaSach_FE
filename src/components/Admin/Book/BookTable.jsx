@@ -9,6 +9,7 @@ import moment from 'moment/moment';
 import { FORMAT_DATE_DISPLAY } from '../../../utils/constant';
 import BookModalUpdate from './BookModalUpdate';
 import * as XLSX from 'xlsx';
+import BookModalRevenue from './BookModalRevenue';
 
 const BookTable = () => {
     const [listBook, setListBook] = useState([]);
@@ -23,6 +24,7 @@ const BookTable = () => {
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [openViewDetail, setOpenViewDetail] = useState(false);
     const [dataViewDetail, setDataViewDetail] = useState(null);
+    const [openModalRevenue, setOpenModalRevenue] = useState(false);
 
     const [openModalUpdate, setOpenModalUpdate] = useState(false);
     const [dataUpdate, setDataUpdate] = useState(null);
@@ -197,6 +199,12 @@ const BookTable = () => {
                     <Button
                         icon={<ExportOutlined />}
                         type="primary"
+                        onClick={() => setOpenModalRevenue(true)}
+                    >Thống kê
+                    </Button>
+                    <Button
+                        icon={<ExportOutlined />}
+                        type="primary"
                         onClick={() => handleExportData()}
                     >Export</Button>
 
@@ -281,6 +289,11 @@ const BookTable = () => {
                 dataUpdate={dataUpdate}
                 setDataUpdate={setDataUpdate}
                 fetchBook={fetchBook}
+            />
+
+            <BookModalRevenue
+                openModalRevenue={openModalRevenue}
+                setOpenModalRevenue={setOpenModalRevenue}
             />
 
         </>

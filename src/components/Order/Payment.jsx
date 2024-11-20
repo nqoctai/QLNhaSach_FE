@@ -18,7 +18,9 @@ const Payment = (props) => {
 
 
     useEffect(() => {
+        console.log('carts', carts);
         if (carts && carts.length > 0) {
+            console.log('carts', carts.length);
             let sum = 0;
             carts.map(item => {
                 sum += item.quantity * item.book.price;
@@ -28,6 +30,20 @@ const Payment = (props) => {
             setTotalPrice(0);
         }
     }, [carts]);
+
+    useEffect(() => {
+        console.log('carts', carts);
+        if (carts && carts.length > 0) {
+            console.log('carts', carts.length);
+            let sum = 0;
+            carts.map(item => {
+                sum += item.quantity * item.book.price;
+            })
+            setTotalPrice(sum);
+        } else {
+            setTotalPrice(0);
+        }
+    }, []);
 
 
     const handlePlaceOrder = () => {

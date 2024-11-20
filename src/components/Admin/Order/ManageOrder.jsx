@@ -218,7 +218,7 @@ const ManageOrder = () => {
 
     return (
         <>
-            <Row gutter={[20, 20]}>
+            <Row gutter={[20, 20]} style={{ maxHeight: '626px', overflowY: 'auto' }}>
                 <Col span={24}>
                     <InputSearch
                         handleSearch={handleSearch}

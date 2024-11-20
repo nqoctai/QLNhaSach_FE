@@ -48,7 +48,7 @@ const ReceiptModalDetail = (props) => {
                             bookId: product?.supply?.book.id,
                             supplierId: product?.supply?.supplier.id,
                             quantity: product.quantity,
-                            price: supplyData?.supplyPrice || product?.supply?.supplyPrice,
+                            price: product.totalPrice / product.quantity,
                             totalPrice: product.totalPrice,
                             key: product.id,
                         };
@@ -106,7 +106,7 @@ const ReceiptModalDetail = (props) => {
                 open={openViewDetail}
             >
                 <Descriptions
-                    title="Thông tin đơn hàng"
+                    title="Thông tin nhập hàng"
                     bordered
                     column={2}
                 >

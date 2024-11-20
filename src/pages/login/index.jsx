@@ -25,7 +25,7 @@ const LoginPage = () => {
         } else {
             notification.error({
                 message: 'Có lỗi xảy ra',
-                description: res.message && res.message.length > 0 ? res.message : "Đăng nhập thất bại",
+                description: "Tài khoản hoặc mật khẩu không chính xác",
                 duration: 5
             })
         }

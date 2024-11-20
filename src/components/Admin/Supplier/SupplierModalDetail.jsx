@@ -67,7 +67,7 @@ const SupplierModalDetail = (props) => {
                 open={openViewDetail}
             >
                 <Descriptions
-                    title="Thông tin đơn hàng"
+                    title="Thông tin nhà cung cấp"
                     bordered
                     column={2}
                 >

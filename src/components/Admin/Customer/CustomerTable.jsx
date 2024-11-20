@@ -11,6 +11,7 @@ import * as XLSX from 'xlsx';
 import CustomerViewDetail from './CustomerViewDetail';
 import CustomerModalCreate from './CustomerModalCreate';
 import CustomerModalUpdate from './CustomerModalUpdate';
+import CustomerModalTop5BestBuyer from './CustomerModalTop5BestBuyer';
 
 // https://stackblitz.com/run?file=demo.tsx
 const CustomerTable = () => {
@@ -26,6 +27,7 @@ const CustomerTable = () => {
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [openViewDetail, setOpenViewDetail] = useState(false);
     const [dataViewDetail, setDataViewDetail] = useState(null);
+    const [openModalTop5BestBuyer, setOpenModalTop5BestBuyer] = useState(false);
 
     const [openModalImport, setOpenModalImport] = useState(false);
 
@@ -181,6 +183,9 @@ const CustomerTable = () => {
     };
 
 
+
+
+
     // change button color: https://ant.design/docs/react/customize-theme#customize-design-token
     const renderHeader = () => {
         return (
@@ -190,11 +195,14 @@ const CustomerTable = () => {
                     <Button
                         icon={<ExportOutlined />}
                         type="primary"
+                        onClick={() => setOpenModalTop5BestBuyer(true)}
+                    >Top 5
+                    </Button>
+                    <Button
+                        icon={<ExportOutlined />}
+                        type="primary"
                         onClick={() => handleExportData()}
                     >Export</Button>
-
-
-
                     <Button
                         icon={<PlusOutlined />}
                         type="primary"
@@ -258,6 +266,10 @@ const CustomerTable = () => {
                     />
                 </Col>
             </Row>
+            <CustomerModalTop5BestBuyer
+                openModalTop5BestBuyer={openModalTop5BestBuyer}
+                setOpenModalTop5BestBuyer={setOpenModalTop5BestBuyer}
+            />
             <CustomerViewDetail
                 openViewDetail={openViewDetail}
                 setOpenViewDetail={setOpenViewDetail}

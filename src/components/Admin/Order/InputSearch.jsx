@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Col, Form, Input, Row, theme } from 'antd';
+import { Button, Col, Form, Input, Row, theme, DatePicker } from 'antd';
 import { sfLike } from 'spring-filter-query-builder';
 import { removeAccents } from '../../../utils/removeAccents';
 
 const InputSearch = (props) => {
     const { token } = theme.useToken();
     const [form] = Form.useForm();
+    const { RangePicker } = DatePicker;
 
     const formStyle = {
         maxWidth: 'none',
@@ -17,7 +18,13 @@ const InputSearch = (props) => {
     const onFinish = (values) => {
         let query = "";
         let q = [];
+        console.log("rage date:", values.RangeDate);
         // build query
+        if (values.RangeDate) {
+            const dateStart = values.RangeDate[0].format('YYYY-MM-DD');
+            const dateFinish = values.RangeDate[1].format('YYYY-MM-DD');
+            q.push(`createdAt>='${dateStart}' and createdAt<='${dateFinish} 23:59:59'`);
+        }
 
         if (values.username) {
             q.push(`receiverName~'${values.username}'`);
@@ -85,6 +92,17 @@ const InputSearch = (props) => {
                         <Input />
                     </Form.Item>
                 </Col>
+                <Col span={8}>
+                    <Form.Item
+                        labelCol={{ span: 24 }}
+                        name={`RangeDate`}
+                        label={`Khoảng thời gian`}
+                    >
+                        <RangePicker />
+                    </Form.Item>
+                </Col>
+
+
             </Row>
             <Row>
                 <Col span={24} style={{ textAlign: 'right' }}>

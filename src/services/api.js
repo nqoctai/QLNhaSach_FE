@@ -86,7 +86,7 @@ export const callDeleteBook = (id) => {
 }
 
 export const callFetchBookById = (id) => {
-    return axios.get(`api/v1/book/${id}`)
+    return axios.get(`api/v1/books/${id}`)
 }
 
 export const callPlaceOrder = (data) => {
@@ -158,16 +158,16 @@ export const callFetchCustomerWithPagination = (query) => {
     return axios.get(`/api/v1/customers?${query}`);
 }
 
-export const callCreateCustomer = (name, address, phone, email) => {
-    return axios.post('/api/v1/customer', { name, address, phone, email })
+export const callCreateCustomer = (name, address, phone, email, gender, birthday) => {
+    return axios.post('/api/v1/customer', { name, address, phone, email, gender, birthday })
 }
 
 export const callDeleteCustomer = (id) => {
     return axios.delete(`/api/v1/customer/${id}`)
 }
 
-export const callUpdateCustomer = (id, name, address, phone, email) => {
-    return axios.put('/api/v1/customer', { id, name, address, phone, email })
+export const callUpdateCustomer = (id, name, address, phone, email, gender, birthday) => {
+    return axios.put('/api/v1/customer', { id, name, address, phone, email, gender, birthday })
 }
 
 export const callFetchEmployeeWithPagination = (query) => {
@@ -308,4 +308,32 @@ export const callFetchPermissionByName = (name) => {
 
 export const callFetchRevenue = (year) => {
     return axios.get(`/api/v1/monthly-revenue?year=${year}`);
+}
+
+export const callGetTop5BestBuyer = () => {
+    return axios.get('/api/v1/top5-customers');
+}
+
+export const callRevenueBookArePlaced = (dateStart, dateFinish) => {
+    return axios.get(`/api/v1/sold-books?startDate=${dateStart}&endDate=${dateFinish} 23:59:59`);
+}
+
+export const callFetchInvoiceByCustomerId = (customerId) => {
+    return axios.get(`/api/v1/customers/${customerId}/invoices`);
+}
+
+export const callFetchAllCategoryAndQuantityBookAreSold = () => {
+    return axios.get('/api/v1/dashboard/view1');
+}
+
+export const callFetchTop5BookAreSold = () => {
+    return axios.get('/api/v1/dashboard/get-top5-books-sold');
+}
+
+export const callFetchView6 = () => {
+    return axios.get('/api/v1/dashboard/view6');
+}
+
+export const callFetchGenderRatio = () => {
+    return axios.get('/api/v1/dashboard/view9');
 }
