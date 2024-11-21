@@ -149,7 +149,7 @@ const AdminPage = () => {
                 labels: res.data.map(item => item.gender),
                 datasets: [
                     {
-                        label: "Tỷ lệ bán",
+                        label: "Tỷ lệ giới tính",
                         data: res.data.map(item => item.percentage),
                         backgroundColor: [
                             "rgba(255, 99, 132, 0.2)",
@@ -363,7 +363,7 @@ const AdminPage = () => {
                 </Row >
                 <Row gutter={[40, 40]} style={{ marginTop: "20px" }}>
                     <Col span={12}>
-                        <Card style={{ height: "500px", overflowY: "scroll" }} title="Tỷ lệ bán theo thể loại" bordered={false}>
+                        <Card style={{ height: "500px", overflowY: "scroll" }} title="Tỷ lệ giới tính khách hàng" bordered={false}>
                             <div style={{ width: "100%", height: "300px" }}>
                                 <Pie
                                     data={pieGenderData}

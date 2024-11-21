@@ -101,6 +101,7 @@ const BookModalUpdate = (props) => {
 
         const { id, mainText, author, price, sold, quantity, category } = values;
         const thumbnail = dataThumbnail[0].name;
+        console.log('thumbnail', thumbnail)
         const slider = dataSlider.map(item => item.name);
         const bookImages = dataSlider.map(item => { return { url: item.name } });
         console.log('bookImages', bookImages)
@@ -163,10 +164,12 @@ const BookModalUpdate = (props) => {
         const res = await callUploadBookImg(file);
         if (res && res.data) {
             setDataThumbnail([{
-                name: res.data.fileUploaded,
+                name: res.data.fileName,
                 uid: file.uid
             }])
+            console.log('res.data', res.data)
             onSuccess('ok')
+            console.log('dataThumbnail', dataThumbnail)
         } else {
             onError('Đã có lỗi khi upload file');
         }

@@ -38,7 +38,7 @@ const PermissionModalUpdate = (props) => {
         <>
 
             <Modal
-                title="Cập nhật khách hàng"
+                title="Cập nhật quyền hạn"
                 open={openModalUpdate}
                 onOk={() => { form.submit() }}
                 onCancel={() => {

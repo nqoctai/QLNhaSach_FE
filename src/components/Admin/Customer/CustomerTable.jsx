@@ -177,7 +177,7 @@ const CustomerTable = () => {
         } else {
             notification.error({
                 message: 'Có lỗi xảy ra',
-                description: res.message
+                description: 'Xóa khách hàng không thành công, có các bản ghi có thể liên quan đến khách hàng này'
             });
         }
     };

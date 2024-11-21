@@ -116,7 +116,7 @@ export const callUpdateAvatar = (fileImg) => {
 
 export const callUpdateUserInfo = (id, email, phone, username, avatar) => {
     return axios.put(`/api/v1/account`, {
-        id, email, phone, username, avatar, role: { id: 2 }
+        id, email, phone, username, avatar, role: { id: 4 }
     })
 }
 

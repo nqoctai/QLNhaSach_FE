@@ -178,7 +178,7 @@ const UserTable = () => {
         } else {
             notification.error({
                 message: 'Có lỗi xảy ra',
-                description: res.message
+                description: 'Xóa account không thành công, có các bản ghi liên quan'
             });
         }
     };

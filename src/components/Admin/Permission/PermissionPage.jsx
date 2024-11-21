@@ -176,7 +176,7 @@ const PermissionPage = () => {
         } else {
             notification.error({
                 message: 'Có lỗi xảy ra',
-                description: res.message
+                description: 'Xóa quyền hạn không thành công'
             });
         }
     };

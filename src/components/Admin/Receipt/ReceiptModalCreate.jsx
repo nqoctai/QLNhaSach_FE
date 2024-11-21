@@ -72,8 +72,9 @@ const ReceiptModalCreate = (props) => {
         console.log('rqProducts', rqProducts);
         const res = await callCreateImportReceipt(user?.email, totalPrice, rqProducts);
         if (res && res.data) {
-            message.success('Tạo mới đơn hàng thành công');
+            message.success('Tạo mới phiếu nhập thành công');
             form.resetFields();
+            setProducts([]);
             setOpenModalCreate(false);
             await props.fetchReceipt()
         } else {

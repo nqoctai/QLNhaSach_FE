@@ -119,7 +119,9 @@ const BookModalCreate = (props) => {
                 name: res.data.fileName,
                 uid: file.uid
             }])
+            console.log('res.data', res.data)
             onSuccess('ok')
+            console.log('dataThumbnail', dataThumbnail)
         } else {
             onError('Đã có lỗi khi upload file');
         }

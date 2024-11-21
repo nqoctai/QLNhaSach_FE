@@ -25,7 +25,7 @@ const EmployeeViewDetail = (props) => {
                     <Descriptions.Item label="Email">{dataViewDetail?.email}</Descriptions.Item>
                     <Descriptions.Item label="Địa chỉ">{dataViewDetail?.address}</Descriptions.Item>
                     <Descriptions.Item label="Lương">{dataViewDetail?.salary}</Descriptions.Item>
-                    <Descriptions.Item label="Role">{dataViewDetail?.account?.role?.name}</Descriptions.Item>
+                    <Descriptions.Item label="Role">{dataViewDetail?.account?.role?.name ?? 'Nhân viên offline'}</Descriptions.Item>
                     <Descriptions.Item label="Số điện thoại">{dataViewDetail?.phone}</Descriptions.Item>
                     <Descriptions.Item label="Hire Date">
                         {moment(dataViewDetail?.hireDate).format('DD-MM-YYYY')}

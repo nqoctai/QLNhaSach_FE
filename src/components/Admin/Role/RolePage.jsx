@@ -167,7 +167,7 @@ const RolePage = () => {
         } else {
             notification.error({
                 message: 'Có lỗi xảy ra',
-                description: res.message
+                description: 'Xóa role không thành công, có các bản ghi khác liên quan'
             });
         }
     };

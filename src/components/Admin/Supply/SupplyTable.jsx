@@ -180,7 +180,7 @@ const SupplyTable = () => {
         } else {
             notification.error({
                 message: 'Có lỗi xảy ra',
-                description: res.message
+                description: 'Xóa cung ứng không thành công, có các bản ghi khác liên quan'
             });
         }
     };

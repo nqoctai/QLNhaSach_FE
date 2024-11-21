@@ -170,7 +170,7 @@ const SupplierTable = () => {
         } else {
             notification.error({
                 message: 'Có lỗi xảy ra',
-                description: res.message
+                description: 'Xóa nhà cung cấp không thành công, có các sản phẩm đang sử dụng nhà cung cấp này'
             });
         }
     };

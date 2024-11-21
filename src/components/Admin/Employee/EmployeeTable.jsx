@@ -103,7 +103,7 @@ const EmployeeTable = () => {
             sorter: true,
             render: (text, record, index) => {
                 return (
-                    <>{record?.account?.role ? record?.account?.role?.name : 'Không có vai trò'}</>
+                    <>{record?.account?.role ? record?.account?.role?.name : 'Nhân viên offline'}</>
                 )
             }
         },
@@ -195,7 +195,7 @@ const EmployeeTable = () => {
         } else {
             notification.error({
                 message: 'Có lỗi xảy ra',
-                description: res.message
+                description: 'Xóa nhân viên không thành công, có các bản ghi liên quan đến nhân viên này'
             });
         }
     };
