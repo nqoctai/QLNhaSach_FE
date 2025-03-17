@@ -1,7 +1,7 @@
 import ViewOrder from "../../components/Order/ViewOrder";
 import { Breadcrumb, Button, Result, Steps } from 'antd';
 import './order.scss';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Payment from "../../components/Order/Payment";
 import { SmileOutlined, HomeOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +9,15 @@ import { Link, useNavigate } from "react-router-dom";
 const OrderPage = (props) => {
     const [currentStep, setCurrentStep] = useState(0);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const url = new URL(window.location.href);
+        const currentStepVnPay = url.searchParams.get('currentStepVnPay');
+
+        if (currentStepVnPay) {
+            setCurrentStep(2);
+        }
+    }, []);
 
     return (
         <div style={{ background: '#efefef', padding: "20px 0", maxHeight: 600, overflowY: "auto" }}>

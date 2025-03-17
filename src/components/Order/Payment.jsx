@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { doDeleteItemCartAction, doPlaceOrderAction, doUpdateCartAction } from '../../redux/order/orderSlice';
 import { Input } from 'antd';
-import { callFetchAccount, callPlaceOrder } from '../../services/api';
+import { callFetchAccount, callPlaceOrder, createPaymentVnPay } from '../../services/api';
 import { doGetAccountAction } from '../../redux/account/accountSlice';
 const { TextArea } = Input;
 
@@ -66,28 +66,65 @@ const Payment = (props) => {
                 id: item.id
             }
         })
-        const data = {
+        console.log("Method", values.paymentMethod);
+        let data = {
             accountId: user?.id,
             email: user?.email,
             name: values.name,
             address: values.address,
             phone: values.phone,
             totalPrice: totalPrice,
+            paymentMethod: values.paymentMethod,
         }
 
-        const res = await callPlaceOrder(data);
-        if (res && res.data) {
-            message.success('Đặt hàng thành công !');
-            // dispatch(doPlaceOrderAction());
-            const dataAccount = await callFetchAccount();
-            dispatch(doGetAccountAction(dataAccount.data));
-            props.setCurrentStep(2);
-        } else {
-            notification.error({
-                message: "Đã có lỗi xảy ra",
-                description: res.message
-            })
+        if (values.paymentMethod === 'vnpay') {
+            const resPayment = await createPaymentVnPay(totalPrice);
+            console.log('resPayment', resPayment);
+            const url = new URL(resPayment.data.paymentUrl);
+            const vnp_TxnRef = url.searchParams.get('vnp_TxnRef');
+            data = {
+                ...data,
+                vnp_txn_ref: vnp_TxnRef,
+            }
+            if (resPayment && resPayment.data) {
+                const res = await callPlaceOrder(data);
+                if (res && res.data) {
+                    const dataAccount = await callFetchAccount();
+                    dispatch(doGetAccountAction(dataAccount.data));
+                    window.location.href = resPayment.data.paymentUrl;
+                } else {
+                    notification.error({
+                        message: "Đã có lỗi xảy ra",
+                        description: res.message
+                    })
+                }
+
+            } else {
+                notification.error({
+                    message: "Đã có lỗi xảy ra",
+                    description: resPayment.message
+                })
+            }
+
         }
+
+        if (values.paymentMethod === 'cod') {
+            const res = await callPlaceOrder(data);
+            if (res && res.data) {
+                message.success('Đặt hàng thành công !');
+                // dispatch(doPlaceOrderAction());
+                const dataAccount = await callFetchAccount();
+                dispatch(doGetAccountAction(dataAccount.data));
+                props.setCurrentStep(2);
+            } else {
+                notification.error({
+                    message: "Đã có lỗi xảy ra",
+                    description: res.message
+                })
+            }
+        }
+
+
         setIsSubmit(false);
     }
 
@@ -163,13 +200,21 @@ const Payment = (props) => {
                                 rows={4}
                             />
                         </Form.Item>
+                        <Form.Item
+                            style={{ margin: 0 }}
+                            labelCol={{ span: 24 }}
+                            label="Hình thức thanh toán"
+                            name="paymentMethod"
+                            initialValue="cod"
+                            rules={[{ required: true, message: 'Hình thức thanh toán không được để trống!' }]}
+                        >
+                            <Radio.Group>
+                                <Radio value="cod">Thanh toán khi nhận hàng</Radio>
+                                <Radio value="vnpay">Thanh toán qua VNPAY</Radio>
+                            </Radio.Group>
+                        </Form.Item>
                     </Form>
-                    <div className='info'>
-                        <div className='method'>
-                            <div>  Hình thức thanh toán</div>
-                            <Radio checked>Thanh toán khi nhận hàng</Radio>
-                        </div>
-                    </div>
+
 
                     <Divider style={{ margin: "5px 0" }} />
                     <div className='calculate'>

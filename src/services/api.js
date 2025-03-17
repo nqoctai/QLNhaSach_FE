@@ -86,7 +86,7 @@ export const callDeleteBook = (id) => {
 }
 
 export const callFetchBookById = (id) => {
-    return axios.get(`api/v1/books/${id}`)
+    return axios.get(`/api/v1/books/${id}`)
 }
 
 export const callPlaceOrder = (data) => {
@@ -336,4 +336,8 @@ export const callFetchView6 = () => {
 
 export const callFetchGenderRatio = () => {
     return axios.get('/api/v1/dashboard/view9');
+}
+
+export const createPaymentVnPay = (totalPrice) => {
+    return axios.get(`/api/v1/payment/vn-pay?amount=${totalPrice}`);
 }
