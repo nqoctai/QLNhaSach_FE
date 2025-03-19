@@ -341,3 +341,7 @@ export const callFetchGenderRatio = () => {
 export const createPaymentVnPay = (totalPrice) => {
     return axios.get(`/api/v1/payment/vn-pay?amount=${totalPrice}`);
 }
+
+export const callOutboundAuthentication = (code) => {
+    return axios.post(`/api/v1/auth/outbound/authentication?code=${code}`);
+}

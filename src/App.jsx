@@ -1,72 +1,70 @@
-import React, { useEffect, useState } from 'react';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import BookPage from './pages/book';
-import ContactPage from './pages/contact';
-import LoginPage from './pages/login';
+import React, { useEffect, useState } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import BookPage from "./pages/book";
+import ContactPage from "./pages/contact";
+import LoginPage from "./pages/login";
 import { Outlet } from "react-router-dom";
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Home from './components/Home';
-import RegisterPage from './pages/register';
-import { callFetchAccount } from './services/api';
-import { useDispatch, useSelector } from 'react-redux';
-import { doGetAccountAction } from './redux/account/accountSlice';
-import Loading from './components/Loading';
-import NotFound from './components/NotFound';
-import AdminPage from './pages/admin';
-import ProtectedRoute from './components/ProtectedRoute';
-import LayoutAdmin from './components/Admin/LayoutAdmin';
-import './styles/reset.scss';
-import './styles/global.scss';
-import ManageUserPage from './pages/admin/user';
-import ManageBookPage from './pages/admin/book';
-import OrderPage from './pages/order';
-import HistoryPage from './pages/history';
-import AdminOrderPage from './pages/admin/order';
-import ManageCustomerPage from './pages/admin/customer';
-import ManageEmployeePage from './pages/admin/employee';
-import ManageReceiptPage from './pages/admin/receipt';
-import ManageSupply from './pages/admin/supply';
-import ManageSupplyPage from './pages/admin/supply';
-import ManageSupplierPage from './pages/admin/supplier';
-import ManagePermissionPage from './pages/admin/permission';
-import ManageRolePage from './pages/admin/role';
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Home from "./components/Home";
+import RegisterPage from "./pages/register";
+import { callFetchAccount } from "./services/api";
+import { useDispatch, useSelector } from "react-redux";
+import { doGetAccountAction } from "./redux/account/accountSlice";
+import Loading from "./components/Loading";
+import NotFound from "./components/NotFound";
+import AdminPage from "./pages/admin";
+import ProtectedRoute from "./components/ProtectedRoute";
+import LayoutAdmin from "./components/Admin/LayoutAdmin";
+import "./styles/reset.scss";
+import "./styles/global.scss";
+import ManageUserPage from "./pages/admin/user";
+import ManageBookPage from "./pages/admin/book";
+import OrderPage from "./pages/order";
+import HistoryPage from "./pages/history";
+import AdminOrderPage from "./pages/admin/order";
+import ManageCustomerPage from "./pages/admin/customer";
+import ManageEmployeePage from "./pages/admin/employee";
+import ManageReceiptPage from "./pages/admin/receipt";
+import ManageSupply from "./pages/admin/supply";
+import ManageSupplyPage from "./pages/admin/supply";
+import ManageSupplierPage from "./pages/admin/supplier";
+import ManagePermissionPage from "./pages/admin/permission";
+import ManageRolePage from "./pages/admin/role";
+import Authenticate from "./pages/authenticate/Authenticate";
 
 const Layout = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   return (
-    <div className='layout-app'>
+    <div className="layout-app">
       <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <Outlet context={[searchTerm, setSearchTerm]} />
       <Footer />
     </div>
-  )
-}
+  );
+};
 
 export default function App() {
   const dispatch = useDispatch();
-  const isLoading = useSelector(state => state.account.isLoading)
+  const isLoading = useSelector((state) => state.account.isLoading);
 
   const getAccount = async () => {
     if (
-      window.location.pathname === '/login'
-      || window.location.pathname === '/register'
+      window.location.pathname === "/login" ||
+      window.location.pathname === "/register"
     )
       return;
 
     const res = await callFetchAccount();
     if (res && res.data) {
-      dispatch(doGetAccountAction(res.data))
+      dispatch(doGetAccountAction(res.data));
     }
-  }
+  };
 
   useEffect(() => {
     getAccount();
-  }, [])
+  }, []);
 
   const router = createBrowserRouter([
     {
@@ -75,6 +73,7 @@ export default function App() {
       errorElement: <NotFound />,
       children: [
         { index: true, element: <Home /> },
+
         {
           path: "contact",
           element: <ContactPage />,
@@ -85,19 +84,19 @@ export default function App() {
         },
         {
           path: "order",
-          element:
+          element: (
             <ProtectedRoute>
               <OrderPage />
             </ProtectedRoute>
-          ,
+          ),
         },
         {
           path: "history",
-          element:
+          element: (
             <ProtectedRoute>
               <HistoryPage />
             </ProtectedRoute>
-          ,
+          ),
         },
       ],
     },
@@ -108,94 +107,95 @@ export default function App() {
       errorElement: <NotFound />,
       children: [
         {
-          index: true, element:
+          index: true,
+          element: (
             <ProtectedRoute>
               <AdminPage />
             </ProtectedRoute>
+          ),
         },
         {
           path: "user",
-          element:
+          element: (
             <ProtectedRoute>
               <ManageUserPage />
             </ProtectedRoute>
-          ,
+          ),
         },
         {
           path: "customer",
-          element:
+          element: (
             <ProtectedRoute>
               <ManageCustomerPage />
             </ProtectedRoute>
-          ,
+          ),
         },
         {
           path: "employee",
-          element:
+          element: (
             <ProtectedRoute>
               <ManageEmployeePage />
             </ProtectedRoute>
-          ,
+          ),
         },
         {
           path: "book",
-          element:
+          element: (
             <ProtectedRoute>
               <ManageBookPage />
             </ProtectedRoute>
-          ,
+          ),
         },
         {
           path: "order",
-          element:
+          element: (
             <ProtectedRoute>
               <AdminOrderPage />
             </ProtectedRoute>
-          ,
+          ),
         },
         {
           path: "receipt",
-          element:
+          element: (
             <ProtectedRoute>
               <ManageReceiptPage />
             </ProtectedRoute>
-          ,
+          ),
         },
         {
           path: "supply",
-          element:
+          element: (
             <ProtectedRoute>
               <ManageSupplyPage />
             </ProtectedRoute>
-          ,
+          ),
         },
         {
           path: "supplier",
-          element:
+          element: (
             <ProtectedRoute>
               <ManageSupplierPage />
             </ProtectedRoute>
-          ,
+          ),
         },
         {
           path: "permission",
-          element:
+          element: (
             <ProtectedRoute>
               <ManagePermissionPage />
             </ProtectedRoute>
-          ,
+          ),
         },
         {
           path: "role",
-          element:
+          element: (
             <ProtectedRoute>
               <ManageRolePage />
             </ProtectedRoute>
-          ,
-        }
+          ),
+        },
       ],
     },
-
 
     {
       path: "/login",
@@ -206,23 +206,24 @@ export default function App() {
       path: "/register",
       element: <RegisterPage />,
     },
+    {
+      path: "/authenticate",
+      element: <Authenticate />,
+    },
   ]);
 
   return (
     <>
-      {
-        isLoading === false
-          || window.location.pathname === '/login'
-          || window.location.pathname === '/register'
-          || window.location.pathname === '/'
-          || window.location.pathname.startsWith('/book')
-          ?
-          <RouterProvider router={router} />
-          :
-          <Loading />
-      }
+      {isLoading === false ||
+      window.location.pathname === "/authenticate" ||
+      window.location.pathname === "/login" ||
+      window.location.pathname === "/register" ||
+      window.location.pathname === "/" ||
+      window.location.pathname.startsWith("/book") ? (
+        <RouterProvider router={router} />
+      ) : (
+        <Loading />
+      )}
     </>
-  )
-
+  );
 }
-
